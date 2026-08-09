@@ -1,6 +1,6 @@
 import { Product, Category, CalculatorPayload, CalculatorResult, OrganizationInfo } from "@/shared/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.kontrol.uz/api";
 const STRAPI_HOST = API_BASE_URL.replace(/\/api\/?$/, "");
 
 export const MOCK_ORGANIZATION: OrganizationInfo = {
@@ -401,9 +401,13 @@ export function mapStrapiProduct(rawItem: any): Product {
 // 🌐 API FETCHING FUNCTIONS (ISR & CACHE)
 // ==========================================
 
-export async function fetchCategories(): Promise<Category[]> {
+export async function fetchCategories(locale?: string): Promise<Category[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/categories?populate=*`, {
+    const url = locale
+      ? `${API_BASE_URL}/categories?locale=${encodeURIComponent(locale)}&populate=*`
+      : `${API_BASE_URL}/categories?populate=*`;
+
+    const res = await fetch(url, {
       next: { revalidate: 60 },
     });
     if (!res.ok) throw new Error(`Categories API request failed: ${res.status}`);
@@ -417,11 +421,35 @@ export async function fetchCategories(): Promise<Category[]> {
   }
 }
 
-export async function fetchProducts(categorySlug?: string): Promise<Product[]> {
+export async function fetchProducts(
+  categorySlugOrOptions?:
+    | string
+    | {
+        categorySlug?: string;
+        locale?: string;
+        search?: string;
+        minPrice?: number;
+        maxPrice?: number;
+        sort?: string;
+      }
+): Promise<Product[]> {
   try {
-    const url = categorySlug
-      ? `${API_BASE_URL}/products?filters[categorySlug][$eq]=${encodeURIComponent(categorySlug)}&populate=*`
-      : `${API_BASE_URL}/products?populate=*`;
+    const opts =
+      typeof categorySlugOrOptions === "string"
+        ? { categorySlug: categorySlugOrOptions }
+        : categorySlugOrOptions || {};
+
+    const params = new URLSearchParams();
+    params.set("populate", "*");
+
+    if (opts.locale) params.set("locale", opts.locale);
+    if (opts.categorySlug) params.set("filters[categorySlug][$eq]", opts.categorySlug);
+    if (opts.search) params.set("search", opts.search);
+    if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
+    if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
+    if (opts.sort) params.set("sort", opts.sort);
+
+    const url = `${API_BASE_URL}/products?${params.toString()}`;
 
     const res = await fetch(url, {
       next: { revalidate: 60 },
@@ -431,22 +459,27 @@ export async function fetchProducts(categorySlug?: string): Promise<Product[]> {
     if (Array.isArray(json.data) && json.data.length > 0) {
       return json.data.map(mapStrapiProduct);
     }
-    if (categorySlug) {
-      return MOCK_PRODUCTS.filter((p) => p.categorySlug === categorySlug);
+    if (opts.categorySlug) {
+      return MOCK_PRODUCTS.filter((p) => p.categorySlug === opts.categorySlug);
     }
     return MOCK_PRODUCTS;
   } catch (err) {
-    if (categorySlug) {
-      return MOCK_PRODUCTS.filter((p) => p.categorySlug === categorySlug);
+    const cat =
+      typeof categorySlugOrOptions === "string"
+        ? categorySlugOrOptions
+        : categorySlugOrOptions?.categorySlug;
+    if (cat) {
+      return MOCK_PRODUCTS.filter((p) => p.categorySlug === cat);
     }
     return MOCK_PRODUCTS;
   }
 }
 
-export async function fetchProductBySlug(slug: string): Promise<Product | null> {
+export async function fetchProductBySlug(slug: string, locale?: string): Promise<Product | null> {
   try {
+    const localeQuery = locale ? `&locale=${encodeURIComponent(locale)}` : "";
     const res = await fetch(
-      `${API_BASE_URL}/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`,
+      `${API_BASE_URL}/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*${localeQuery}`,
       {
         next: { revalidate: 60 },
       }

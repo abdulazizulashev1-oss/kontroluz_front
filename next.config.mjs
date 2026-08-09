@@ -5,11 +5,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
+        hostname: 'api.kontrol.uz',
       },
       {
         protocol: 'https',
-        hostname: 'contribution.usercontent.google.com',
+        hostname: 'kontrol.uz',
       },
       {
         protocol: 'https',
@@ -17,7 +17,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'kontrol.uz',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'contribution.usercontent.google.com',
       },
       {
         protocol: 'http',
