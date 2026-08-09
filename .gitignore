@@ -24,9 +24,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Environment variables (Security Standard - Rule 4)
+# Environment variables (Security Standard - All .env files ignored)
 .env
 .env*
+.env.example
 .env.local
 .env*.local
 .env.development
@@ -35,7 +36,6 @@ yarn-error.log*
 .env.test.local
 .env.production
 .env.production.local
-!.env.example
 
 # Internal Agent & Specification Markdown Files (Security Standard)
 /.agents/
