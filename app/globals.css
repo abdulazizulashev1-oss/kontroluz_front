@@ -12,3 +12,62 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Ringing phone and glowing aura animations */
+@keyframes phone-ring {
+  0% { transform: rotate(0deg) scale(1); }
+  5% { transform: rotate(16deg) scale(1.08); }
+  10% { transform: rotate(-14deg) scale(1.08); }
+  15% { transform: rotate(16deg) scale(1.08); }
+  20% { transform: rotate(-12deg) scale(1.08); }
+  25% { transform: rotate(12deg) scale(1.08); }
+  30% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes tg-fly {
+  0% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-3px) scale(1.05); }
+  40% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 166, 126, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(0, 166, 126, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 166, 126, 0);
+  }
+}
+
+@keyframes tg-glow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 158, 217, 0.75);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(34, 158, 217, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 158, 217, 0);
+  }
+}
+
+.animate-phone-ring {
+  animation: phone-ring 2.2s infinite ease-in-out;
+}
+
+.animate-tg-fly {
+  animation: tg-fly 3s infinite ease-in-out;
+}
+
+.animate-glow-ring {
+  animation: glow-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.animate-tg-glow-ring {
+  animation: tg-glow-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}

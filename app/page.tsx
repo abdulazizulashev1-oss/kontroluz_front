@@ -4,14 +4,17 @@ import { ArrowRight, Building2, Truck, Wrench, Flame, Sparkles } from "lucide-re
 import { HeroBanner } from "@/components/features/hero-banner";
 import { CategoryGrid } from "@/components/features/category-grid";
 import { ProductCard } from "@/components/features/product-card";
+import { HomeProductsSection } from "@/components/features/home-products-section";
 import { PromoBanner } from "@/components/features/promo-banner";
 import { EngineeringExcellence } from "@/components/features/engineering-excellence";
 import { SolutionCalculator } from "@/components/features/solution-calculator";
-import { fetchCategories, fetchFeaturedProducts } from "@/lib/api";
+import { fetchCategories, fetchProducts } from "@/lib/api";
+import { getServerLocale } from "@/lib/i18n/server";
 
 export default async function HomePage() {
-  const categories = await fetchCategories();
-  const featuredProducts = await fetchFeaturedProducts();
+  const locale = getServerLocale();
+  const categories = await fetchCategories(locale);
+  const featuredProducts = await fetchProducts({ locale });
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
@@ -63,63 +66,13 @@ export default async function HomePage() {
       </section>
 
       {/* 4. New Arrivals (Yangi Kelgan Uskunalar) */}
-      <section className="space-y-6">
-        <div className="flex justify-between items-end pb-3 border-b-2 border-industrial-blue">
-          <div>
-            <span className="text-xs font-extrabold uppercase text-industrial-orange tracking-widest flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5" />
-              Tizim yangiliklari
-            </span>
-            <h2 className="text-2xl font-black text-industrial-text mt-1">
-              Yangi Kelgan Uskunalar
-            </h2>
-          </div>
-          <Link
-            href="/katalog"
-            className="text-xs font-extrabold text-industrial-blue hover:text-industrial-orange flex items-center gap-1 uppercase"
-          >
-            <span>Barchasini ko'rish</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
+      <HomeProductsSection initialProducts={featuredProducts} type="new" />
 
       {/* 5. Promotional Banner (Aksiya / Maxsus Taklif) */}
       <PromoBanner />
 
       {/* 6. Bestsellers / Hit Products (Xiti Prodaj) */}
-      <section className="space-y-6">
-        <div className="flex justify-between items-end pb-3 border-b-2 border-industrial-orange">
-          <div>
-            <span className="text-xs font-extrabold uppercase text-industrial-blue tracking-widest flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-industrial-orange" />
-              Eng Kop Sotilgan
-            </span>
-            <h2 className="text-2xl font-black text-industrial-text mt-1">
-              Savdo Xitlari (Bestsellers)
-            </h2>
-          </div>
-          <Link
-            href="/katalog"
-            className="text-xs font-extrabold text-industrial-blue hover:text-industrial-orange flex items-center gap-1 uppercase"
-          >
-            <span>Katalogga o'tish</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.slice(0, 4).map((product) => (
-            <ProductCard key={`hit-${product.id}`} product={product} />
-          ))}
-        </div>
-      </section>
+      <HomeProductsSection initialProducts={featuredProducts} type="bestseller" />
 
       {/* 7. Engineering Excellence (Injenyerlik Mukammalligi) */}
       <EngineeringExcellence />

@@ -331,6 +331,56 @@ export function mapStrapiCategory(rawItem: any): Category {
   const attrs = rawItem.attributes || rawItem;
   const id = String(rawItem.id || attrs.id || attrs.slug || "cat");
   const slug = String(attrs.slug || id);
+  const order =
+    attrs.order !== undefined && attrs.order !== null
+      ? Number(attrs.order)
+      : undefined;
+
+  // Extract nested subcategories from Strapi v4/v5
+  let subcategories: {
+    id?: string | number;
+    slug: string;
+    name: string;
+    iconName?: string;
+    order?: number;
+  }[] = [];
+
+  if (Array.isArray(attrs.subcategories?.data)) {
+    subcategories = attrs.subcategories.data.map((sub: any) => {
+      const subAttrs = sub.attributes || sub;
+      return {
+        id: sub.id,
+        slug: subAttrs.slug || String(sub.id),
+        name: subAttrs.name || "Kategoriya",
+        iconName: subAttrs.iconName,
+        order:
+          subAttrs.order !== undefined && subAttrs.order !== null
+            ? Number(subAttrs.order)
+            : undefined,
+      };
+    });
+  } else if (Array.isArray(attrs.subcategories)) {
+    subcategories = attrs.subcategories.map((sub: any) => {
+      const subAttrs = sub.attributes || sub;
+      return {
+        id: sub.id,
+        slug: subAttrs.slug || sub.slug || String(sub.id || ""),
+        name: subAttrs.name || sub.name || "Kategoriya",
+        iconName: subAttrs.iconName || sub.iconName,
+        order:
+          subAttrs.order !== undefined && subAttrs.order !== null
+            ? Number(subAttrs.order)
+            : undefined,
+      };
+    });
+  }
+
+  // Sort subcategories by custom order asc, then id asc
+  subcategories.sort(
+    (a, b) =>
+      (a.order ?? 999) - (b.order ?? 999) ||
+      Number(a.id || 0) - Number(b.id || 0)
+  );
 
   return {
     id,
@@ -342,8 +392,11 @@ export function mapStrapiCategory(rawItem: any): Category {
       attrs.imageUrl || attrs.image,
       "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&auto=format&fit=crop&q=80"
     ),
-    productCount: Number(attrs.productCount || 0),
-    subcategories: attrs.subcategories || [],
+    productCount: Number(
+      attrs.productCount || (subcategories.length > 0 ? subcategories.length * 10 : 10)
+    ),
+    order,
+    subcategories,
   };
 }
 
@@ -352,19 +405,38 @@ export function mapStrapiProduct(rawItem: any): Product {
   const id = String(rawItem.id || attrs.id || attrs.slug || "prod");
   const slug = String(attrs.slug || id);
 
-  const rawCat = attrs.category?.data?.attributes || attrs.category || {};
-  const categorySlug = attrs.categorySlug || rawCat.slug || "uskunalar";
-  const categoryName = attrs.categoryName || rawCat.name || "Sanoat Uskunalari";
+  const rawCat = attrs.category?.data?.attributes || attrs.category?.attributes || attrs.category || {};
+  const categoryRelationSlug = rawCat.slug ? String(rawCat.slug) : undefined;
+  const categorySlug = categoryRelationSlug || attrs.categorySlug || "uskunalar";
+  const categoryName = rawCat.name || attrs.categoryName || "Sanoat Uskunalari";
+
+  // Robust image extraction: check coverImage, images array, image, imageUrl
+  const rawCover = attrs.coverImage || attrs.image || attrs.imageUrl;
+  const rawFirstImage = Array.isArray(attrs.images?.data)
+    ? attrs.images.data[0]
+    : Array.isArray(attrs.images)
+    ? attrs.images[0]
+    : null;
+
+  const mainImage = resolveStrapiMediaUrl(
+    rawCover || rawFirstImage,
+    "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&auto=format&fit=crop&q=80"
+  );
 
   // Additional images
   const additionalImages: string[] = [];
-  if (Array.isArray(attrs.additionalImages?.data)) {
-    attrs.additionalImages.data.forEach((img: any) => {
-      additionalImages.push(resolveStrapiMediaUrl(img));
-    });
-  } else if (Array.isArray(attrs.additionalImages)) {
-    attrs.additionalImages.forEach((img: any) => {
-      additionalImages.push(resolveStrapiMediaUrl(img));
+  const rawImagesList =
+    attrs.images?.data ||
+    attrs.images ||
+    attrs.additionalImages?.data ||
+    attrs.additionalImages;
+
+  if (Array.isArray(rawImagesList)) {
+    rawImagesList.forEach((img: any) => {
+      const resolved = resolveStrapiMediaUrl(img);
+      if (resolved && resolved !== mainImage && !additionalImages.includes(resolved)) {
+        additionalImages.push(resolved);
+      }
     });
   }
 
@@ -375,6 +447,7 @@ export function mapStrapiProduct(rawItem: any): Product {
     sku: attrs.sku || `SKU-${id}`,
     categorySlug,
     categoryName,
+    categoryRelationSlug,
     price: Number(attrs.price || 0),
     oldPrice: attrs.oldPrice ? Number(attrs.oldPrice) : undefined,
     currency: attrs.currency || "UZS",
@@ -382,10 +455,7 @@ export function mapStrapiProduct(rawItem: any): Product {
     stockCount: Number(attrs.stockCount || 10),
     rating: Number(attrs.rating || 5.0),
     reviewCount: Number(attrs.reviewCount || 0),
-    image: resolveStrapiMediaUrl(
-      attrs.image || attrs.imageUrl,
-      "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&auto=format&fit=crop&q=80"
-    ),
+    image: mainImage,
     additionalImages: additionalImages.length > 0 ? additionalImages : undefined,
     shortDescription: attrs.shortDescription || "",
     fullDescription: attrs.fullDescription || "",
@@ -401,19 +471,78 @@ export function mapStrapiProduct(rawItem: any): Product {
 // 🌐 API FETCHING FUNCTIONS (ISR & CACHE)
 // ==========================================
 
-export async function fetchCategories(locale?: string): Promise<Category[]> {
+export async function fetchCategories(
+  localeOrOptions?:
+    | string
+    | {
+        locale?: string;
+        order?: number;
+        id?: number | string;
+        slug?: string;
+      }
+): Promise<Category[]> {
   try {
-    const url = locale
-      ? `${API_BASE_URL}/categories?locale=${encodeURIComponent(locale)}&populate=*`
-      : `${API_BASE_URL}/categories?populate=*`;
+    const opts =
+      typeof localeOrOptions === "string"
+        ? { locale: localeOrOptions }
+        : localeOrOptions || {};
 
-    const res = await fetch(url, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) throw new Error(`Categories API request failed: ${res.status}`);
-    const json = await res.json();
-    if (Array.isArray(json.data) && json.data.length > 0) {
-      return json.data.map(mapStrapiCategory);
+    const targetLocale = opts.locale || "uz";
+
+    const fetchByLocale = async (loc: string) => {
+      const params = new URLSearchParams();
+      params.set("populate", "*");
+      params.set("locale", loc);
+      params.set("pagination[pageSize]", "100");
+
+      if (opts.order !== undefined) {
+        params.set("filters[order][$eq]", String(opts.order));
+      }
+      if (opts.id !== undefined) {
+        params.set("filters[id][$eq]", String(opts.id));
+      }
+      if (opts.slug) {
+        params.set("filters[slug][$eq]", opts.slug);
+      }
+
+      const url = `${API_BASE_URL}/categories?${params.toString()}`;
+      const isClient = typeof window !== "undefined";
+      const fetchOpts: RequestInit = isClient
+        ? { cache: "no-store" }
+        : { next: { revalidate: 30 } };
+
+      const res = await fetch(url, fetchOpts);
+      if (!res.ok) return [];
+      const json = await res.json();
+      return Array.isArray(json.data) ? json.data : [];
+    };
+
+    // 1. First attempt with requested language (e.g. uz, ru, en)
+    let rawList = await fetchByLocale(targetLocale);
+
+    // 2. If empty and not already 'all', fallback to 'all' so no blank screen
+    if (rawList.length === 0 && targetLocale !== "all") {
+      rawList = await fetchByLocale("all");
+    }
+
+    if (rawList.length > 0) {
+      // Prioritize root categories (where parent is null)
+      const rootEntries = rawList.filter((item: any) => {
+        const attrs = item.attributes || item;
+        const parentData = attrs.parent?.data;
+        return !parentData;
+      });
+      const targetEntries = rootEntries.length > 0 ? rootEntries : rawList;
+      const mapped = targetEntries.map(mapStrapiCategory);
+
+      // Explicitly sort by order asc, then id asc
+      mapped.sort(
+        (a: Category, b: Category) =>
+          (a.order ?? 999) - (b.order ?? 999) ||
+          Number(a.id || 0) - Number(b.id || 0)
+      );
+
+      return mapped;
     }
     return MOCK_CATEGORIES;
   } catch (err) {
@@ -439,25 +568,50 @@ export async function fetchProducts(
         ? { categorySlug: categorySlugOrOptions }
         : categorySlugOrOptions || {};
 
-    const params = new URLSearchParams();
-    params.set("populate", "*");
+    const targetLocale = opts.locale || "uz";
 
-    if (opts.locale) params.set("locale", opts.locale);
-    if (opts.categorySlug) params.set("filters[categorySlug][$eq]", opts.categorySlug);
-    if (opts.search) params.set("search", opts.search);
-    if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
-    if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
-    if (opts.sort) params.set("sort", opts.sort);
+    const fetchByLocale = async (loc: string) => {
+      const params = new URLSearchParams();
+      params.set("populate", "*");
+      params.set("locale", loc);
+      params.set("pagination[pageSize]", "100");
 
-    const url = `${API_BASE_URL}/products?${params.toString()}`;
+      if (opts.search) params.set("search", opts.search);
+      if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
+      if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
+      if (opts.sort) params.set("sort", opts.sort);
 
-    const res = await fetch(url, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) throw new Error(`Products API request failed: ${res.status}`);
-    const json = await res.json();
-    if (Array.isArray(json.data) && json.data.length > 0) {
-      return json.data.map(mapStrapiProduct);
+      const url = `${API_BASE_URL}/products?${params.toString()}`;
+      const isClient = typeof window !== "undefined";
+      const fetchOpts: RequestInit = isClient
+        ? { cache: "no-store" }
+        : { next: { revalidate: 30 } };
+
+      const res = await fetch(url, fetchOpts);
+      if (!res.ok) return [];
+      const json = await res.json();
+      return Array.isArray(json.data) ? json.data : [];
+    };
+
+    // 1. Fetch with requested language
+    let rawList = await fetchByLocale(targetLocale);
+
+    // 2. Fallback to all if empty
+    if (rawList.length === 0 && targetLocale !== "all") {
+      rawList = await fetchByLocale("all");
+    }
+
+    if (rawList.length > 0) {
+      let mapped = rawList.map(mapStrapiProduct);
+      if (opts.categorySlug) {
+        mapped = mapped.filter(
+          (p: Product) =>
+            p.categorySlug === opts.categorySlug ||
+            p.categoryRelationSlug === opts.categorySlug ||
+            p.categorySlug.toLowerCase() === opts.categorySlug?.toLowerCase()
+        );
+      }
+      return mapped;
     }
     if (opts.categorySlug) {
       return MOCK_PRODUCTS.filter((p) => p.categorySlug === opts.categorySlug);
@@ -477,17 +631,25 @@ export async function fetchProducts(
 
 export async function fetchProductBySlug(slug: string, locale?: string): Promise<Product | null> {
   try {
-    const localeQuery = locale ? `&locale=${encodeURIComponent(locale)}` : "";
-    const res = await fetch(
-      `${API_BASE_URL}/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*${localeQuery}`,
-      {
-        next: { revalidate: 60 },
-      }
-    );
-    if (!res.ok) throw new Error(`Product slug API request failed: ${res.status}`);
-    const json = await res.json();
-    if (Array.isArray(json.data) && json.data.length > 0) {
-      return mapStrapiProduct(json.data[0]);
+    const targetLocale = locale || "uz";
+
+    const fetchByLocale = async (loc: string) => {
+      const res = await fetch(
+        `${API_BASE_URL}/products?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*&locale=${encodeURIComponent(loc)}`,
+        { next: { revalidate: 30 } }
+      );
+      if (!res.ok) return null;
+      const json = await res.json();
+      return Array.isArray(json.data) && json.data.length > 0 ? json.data[0] : null;
+    };
+
+    let item = await fetchByLocale(targetLocale);
+    if (!item && targetLocale !== "all") {
+      item = await fetchByLocale("all");
+    }
+
+    if (item) {
+      return mapStrapiProduct(item);
     }
     return MOCK_PRODUCTS.find((p) => p.slug === slug) || null;
   } catch (err) {

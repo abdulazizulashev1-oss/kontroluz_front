@@ -28,6 +28,7 @@ import {
   PlayCircle,
 } from "lucide-react";
 import { fetchProductBySlug, fetchProducts, fetchCategories } from "@/lib/api";
+import { getServerLocale } from "@/lib/i18n/server";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +39,7 @@ import { AddToCartSection } from "@/components/features/add-to-cart-section";
 import { ProductGallery } from "@/components/features/product-gallery";
 import { RelatedProductsCarousel } from "@/components/features/related-products-carousel";
 import { ProductDetailTabs } from "@/components/features/product-detail-tabs";
+import { CategoryGrid } from "@/components/features/category-grid";
 
 interface ProductPageProps {
   params: {
@@ -47,7 +49,8 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = await fetchProductBySlug(params.slug);
+  const locale = getServerLocale();
+  const product = await fetchProductBySlug(params.slug, locale);
   if (!product) {
     return {
       title: "Mahsulot Topilmadi",
@@ -78,11 +81,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
-  const product = await fetchProductBySlug(params.slug);
+  const locale = getServerLocale();
+  const product = await fetchProductBySlug(params.slug, locale);
   if (!product) notFound();
 
-  const categories = await fetchCategories();
-  const allProducts = await fetchProducts();
+  const categories = await fetchCategories(locale);
+  const allProducts = await fetchProducts({ locale });
   
   const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price);
   const bestsellerProducts = allProducts.filter((p) => p.rating >= 4.9);
@@ -97,14 +101,20 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     { name: product.title, url: `https://kontrol.uz/katalog/${params.category}/${params.slug}` },
   ];
 
-  const popularCategories = [
-    { name: "Quvur Armaturasi", color: "bg-[#fc8b91]", slug: "videokuzatuv" },
-    { name: "Nasos Uskunalari", color: "bg-[#7b81f1]", slug: "videokuzatuv" },
-    { name: "Elektr Uskunalari", color: "bg-[#7accee]", slug: "kirishni-boshqarish" },
-    { name: "KIPiA va SKUD", color: "bg-[#5cdc69]", slug: "kirishni-boshqarish" },
-    { name: "Elektromagnit Klapanlar", color: "bg-[#c56dbb]", slug: "yongin-xavfsizligi" },
-    { name: "Avtomatika Tizimlari", color: "bg-[#a773ed]", slug: "kirishni-boshqarish" },
+  const TILE_COLORS = [
+    "bg-[#fc8b91]",
+    "bg-[#7b81f1]",
+    "bg-[#7accee]",
+    "bg-[#5cdc69]",
+    "bg-[#c56dbb]",
+    "bg-[#a773ed]",
   ];
+
+  const popularCategories = categories.map((cat, idx) => ({
+    name: cat.name,
+    slug: cat.slug,
+    color: TILE_COLORS[idx % TILE_COLORS.length],
+  }));
 
   return (
     <div className="bg-industrial-surface py-6 min-h-screen">
@@ -252,25 +262,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             {/* Technical Specifications & Interactive Detail Tabs */}
             <ProductDetailTabs product={product} />
 
-            {/* Ommabop Ruknlar Section from Stitch */}
-            <section>
-              <h2 className="text-xl font-black text-industrial-blue mb-4 border-b border-industrial-border pb-2">
-                Ommabop Ruknlar
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {popularCategories.map((cat, idx) => (
-                  <Link
-                    key={idx}
-                    href={`/katalog?category=${cat.slug}`}
-                    className={`${cat.color} text-white p-5 rounded-lg flex items-center justify-between hover:opacity-95 transition-all shadow-sm group`}
-                  >
-                    <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-extrabold text-base text-center flex-1">{cat.name}</h3>
-                    <ArrowRight className="w-5 h-5 opacity-70 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                ))}
-              </div>
-            </section>
+            {/* Popular Categories Section with Subcategories Accordion */}
+            <CategoryGrid
+              showViewAll={false}
+              gridCols={3}
+            />
 
             {/* Chegirmali Mahsulotlar Section */}
             {onSaleProducts.length > 0 && (

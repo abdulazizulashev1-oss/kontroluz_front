@@ -1,22 +1,105 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Minus, Wrench, ShieldCheck, Cpu, Activity, Sliders, Flame, ChevronRight } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  Wrench,
+  ShieldCheck,
+  Cpu,
+  Activity,
+  Sliders,
+  Flame,
+  ChevronRight,
+  Camera,
+  Gauge,
+  Droplet,
+  HardDrive,
+  Radio,
+  Zap,
+  Layers,
+  Settings,
+} from "lucide-react";
 import { Category } from "@/shared/types";
 import { useTranslation } from "@/lib/i18n/context";
+import { fetchCategories } from "@/lib/api";
 
 export interface CategoryGridProps {
   categories?: Category[];
+  title?: string;
+  showViewAll?: boolean;
+  gridCols?: 2 | 3;
 }
 
-export function CategoryGrid({ categories }: CategoryGridProps) {
+const TILE_COLORS = [
+  "bg-[#ff8a8a]", // 1. Coral Red
+  "bg-[#7a8aff]", // 2. Indigo Blue
+  "bg-[#7accee]", // 3. Sky Blue
+  "bg-[#52d66b]", // 4. Mint Green
+  "bg-[#c56dbb]", // 5. Purple Pink
+  "bg-[#a773ed]", // 6. Violet
+];
+
+function getCategoryIcon(iconName?: string) {
+  switch (iconName?.toLowerCase()) {
+    case "camera":
+      return <Camera className="w-6 h-6" />;
+    case "activity":
+      return <Activity className="w-6 h-6" />;
+    case "cpu":
+      return <Cpu className="w-6 h-6" />;
+    case "shieldcheck":
+    case "shield":
+      return <ShieldCheck className="w-6 h-6" />;
+    case "flame":
+    case "fire":
+      return <Flame className="w-6 h-6" />;
+    case "sliders":
+      return <Sliders className="w-6 h-6" />;
+    case "wrench":
+      return <Wrench className="w-6 h-6" />;
+    case "gauge":
+      return <Gauge className="w-6 h-6" />;
+    case "droplet":
+      return <Droplet className="w-6 h-6" />;
+    case "harddrive":
+      return <HardDrive className="w-6 h-6" />;
+    case "radio":
+      return <Radio className="w-6 h-6" />;
+    case "zap":
+      return <Zap className="w-6 h-6" />;
+    default:
+      return <Layers className="w-6 h-6" />;
+  }
+}
+
+export function CategoryGrid({
+  categories,
+  title,
+  showViewAll = true,
+  gridCols = 2,
+}: CategoryGridProps) {
   const { t, locale } = useTranslation();
+  const [currentCategories, setCurrentCategories] = useState<Category[]>(categories || []);
+
+  useEffect(() => {
+    let active = true;
+    fetchCategories(locale).then((data) => {
+      if (active && Array.isArray(data) && data.length > 0) {
+        setCurrentCategories(data);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [locale]);
 
   const [openStates, setOpenStates] = useState<Record<number, boolean>>({
+    0: true,
     1: true,
+    2: true,
     3: true,
-    5: true,
   });
 
   const toggleCategory = (index: number) => {
@@ -26,13 +109,21 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
     }));
   };
 
-  const categoriesByLang: Record<string, Array<{ name: string; slug: string; bgColor: string; icon: React.ReactNode; subcategories: Array<{ name: string; slug: string }> }>> = {
+  // Static fallback if backend is offline and no categories are passed
+  const fallbackCategoriesByLang: Record<
+    string,
+    Array<{
+      name: string;
+      slug: string;
+      iconName: string;
+      subcategories: Array<{ name: string; slug: string }>;
+    }>
+  > = {
     uz: [
       {
         slug: "videokuzatuv",
         name: "Quvur Armaturasi va Kameralar",
-        bgColor: "bg-[#ff8a8a]",
-        icon: <Wrench className="w-6 h-6" />,
+        iconName: "Wrench",
         subcategories: [
           { name: "Vertikal ko'p bosqichli kameralar", slug: "videokuzatuv" },
           { name: "Gorizontal IP kameralar 4K", slug: "videokuzatuv" },
@@ -43,75 +134,64 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
         ],
       },
       {
-        slug: "videokuzatuv",
+        slug: "sanoat-avtomatikasi",
         name: "Nasos Uskunalari va Registratorlar",
-        bgColor: "bg-[#7a8aff]",
-        icon: <Activity className="w-6 h-6" />,
+        iconName: "Activity",
         subcategories: [
-          { name: "Vertikal ko'p bosqichli nasoslar", slug: "videokuzatuv" },
-          { name: "Gorizontal sanoat nasoslari", slug: "videokuzatuv" },
-          { name: "Cho'kma nasoslar Granpamp", slug: "videokuzatuv" },
-          { name: "Tsirkulyatsion nasoslar («ho'l» rotorli)", slug: "videokuzatuv" },
-          { name: "Tsirkulyatsion nasoslar («quruq» rotorli)", slug: "videokuzatuv" },
-          { name: "Suv ta'minoti qurilmalari Granflou", slug: "videokuzatuv" },
-          { name: "Yong'in o'chirish qurilmalari Granflou", slug: "videokuzatuv" },
-          { name: "Birlashtirilgan sanoat stansiyalari", slug: "videokuzatuv" },
+          { name: "Vertikal ko'p bosqichli nasoslar", slug: "vertikal-nasoslar" },
+          { name: "Gorizontal sanoat nasoslari", slug: "sanoat-avtomatikasi" },
+          { name: "Cho'kma nasoslar Granpamp", slug: "sanoat-avtomatikasi" },
+          { name: "Tsirkulyatsion nasoslar («ho'l» rotorli)", slug: "sanoat-avtomatikasi" },
+          { name: "Suv ta'minoti qurilmalari Granflou", slug: "sanoat-avtomatikasi" },
+          { name: "Yong'in o'chirish qurilmalari Granflou", slug: "sanoat-avtomatikasi" },
         ],
       },
       {
         slug: "kirishni-boshqarish",
         name: "Elektr Uskunalari va Turniketlar",
-        bgColor: "bg-[#7accee]",
-        icon: <Cpu className="w-6 h-6" />,
+        iconName: "Cpu",
         subcategories: [
-          { name: "Tripod va biometrik turniketlar ZKTeco", slug: "kirishni-boshqarish" },
+          { name: "Tripod va biometrik turniketlar ZKTeco", slug: "turniketlar" },
           { name: "Vakuumli avtomat o'chirgichlar 12kV", slug: "kirishni-boshqarish" },
           { name: "Chastota o'zgartirgichlar (Delta / Danfoss)", slug: "kirishni-boshqarish" },
           { name: "Sanoat transformatorlari va KTP", slug: "kirishni-boshqarish" },
-          { name: "Shlagbaumlar va avtomatik darvozalar", slug: "kirishni-boshqarish" },
-          { name: "Smart hisoblagichlar TE73 380V", slug: "kirishni-boshqarish" },
+          { name: "Shlagbaumlar va avtomatik darvozalar", slug: "shlagbaumlar" },
         ],
       },
       {
         slug: "kirishni-boshqarish",
         name: "KIPiA va SKUD Biometriya",
-        bgColor: "bg-[#52d66b]",
-        icon: <ShieldCheck className="w-6 h-6" />,
+        iconName: "ShieldCheck",
         subcategories: [
-          { name: "Bosim datchiklari (Manometrlar)", slug: "kirishni-boshqarish" },
-          { name: "Manometrlar va termometrlar", slug: "kirishni-boshqarish" },
-          { name: "Biometrik yuz tanish terminallari", slug: "kirishni-boshqarish" },
-          { name: "Sarf o'lchagichlar (Flowmeters)", slug: "kirishni-boshqarish" },
+          { name: "Bosim datchiklari (Manometrlar)", slug: "kipia-manometrlar" },
+          { name: "Manometrlar va termometrlar", slug: "kipia-manometrlar" },
+          { name: "Biometrik yuz tanish terminallari", slug: "biometrik-skanerlar" },
+          { name: "Sarf o'lchagichlar (Flowmeters)", slug: "kipia-manometrlar" },
           { name: "Magnit va elektron SKUD qulflari", slug: "kirishni-boshqarish" },
-          { name: "Gaz va issiqlik datchiklari", slug: "kirishni-boshqarish" },
         ],
       },
       {
         slug: "yongin-xavfsizligi",
         name: "Elektromagnit va Pnevmatik Klapanlar",
-        bgColor: "bg-[#c56dbb]",
-        icon: <Flame className="w-6 h-6" />,
+        iconName: "Flame",
         subcategories: [
-          { name: "Pnevmatika silindrlari Festo DNC", slug: "yongin-xavfsizligi" },
-          { name: "Elektromagnit (Solenoid) klapanlar", slug: "yongin-xavfsizligi" },
-          { name: "Pnevmo-taqsimlagichlar va bloklar", slug: "yongin-xavfsizligi" },
+          { name: "Pnevmatika silindrlari Festo DNC", slug: "festo-pnevmatika" },
+          { name: "Elektromagnit (Solenoid) klapanlar", slug: "festo-pnevmatika" },
+          { name: "Pnevmo-taqsimlagichlar va bloklar", slug: "festo-pnevmatika" },
           { name: "Klapanlarni puflash va tozalash uzellari", slug: "yongin-xavfsizligi" },
-          { name: "Proba olish sovutgichlari", slug: "yongin-xavfsizligi" },
-          { name: "Sanoat pnevmo-shlanglari va fitinglar", slug: "yongin-xavfsizligi" },
+          { name: "Tutun va issiqlik datchiklari", slug: "tutun-datchiklari" },
         ],
       },
       {
-        slug: "kirishni-boshqarish",
+        slug: "sanoat-avtomatikasi",
         name: "Qozonxonalar Avtomatikasi",
-        bgColor: "bg-[#a773ed]",
-        icon: <Sliders className="w-6 h-6" />,
+        iconName: "Sliders",
         subcategories: [
-          { name: "Puflash va tozalash klapanlari", slug: "kirishni-boshqarish" },
-          { name: "Proba olish sovutgichlari", slug: "kirishni-boshqarish" },
-          { name: "Suv sathi va bosim ko'rsatkichlari", slug: "kirishni-boshqarish" },
-          { name: "PLC kontrollerlar (Siemens S7-1200)", slug: "kirishni-boshqarish" },
-          { name: "Qozonxona xavfsizlik bloklari", slug: "kirishni-boshqarish" },
-          { name: "Termostatlar va harorat rostlagichlar", slug: "kirishni-boshqarish" },
+          { name: "Qozonxona avtomatika bloklari", slug: "qozonxona-avtomatikasi" },
+          { name: "Puflash va tozalash klapanlari", slug: "qozonxona-avtomatikasi" },
+          { name: "Suv sathi va bosim ko'rsatkichlari", slug: "qozonxona-avtomatikasi" },
+          { name: "PLC kontrollerlar (Siemens S7-1200)", slug: "sanoat-avtomatikasi" },
+          { name: "Termostatlar va harorat rostlagichlar", slug: "qozonxona-avtomatikasi" },
         ],
       },
     ],
@@ -119,87 +199,61 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
       {
         slug: "videokuzatuv",
         name: "Трубопроводная Арматура и Камеры",
-        bgColor: "bg-[#ff8a8a]",
-        icon: <Wrench className="w-6 h-6" />,
+        iconName: "Wrench",
         subcategories: [
           { name: "Вертикальные многоступенчатые камеры", slug: "videokuzatuv" },
           { name: "Горизонтальные IP камеры 4K", slug: "videokuzatuv" },
           { name: "Погружная арматура и задвижки", slug: "videokuzatuv" },
-          { name: "Циркуляционные соединители", slug: "videokuzatuv" },
-          { name: "Огнестойкие промышленные краны", slug: "videokuzatuv" },
           { name: "Тепловизионные камеры", slug: "videokuzatuv" },
         ],
       },
       {
-        slug: "videokuzatuv",
+        slug: "sanoat-avtomatikasi",
         name: "Насосное Оборудование и Регистраторы",
-        bgColor: "bg-[#7a8aff]",
-        icon: <Activity className="w-6 h-6" />,
+        iconName: "Activity",
         subcategories: [
-          { name: "Вертикальные многоступенчатые насосы", slug: "videokuzatuv" },
-          { name: "Горизонтальные промышленные насосы", slug: "videokuzatuv" },
-          { name: "Погружные насосы Гранпамп", slug: "videokuzatuv" },
-          { name: "Циркуляционные насосы («мокрый» ротор)", slug: "videokuzatuv" },
-          { name: "Циркуляционные насосы («сухой» ротор)", slug: "videokuzatuv" },
-          { name: "Установки водоснабжения Гранфлоу", slug: "videokuzatuv" },
-          { name: "Установки пожаротушения Гранфлоу", slug: "videokuzatuv" },
-          { name: "Промышленные насосные станции", slug: "videokuzatuv" },
+          { name: "Вертикальные многоступенчатые насосы", slug: "vertikal-nasoslar" },
+          { name: "Погружные насосы Гранпамп", slug: "sanoat-avtomatikasi" },
+          { name: "Установки водоснабжения Гранфлоу", slug: "sanoat-avtomatikasi" },
         ],
       },
       {
         slug: "kirishni-boshqarish",
         name: "Электрооборудование и Турникеты",
-        bgColor: "bg-[#7accee]",
-        icon: <Cpu className="w-6 h-6" />,
+        iconName: "Cpu",
         subcategories: [
-          { name: "Триподные и биометрические турникеты ZKTeco", slug: "kirishni-boshqarish" },
+          { name: "Триподные и биометрические турникеты ZKTeco", slug: "turniketlar" },
           { name: "Вакуумные выключатели 12кВ", slug: "kirishni-boshqarish" },
-          { name: "Частотные преобразователи (Delta / Danfoss)", slug: "kirishni-boshqarish" },
-          { name: "Промышленные трансформаторы и КТП", slug: "kirishni-boshqarish" },
-          { name: "Шлагбаумы и автоматические ворота", slug: "kirishni-boshqarish" },
-          { name: "Умные счетчики TE73 380В", slug: "kirishni-boshqarish" },
+          { name: "Шлагбаумы и автоматические ворота", slug: "shlagbaumlar" },
         ],
       },
       {
         slug: "kirishni-boshqarish",
         name: "КИПиА и СКУД Биометрия",
-        bgColor: "bg-[#52d66b]",
-        icon: <ShieldCheck className="w-6 h-6" />,
+        iconName: "ShieldCheck",
         subcategories: [
-          { name: "Датчики давления (Манометры)", slug: "kirishni-boshqarish" },
-          { name: "Манометры и термометры", slug: "kirishni-boshqarish" },
-          { name: "Биометрические терминалы лиц", slug: "kirishni-boshqarish" },
-          { name: "Расходомеры (Flowmeters)", slug: "kirishni-boshqarish" },
+          { name: "Датчики давления (Манометры)", slug: "kipia-manometrlar" },
+          { name: "Биометрические терминалы лиц", slug: "biometrik-skanerlar" },
           { name: "Магнитные и электронные замки СКУД", slug: "kirishni-boshqarish" },
-          { name: "Датчики газа и тепла", slug: "kirishni-boshqarish" },
         ],
       },
       {
         slug: "yongin-xavfsizligi",
         name: "Электромагнитные и Пневмоклапаны",
-        bgColor: "bg-[#c56dbb]",
-        icon: <Flame className="w-6 h-6" />,
+        iconName: "Flame",
         subcategories: [
-          { name: "Пневматические цилиндры Festo DNC", slug: "yongin-xavfsizligi" },
-          { name: "Электромагнитные (Соленоидные) клапаны", slug: "yongin-xavfsizligi" },
-          { name: "Пневмораспределители и блоки", slug: "yongin-xavfsizligi" },
-          { name: "Узлы продувки и очистки клапанов", slug: "yongin-xavfsizligi" },
-          { name: "Охладители отбора проб", slug: "yongin-xavfsizligi" },
-          { name: "Пневмошланги и фитинги", slug: "yongin-xavfsizligi" },
+          { name: "Пневматические цилиндры Festo DNC", slug: "festo-pnevmatika" },
+          { name: "Электромагнитные (Соленоидные) клапаны", slug: "festo-pnevmatika" },
+          { name: "Датчики дыма и тепла", slug: "tutun-datchiklari" },
         ],
       },
       {
-        slug: "kirishni-boshqarish",
+        slug: "sanoat-avtomatikasi",
         name: "Автоматика Котельных",
-        bgColor: "bg-[#a773ed]",
-        icon: <Sliders className="w-6 h-6" />,
+        iconName: "Sliders",
         subcategories: [
-          { name: "Клапаны продувки и очистки", slug: "kirishni-boshqarish" },
-          { name: "Охладители отбора проб", slug: "kirishni-boshqarish" },
-          { name: "Указатели уровня и давления", slug: "kirishni-boshqarish" },
-          { name: "PLC контроллеры (Siemens S7-1200)", slug: "kirishni-boshqarish" },
-          { name: "Блоки безопасности котельной", slug: "kirishni-boshqarish" },
-          { name: "Термостаты и регуляторы температуры", slug: "kirishni-boshqarish" },
+          { name: "Автоматика котельных и модули", slug: "qozonxona-avtomatikasi" },
+          { name: "PLC контроллеры Siemens", slug: "sanoat-avtomatikasi" },
         ],
       },
     ],
@@ -207,122 +261,114 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
       {
         slug: "videokuzatuv",
         name: "Pipeline Valves & Cameras",
-        bgColor: "bg-[#ff8a8a]",
-        icon: <Wrench className="w-6 h-6" />,
+        iconName: "Wrench",
         subcategories: [
           { name: "Vertical multistage cameras", slug: "videokuzatuv" },
           { name: "Horizontal 4K IP cameras", slug: "videokuzatuv" },
-          { name: "Submersible valves & gate valves", slug: "videokuzatuv" },
-          { name: "Circulation pipe connectors", slug: "videokuzatuv" },
-          { name: "Fire-rated industrial valves", slug: "videokuzatuv" },
           { name: "Thermal imaging cameras", slug: "videokuzatuv" },
         ],
       },
       {
-        slug: "videokuzatuv",
+        slug: "sanoat-avtomatikasi",
         name: "Pump Hardware & Recorders",
-        bgColor: "bg-[#7a8aff]",
-        icon: <Activity className="w-6 h-6" />,
+        iconName: "Activity",
         subcategories: [
-          { name: "Vertical multistage pumps", slug: "videokuzatuv" },
-          { name: "Horizontal industrial pumps", slug: "videokuzatuv" },
-          { name: "Granpump submersible pumps", slug: "videokuzatuv" },
-          { name: "Circulation pumps (wet rotor)", slug: "videokuzatuv" },
-          { name: "Circulation pumps (dry rotor)", slug: "videokuzatuv" },
-          { name: "Granflow water supply units", slug: "videokuzatuv" },
-          { name: "Granflow fire suppression units", slug: "videokuzatuv" },
-          { name: "Combined industrial stations", slug: "videokuzatuv" },
+          { name: "Vertical multistage pumps", slug: "vertikal-nasoslar" },
+          { name: "Granflow water supply units", slug: "sanoat-avtomatikasi" },
         ],
       },
       {
         slug: "kirishni-boshqarish",
         name: "Electrical Equipment & Turnstiles",
-        bgColor: "bg-[#7accee]",
-        icon: <Cpu className="w-6 h-6" />,
+        iconName: "Cpu",
         subcategories: [
-          { name: "ZKTeco tripod & biometric turnstiles", slug: "kirishni-boshqarish" },
+          { name: "ZKTeco tripod & biometric turnstiles", slug: "turniketlar" },
           { name: "Vacuum circuit breakers 12kV", slug: "kirishni-boshqarish" },
-          { name: "Frequency inverters (Delta / Danfoss)", slug: "kirishni-boshqarish" },
-          { name: "Industrial transformers & KTP", slug: "kirishni-boshqarish" },
-          { name: "Barriers & automatic gates", slug: "kirishni-boshqarish" },
-          { name: "TE73 380V Smart meters", slug: "kirishni-boshqarish" },
         ],
       },
       {
         slug: "kirishni-boshqarish",
         name: "KIPiA & ACS Biometrics",
-        bgColor: "bg-[#52d66b]",
-        icon: <ShieldCheck className="w-6 h-6" />,
+        iconName: "ShieldCheck",
         subcategories: [
-          { name: "Pressure sensors (Manometers)", slug: "kirishni-boshqarish" },
-          { name: "Pressure gauges & thermometers", slug: "kirishni-boshqarish" },
-          { name: "Biometric face recognition terminals", slug: "kirishni-boshqarish" },
-          { name: "Flowmeters", slug: "kirishni-boshqarish" },
-          { name: "Magnetic & electronic ACS locks", slug: "kirishni-boshqarish" },
-          { name: "Gas & heat detectors", slug: "kirishni-boshqarish" },
+          { name: "Pressure sensors (Manometers)", slug: "kipia-manometrlar" },
+          { name: "Biometric face recognition terminals", slug: "biometrik-skanerlar" },
         ],
       },
       {
         slug: "yongin-xavfsizligi",
         name: "Solenoid & Pneumatic Valves",
-        bgColor: "bg-[#c56dbb]",
-        icon: <Flame className="w-6 h-6" />,
+        iconName: "Flame",
         subcategories: [
-          { name: "Festo DNC Pneumatic cylinders", slug: "yongin-xavfsizligi" },
-          { name: "Electromagnetic (Solenoid) valves", slug: "yongin-xavfsizligi" },
-          { name: "Pneumatic distributors & blocks", slug: "yongin-xavfsizligi" },
-          { name: "Valve blowdown & cleaning units", slug: "yongin-xavfsizligi" },
-          { name: "Sample coolers", slug: "yongin-xavfsizligi" },
-          { name: "Industrial pneumatic hoses & fittings", slug: "yongin-xavfsizligi" },
+          { name: "Festo DNC Pneumatic cylinders", slug: "festo-pnevmatika" },
+          { name: "Smoke and fire detectors", slug: "tutun-datchiklari" },
         ],
       },
       {
-        slug: "kirishni-boshqarish",
+        slug: "sanoat-avtomatikasi",
         name: "Boiler Automation",
-        bgColor: "bg-[#a773ed]",
-        icon: <Sliders className="w-6 h-6" />,
+        iconName: "Sliders",
         subcategories: [
-          { name: "Blowdown & cleaning valves", slug: "kirishni-boshqarish" },
-          { name: "Sample coolers", slug: "kirishni-boshqarish" },
-          { name: "Water level & pressure indicators", slug: "kirishni-boshqarish" },
-          { name: "PLC controllers (Siemens S7-1200)", slug: "kirishni-boshqarish" },
-          { name: "Boiler safety blocks", slug: "kirishni-boshqarish" },
-          { name: "Thermostats & temperature controllers", slug: "kirishni-boshqarish" },
+          { name: "Boiler room automation units", slug: "qozonxona-avtomatikasi" },
+          { name: "PLC controllers Siemens", slug: "sanoat-avtomatikasi" },
         ],
       },
     ],
   };
 
-  const activeCategories = categoriesByLang[locale] || categoriesByLang.uz;
+  // Determine dynamic list: If backend categories are provided, map them directly!
+  const displayCategories =
+    Array.isArray(currentCategories) && currentCategories.length > 0
+      ? currentCategories.map((cat, idx) => ({
+          name: cat.name,
+          slug: cat.slug,
+          iconName: cat.iconName || (idx === 0 ? "Wrench" : idx === 1 ? "Activity" : idx === 2 ? "Cpu" : idx === 3 ? "ShieldCheck" : idx === 4 ? "Flame" : "Sliders"),
+          subcategories:
+            Array.isArray(cat.subcategories) && cat.subcategories.length > 0
+              ? cat.subcategories
+              : [
+                  { name: `${cat.name} — Barchasi`, slug: cat.slug },
+                  { name: `${cat.name} Komponentlari`, slug: cat.slug },
+                ],
+        }))
+      : fallbackCategoriesByLang[locale] || fallbackCategoriesByLang.uz;
 
   return (
-    <section className="mb-12">
+    <section className="mb-10">
       <div className="flex items-center justify-between mb-6 pb-2 border-b-2 border-industrial-blue">
         <h2 className="text-xl sm:text-2xl font-black text-industrial-blue">
-          {t("categories.title")}
+          {title || t("categories.title")}
         </h2>
-        <Link
-          href="/katalog"
-          className="text-xs font-extrabold text-industrial-orange hover:underline uppercase"
-        >
-          {t("categories.viewAll")} →
-        </Link>
+        {showViewAll && (
+          <Link
+            href="/katalog"
+            className="text-xs font-extrabold text-industrial-orange hover:underline uppercase"
+          >
+            {t("categories.viewAll")} →
+          </Link>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        {activeCategories.map((cat, idx) => {
+      <div
+        className={`grid grid-cols-1 ${
+          gridCols === 3 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"
+        } gap-6 items-start`}
+      >
+        {displayCategories.map((cat, idx) => {
           const isOpen = !!openStates[idx];
+          const bgColor = TILE_COLORS[idx % TILE_COLORS.length];
+          const icon = getCategoryIcon(cat.iconName);
 
           return (
             <div
-              key={idx}
+              key={`${cat.slug}-${idx}`}
               className="rounded-lg overflow-hidden border border-industrial-border-subtle shadow-sm transition-all"
             >
               {/* Header Bar with Toggle Button */}
               <button
                 type="button"
                 onClick={() => toggleCategory(idx)}
-                className={`w-full ${cat.bgColor} text-white p-4 sm:p-5 flex items-center justify-between hover:brightness-105 transition-all text-left group`}
+                className={`w-full ${bgColor} text-white p-4 sm:p-5 flex items-center justify-between hover:brightness-105 transition-all text-left group cursor-pointer`}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-black text-xl shrink-0 group-hover:scale-110 transition-transform">
@@ -332,7 +378,7 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
                     {cat.name}
                   </span>
                 </div>
-                <div className="opacity-90 shrink-0">{cat.icon}</div>
+                <div className="opacity-90 shrink-0">{icon}</div>
               </button>
 
               {/* Subcategories List Panel (Shown when Open) */}

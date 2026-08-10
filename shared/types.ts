@@ -21,6 +21,7 @@ export interface Product {
   sku: string;
   categorySlug: string;
   categoryName: string;
+  categoryRelationSlug?: string;
   price: number;
   oldPrice?: number;
   currency: string;
@@ -45,7 +46,14 @@ export interface Category {
   iconName: string;
   imageUrl: string;
   productCount: number;
-  subcategories?: { slug: string; name: string }[];
+  order?: number;
+  subcategories?: {
+    id?: string | number;
+    slug: string;
+    name: string;
+    iconName?: string;
+    order?: number;
+  }[];
 }
 
 export interface CalculatorPayload {

@@ -16,10 +16,12 @@ import { BreadcrumbJsonLd } from "@/components/features/json-ld";
 import { ContactForm } from "@/components/features/contact-form";
 import { Card } from "@/components/ui/card";
 
+import { BranchLocationsMap } from "@/components/features/branch-locations-map";
+
 export const metadata: Metadata = {
   title: "Kontaktlar va Manzil — Kontrol.uz",
   description:
-    "Kontrol.uz sanoat uskunalar B2B distribyutori bilan bog'lanish: Toshkent sh., Nukus ko'chasi 71-uy. Telefon: +998 (71) 200-68-00",
+    "Kontrol.uz sanoat uskunalar B2B distribyutori filiallari: Qorasaroy va Markaziy Servis Markazi. Telefon: +998 (71) 200-68-00",
 };
 
 export default function ContactsPage() {
@@ -39,40 +41,51 @@ export default function ContactsPage() {
             Bosh sahifa
           </Link>
           <span>/</span>
-          <span className="font-bold text-industrial-blue">Kontaktlar va Manzil</span>
+          <span className="font-bold text-industrial-blue">Kontaktlar va Filiallar</span>
         </nav>
 
         {/* Hero Title Section */}
-        <div className="bg-industrial-blue text-white p-8 rounded-xl shadow-md space-y-3 relative overflow-hidden">
+        <div className="bg-industrial-blue text-white p-8 rounded-2xl shadow-md space-y-3 relative overflow-hidden">
           <div className="relative z-10 max-w-2xl">
             <span className="bg-industrial-orange text-white text-[10px] font-black px-2.5 py-1 rounded uppercase tracking-wider">
               24/7 B2B ALOQA LINIYASI
             </span>
             <h1 className="text-3xl sm:text-4xl font-black text-white mt-2">
-              Biz Bilan Bog'laning va Injenyerlik Konsultatsiyasini Oling
+              Biz Bilan Bog'laning va Filiallarimizga Tashrif Buyuring
             </h1>
             <p className="text-sm text-white/90 leading-relaxed font-normal">
-              Sanoat uskunalarini yetkazib berish, smeta tuzish va loyihalash bo'yicha markaziy sales ofisimiz va servis markazlarimiz bilan bog'laning.
+              Sanoat uskunalarini yetkazib berish, smeta tuzish va loyihalash bo'yicha filiallarimiz va servis markazlarimiz bilan bog'laning.
             </p>
           </div>
         </div>
 
         {/* 4 Bento Contact Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Card 1: Address */}
+          {/* Card 1: 1-Filial Qorasaroy */}
           <Card className="p-6 bg-white border border-industrial-border space-y-3 shadow-sm hover:border-industrial-blue transition-all">
             <div className="w-10 h-10 rounded-lg bg-industrial-blue/10 text-industrial-blue flex items-center justify-center">
               <MapPin className="w-5 h-5" />
             </div>
-            <h3 className="font-extrabold text-sm text-industrial-text">Bosh Ofis & Showroom</h3>
+            <h3 className="font-extrabold text-sm text-industrial-text">1-Filial: Qorasaroy</h3>
             <p className="text-xs text-industrial-text-muted leading-relaxed">
-              O'zbekiston, Toshkent shahri, Mirabad tumani, Nukus ko'chasi, 71-uy.
+              Toshkent shahri, Olmazor tumani, Qorasaroy ko'chasi.
             </p>
           </Card>
 
-          {/* Card 2: Phone */}
+          {/* Card 2: Bosh Ofis & Showroom */}
           <Card className="p-6 bg-white border border-industrial-border space-y-3 shadow-sm hover:border-industrial-blue transition-all">
             <div className="w-10 h-10 rounded-lg bg-industrial-orange/10 text-industrial-orange flex items-center justify-center">
+              <Building className="w-5 h-5" />
+            </div>
+            <h3 className="font-extrabold text-sm text-industrial-text">Bosh Ofis & Sklad</h3>
+            <p className="text-xs text-industrial-text-muted leading-relaxed">
+              Toshkent shahri, Chilonzor tumani, Kontrol Bosh Ofisi.
+            </p>
+          </Card>
+
+          {/* Card 3: Phone */}
+          <Card className="p-6 bg-white border border-industrial-border space-y-3 shadow-sm hover:border-industrial-blue transition-all">
+            <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
               <Phone className="w-5 h-5" />
             </div>
             <h3 className="font-extrabold text-sm text-industrial-text">Telefon Liniyalari</h3>
@@ -82,21 +95,9 @@ export default function ContactsPage() {
             </div>
           </Card>
 
-          {/* Card 3: Email */}
-          <Card className="p-6 bg-white border border-industrial-border space-y-3 shadow-sm hover:border-industrial-blue transition-all">
-            <div className="w-10 h-10 rounded-lg bg-industrial-blue/10 text-industrial-blue flex items-center justify-center">
-              <Mail className="w-5 h-5" />
-            </div>
-            <h3 className="font-extrabold text-sm text-industrial-text">Elektron Pochtalar</h3>
-            <div className="text-xs text-industrial-text-muted space-y-1">
-              <div className="font-bold text-industrial-blue">info@kontrol.uz</div>
-              <div>sales@kontrol.uz</div>
-            </div>
-          </Card>
-
           {/* Card 4: Hours */}
           <Card className="p-6 bg-white border border-industrial-border space-y-3 shadow-sm hover:border-industrial-blue transition-all">
-            <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
               <Clock className="w-5 h-5" />
             </div>
             <h3 className="font-extrabold text-sm text-industrial-text">Ish Vaqti</h3>
@@ -107,6 +108,9 @@ export default function ContactsPage() {
           </Card>
         </div>
 
+        {/* 2 Branches Interactive Google Maps Section */}
+        <BranchLocationsMap />
+
         {/* Main Content Grid: Form + Regional Coverage */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Form Area */}
@@ -114,7 +118,7 @@ export default function ContactsPage() {
             <ContactForm />
           </div>
 
-          {/* Regional Network Info & Map Area */}
+          {/* Regional Network Info */}
           <div className="lg:col-span-5 space-y-6">
             <Card className="p-6 bg-white border border-industrial-border space-y-4">
               <h3 className="font-extrabold text-base text-industrial-blue flex items-center gap-2">
@@ -148,21 +152,6 @@ export default function ContactsPage() {
                 <div className="flex items-center gap-2">
                   <Award className="w-4 h-4 text-industrial-orange shrink-0" />
                   <span>Toshkent Markaziy Omboridan Tezkor Yuklash</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Interactive Map Visual Box */}
-            <Card className="p-4 bg-white border border-industrial-border space-y-2">
-              <div className="font-bold text-xs text-industrial-text flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-industrial-orange" />
-                Showroom va Omborxonamiz Joylashuvi (Nukus 71)
-              </div>
-              <div className="w-full h-48 bg-industrial-surface-low rounded border border-industrial-border-subtle flex items-center justify-center text-xs text-industrial-text-muted relative overflow-hidden">
-                <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80')" }}></div>
-                <div className="relative z-10 bg-industrial-blue text-white px-4 py-2 rounded-full font-bold shadow-lg flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-industrial-orange" />
-                  Kontrol.uz Toshkent Showroom
                 </div>
               </div>
             </Card>

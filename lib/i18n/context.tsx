@@ -35,8 +35,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(lang);
     try {
       localStorage.setItem(STORAGE_KEY, lang);
+      document.cookie = `kontrol_lang=${encodeURIComponent(lang)}; path=/; max-age=31536000; SameSite=Lax`;
     } catch (e) {
-      console.warn("Could not save language preference to localStorage.");
+      console.warn("Could not save language preference.");
     }
   };
 

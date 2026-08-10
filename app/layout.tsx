@@ -54,6 +54,7 @@ export const metadata: Metadata = {
 
 import { LanguageProvider } from "@/lib/i18n/context";
 import { CartProvider } from "@/lib/cart/cart-context";
+import { FloatingContactButtons } from "@/components/features/floating-contact-buttons";
 
 export default async function RootLayout({
   children,
@@ -68,13 +69,14 @@ export default async function RootLayout({
         <OrganizationJsonLd org={orgInfo} />
         <LocalBusinessJsonLd org={orgInfo} />
       </head>
-      <body className="min-h-screen flex flex-col justify-between">
+      <body className="min-h-screen flex flex-col justify-between relative">
         <LanguageProvider>
           <CartProvider>
             <Header />
             <main className="flex-1">{children}</main>
             <GlobalContactSection />
             <Footer />
+            <FloatingContactButtons />
           </CartProvider>
         </LanguageProvider>
       </body>

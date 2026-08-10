@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Globe, ChevronDown, Check } from "lucide-react";
 import { useTranslation } from "@/lib/i18n/context";
 import { Language } from "@/lib/i18n/translations";
 
 export function LanguageDropdown() {
+  const router = useRouter();
   const { locale, setLocale } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -58,6 +60,7 @@ export function LanguageDropdown() {
               onClick={() => {
                 setLocale(lang.code);
                 setIsOpen(false);
+                router.refresh();
               }}
               className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors ${
                 locale === lang.code

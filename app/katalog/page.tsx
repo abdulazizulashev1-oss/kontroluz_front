@@ -10,10 +10,13 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { fetchCategories, fetchProducts } from "@/lib/api";
+import { getServerLocale } from "@/lib/i18n/server";
 import { ProductCard } from "@/components/features/product-card";
 import { BreadcrumbJsonLd } from "@/components/features/json-ld";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CategoryGrid } from "@/components/features/category-grid";
+import { CatalogCategorySidebar } from "@/components/features/catalog-category-sidebar";
 import { CatalogFilterToolbar } from "@/components/features/catalog-filter-toolbar";
 import { PriceFilterForm } from "@/components/features/price-filter-form";
 
@@ -40,14 +43,19 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const minPriceNum = searchParams.minPrice ? Number(searchParams.minPrice) : null;
   const maxPriceNum = searchParams.maxPrice ? Number(searchParams.maxPrice) : null;
 
-  const categories = await fetchCategories();
-  const allProducts = await fetchProducts();
+  const locale = getServerLocale();
+  const categories = await fetchCategories(locale);
+  const allProducts = await fetchProducts({ locale });
 
   // 1. Filtering products
   let products = allProducts.filter((p) => {
     // Category filter
-    if (selectedCategorySlug && p.categorySlug !== selectedCategorySlug) {
-      return false;
+    if (selectedCategorySlug) {
+      const matchCat =
+        p.categorySlug === selectedCategorySlug ||
+        p.categoryRelationSlug === selectedCategorySlug ||
+        p.categorySlug?.toLowerCase() === selectedCategorySlug.toLowerCase();
+      if (!matchCat) return false;
     }
 
     // Search query filter
@@ -104,14 +112,20 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       : []),
   ];
 
-  const popularCategories = [
-    { name: "Quvur Armaturasi", color: "bg-[#fc8b91]", slug: "videokuzatuv" },
-    { name: "Nasos Uskunalari", color: "bg-[#7b81f1]", slug: "videokuzatuv" },
-    { name: "Elektr Uskunalari", color: "bg-[#7accee]", slug: "kirishni-boshqarish" },
-    { name: "KIPiA va SKUD", color: "bg-[#5cdc69]", slug: "kirishni-boshqarish" },
-    { name: "Elektromagnit Klapanlar", color: "bg-[#c56dbb]", slug: "yongin-xavfsizligi" },
-    { name: "Avtomatika Tizimlari", color: "bg-[#a773ed]", slug: "kirishni-boshqarish" },
+  const TILE_COLORS = [
+    "bg-[#fc8b91]",
+    "bg-[#7b81f1]",
+    "bg-[#7accee]",
+    "bg-[#5cdc69]",
+    "bg-[#c56dbb]",
+    "bg-[#a773ed]",
   ];
+
+  const popularCategories = categories.map((cat, idx) => ({
+    name: cat.name,
+    slug: cat.slug,
+    color: TILE_COLORS[idx % TILE_COLORS.length],
+  }));
 
   return (
     <div className="bg-industrial-surface min-h-screen py-6">
@@ -135,69 +149,23 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
           )}
         </nav>
 
-        {/* 1. Ommabop Ruknlar Section */}
-        <section>
-          <h2 className="text-xl sm:text-2xl font-black text-industrial-blue mb-4">
-            Ommabop Ruknlar
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {popularCategories.map((cat, idx) => (
-              <Link
-                key={idx}
-                href={`/katalog?category=${cat.slug}`}
-                className={`${cat.color} text-white p-5 rounded-lg flex items-center justify-between hover:opacity-95 transition-all shadow-sm group`}
-              >
-                <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                <h3 className="font-extrabold text-base text-center flex-1">{cat.name}</h3>
-                <ArrowRight className="w-5 h-5 opacity-70 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            ))}
-          </div>
-        </section>
+        {/* 1. Ommabop Ruknlar Section with Subcategories Dropdown / Accordion */}
+        <CategoryGrid
+          categories={categories}
+          title="Ommabop Ruknlar"
+          showViewAll={false}
+          gridCols={2}
+        />
 
         {/* 2. Main Catalog Section with Deep Filters Sidebar & Product Grid */}
         <div className="pt-4 border-t border-industrial-border grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Sidebar (Categories & Deep Filters) */}
+          {/* Left Sidebar (Categories with Subcategories Dropdown & Deep Filters) */}
           <aside className="lg:col-span-3 space-y-6">
-            {/* Category Navigation */}
-            <Card className="p-5 bg-white border border-industrial-border">
-              <div className="flex items-center gap-2 text-sm font-extrabold text-industrial-blue uppercase border-b border-industrial-border pb-3 mb-4">
-                <SlidersHorizontal className="w-4 h-4 text-industrial-orange" />
-                <span>Kategoriyalar</span>
-              </div>
-
-              <ul className="space-y-1.5 text-xs font-medium">
-                <li>
-                  <Link
-                    href="/katalog"
-                    className={`block p-2.5 rounded transition-colors ${
-                      !selectedCategorySlug
-                        ? "bg-industrial-blue text-white font-bold"
-                        : "hover:bg-industrial-surface-low text-industrial-text"
-                    }`}
-                  >
-                    Barcha Uskunalar
-                  </Link>
-                </li>
-                {categories.map((cat) => (
-                  <li key={cat.id}>
-                    <Link
-                      href={`/katalog?category=${cat.slug}`}
-                      className={`flex justify-between items-center p-2.5 rounded transition-colors ${
-                        selectedCategorySlug === cat.slug
-                          ? "bg-industrial-blue text-white font-bold"
-                          : "hover:bg-industrial-surface-low text-industrial-text"
-                      }`}
-                    >
-                      <span>{cat.name}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-black/10 font-mono font-bold">
-                        {cat.productCount}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+            {/* Category Navigation with Subcategories Dropdown */}
+            <CatalogCategorySidebar
+              categories={categories}
+              selectedCategorySlug={selectedCategorySlug}
+            />
 
             {/* Deep Technical & Price Filters */}
             <Card className="p-5 bg-white border border-industrial-border space-y-5 text-xs">

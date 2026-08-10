@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Shield, Phone, Mail, MapPin, Clock, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/lib/i18n/context";
 
@@ -13,14 +14,18 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         {/* Brand & Organization Bio */}
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <div className="bg-industrial-orange p-2 rounded">
-              <Shield className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-extrabold tracking-tight text-white">
+          <Link href="/" className="flex items-center gap-3 group">
+            <Image
+              src="/images/logo-icon.png"
+              alt="Kontrol.uz"
+              width={44}
+              height={44}
+              className="w-10 h-10 object-contain rounded-full bg-white p-0.5 shadow-md group-hover:scale-105 transition-transform"
+            />
+            <span className="text-2xl font-black tracking-tight text-white">
               KONTROL<span className="text-industrial-orange">.UZ</span>
             </span>
-          </div>
+          </Link>
           <p className="text-sm text-slate-300 leading-relaxed">
             {t("footer.description")}
           </p>

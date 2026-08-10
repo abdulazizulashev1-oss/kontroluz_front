@@ -26,10 +26,10 @@ export function GlobalContactSection() {
   const socialLinks = [
     {
       name: "Telegram Bot",
-      url: "https://t.me/kontrol_bot",
+      url: "https://t.me/kontrol_uz_bot",
       icon: Send,
       color: "bg-[#0088cc] hover:bg-[#0077b5] text-white",
-      tag: "@kontrol_bot",
+      tag: "@kontrol_uz_bot",
     },
     {
       name: "WhatsApp",
@@ -129,55 +129,75 @@ export function GlobalContactSection() {
             </Card>
           </div>
 
-          {/* Right Column: Location & Interactive Map Card */}
+          {/* Right Column: 2 Branches Interactive Google Map */}
           <div className="lg:col-span-6">
-            <Card className="p-6 bg-white border border-industrial-border shadow-sm h-full flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between border-b border-industrial-border pb-3">
+            <Card className="p-5 sm:p-6 bg-white border border-industrial-border shadow-sm h-full flex flex-col justify-between space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between border-b border-industrial-border pb-2.5">
                   <h3 className="font-extrabold text-sm text-industrial-blue flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-industrial-orange" />
-                    <span>{t("contact.addressTitle")}</span>
+                    <span>Filiallarimiz Joylashuvi</span>
                   </h3>
                   <span className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" /> {t("contact.workingHours")}
+                    <Clock className="w-3.5 h-3.5" /> Dush-Juma: 09:00-18:00
                   </span>
                 </div>
 
-                <p className="text-xs text-industrial-text-muted leading-relaxed">
-                  {t("contact.address")}
-                </p>
-              </div>
-
-              {/* Map Canvas */}
-              <div className="relative w-full h-56 bg-industrial-surface-low rounded-lg border border-industrial-border-subtle overflow-hidden group flex items-center justify-center">
-                <div
-                  className="absolute inset-0 bg-cover bg-center opacity-90 group-hover:scale-105 transition-transform duration-500"
-                  style={{
-                    backgroundImage:
-                      "url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80')",
-                  }}
-                ></div>
-
-                <div className="absolute inset-0 bg-industrial-blue/40"></div>
-
-                <div className="relative z-10 text-center space-y-2 p-4">
-                  <div className="inline-flex items-center gap-2 bg-industrial-blue text-white px-4 py-2 rounded-full font-extrabold text-xs shadow-xl border border-white/20">
-                    <MapPin className="w-4 h-4 text-industrial-orange" />
-                    <span>Kontrol.uz Tashkent Showroom & Sklad</span>
-                  </div>
-
-                  <div>
+                {/* Branch Quick Switcher */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
+                  <div className="p-2.5 bg-blue-50/60 rounded-lg border border-industrial-blue/30 space-y-1">
+                    <div className="font-extrabold text-industrial-blue flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-industrial-blue" />
+                      <span>1-Filial: Qorasaroy</span>
+                    </div>
+                    <p className="text-[11px] text-industrial-text-muted leading-tight">
+                      Olmazor tumani, Qorasaroy ko'chasi
+                    </p>
                     <a
-                      href="https://yandex.uz/maps"
+                      href="https://www.google.com/maps/place/Kontrol+Qorasaroy/@41.3572598,69.2427857,19z"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-industrial-orange text-white text-xs font-bold px-4 py-2 rounded hover:bg-industrial-orange-dark transition-colors shadow"
+                      className="text-[10px] font-bold text-industrial-orange hover:underline flex items-center gap-1 pt-0.5"
                     >
-                      <span>Yandex / Google Maps</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Google Xaritada</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  </div>
+
+                  <div className="p-2.5 bg-industrial-surface-low rounded-lg border border-industrial-border-subtle space-y-1">
+                    <div className="font-extrabold text-industrial-text flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-industrial-orange" />
+                      <span>Bosh Ofis: Chilonzor</span>
+                    </div>
+                    <p className="text-[11px] text-industrial-text-muted leading-tight">
+                      Chilonzor tumani, Bosh Ofis & Sklad
+                    </p>
+                    <a
+                      href="https://www.google.com/maps/place/Kontrol/@41.2547777,69.2019358,19z"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-bold text-industrial-orange hover:underline flex items-center gap-1 pt-0.5"
+                    >
+                      <span>Google Xaritada</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
                     </a>
                   </div>
                 </div>
+              </div>
+
+              {/* Map Iframe */}
+              <div className="relative w-full h-56 rounded-xl border border-industrial-border overflow-hidden shadow-inner bg-industrial-surface-low">
+                <iframe
+                  title="Kontrol Qorasaroy & Bosh Ofis"
+                  src="https://maps.google.com/maps?q=41.3572598,69.2427857&hl=uz&z=14&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
+                />
               </div>
             </Card>
           </div>
