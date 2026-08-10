@@ -98,7 +98,7 @@ export function RelatedProductsCarousel({
         {products.map((product) => (
           <div
             key={`rel-${product.id}`}
-            className="w-72 sm:w-80 shrink-0 snap-start h-full"
+            className="w-44 sm:w-72 md:w-80 shrink-0 snap-start h-full"
           >
             <ProductCard product={product} />
           </div>

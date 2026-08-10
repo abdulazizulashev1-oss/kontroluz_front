@@ -277,8 +277,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     Chegirmali Mahsulotlar
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {onSaleProducts.slice(0, 3).map((prod) => (
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                  {onSaleProducts.slice(0, 4).map((prod) => (
                     <ProductCard key={`sale-${prod.id}`} product={prod} />
                   ))}
                 </div>
@@ -294,8 +294,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     Bestsellerlar (TOP Xitlar)
                   </h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {bestsellerProducts.slice(0, 3).map((prod) => (
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                  {bestsellerProducts.slice(0, 4).map((prod) => (
                     <ProductCard key={`top-${prod.id}`} product={prod} />
                   ))}
                 </div>

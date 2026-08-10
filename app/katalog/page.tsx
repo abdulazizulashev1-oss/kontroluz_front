@@ -195,7 +195,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
             {/* Product Cards Grid */}
             {products.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -228,7 +228,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                 Chegirmali Mahsulotlar
               </h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {onSaleProducts.map((product) => (
                 <ProductCard key={`sale-${product.id}`} product={product} />
               ))}
@@ -245,7 +245,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                 Bestsellerlar (TOP Savdo Xitlari)
               </h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {bestsellerProducts.slice(0, 4).map((product) => (
                 <ProductCard key={`top-${product.id}`} product={product} />
               ))}
