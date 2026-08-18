@@ -119,16 +119,16 @@ cp .env.example .env.local
 
 `.env.local` ichidagi o'zgaruvchilar:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:1337/api
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-REVALIDATION_SECRET=kontrol_secret_key_2026
+NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_SITE_URL=
+REVALIDATION_SECRET=
 ```
 
 ### 4. Dasturni dev rejimida ishga tushirish:
 ```bash
 npm run dev
 ```
-Brauzeringizda oching: [http://localhost:3000](http://localhost:3000)
+Brauzeringizda oching: 
 
 ---
 
