@@ -15,29 +15,29 @@ export function PromoBanner() {
   return (
     <section className="mb-12 rounded-xl overflow-hidden bg-industrial-blue text-white flex flex-col md:flex-row items-stretch shadow-lg border border-industrial-blue-dark">
       {/* Left Content */}
-      <div className="p-8 md:p-12 flex-1 flex flex-col justify-center space-y-4">
-        <div className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-industrial-orange bg-industrial-orange/10 px-3 py-1 rounded w-max border border-industrial-orange/30">
+      <div className="p-5 sm:p-8 md:p-12 flex-1 flex flex-col justify-center space-y-3 sm:space-y-4">
+        <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-widest text-industrial-orange bg-industrial-orange/10 px-2.5 py-1 rounded w-max border border-industrial-orange/30">
           <Zap className="w-3.5 h-3.5" />
           <span>{t("promo.badge")}</span>
         </div>
 
-        <h2 className="text-2xl md:text-4xl font-black text-white leading-tight">
+        <h2 className="text-xl sm:text-2xl md:text-4xl font-black text-white leading-tight">
           {t("promo.title")}
         </h2>
 
-        <p className="text-sm md:text-base text-white/90 max-w-lg leading-relaxed">
+        <p className="text-xs sm:text-sm md:text-base text-white/90 max-w-lg leading-relaxed">
           {t("promo.description")}
         </p>
 
-        <div className="flex flex-wrap gap-4 pt-2">
-          <Link href="/#calculator">
-            <Button variant="cta" size="lg" className="gap-2 font-extrabold px-6">
+        <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full sm:w-auto">
+          <Link href="/#calculator" className="w-full sm:w-auto">
+            <Button variant="cta" size="lg" className="w-full sm:w-auto gap-2 font-extrabold px-6 justify-center">
               <span>{t("promo.button")}</span>
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
-          <Link href="/katalog">
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-industrial-blue font-bold px-6">
+          <Link href="/katalog" className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-industrial-blue font-bold px-6 justify-center">
               {t("promo.validity")}
             </Button>
           </Link>

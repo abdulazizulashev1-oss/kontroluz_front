@@ -1,25 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Send, CheckCircle2, Phone, User, Building2, MessageSquare, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "@/lib/i18n/context";
-import { createLead } from "@/lib/api";
+import { createLead, fetchCategories } from "@/lib/api";
+import { Category } from "@/shared/types";
 
 export function ContactForm() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     company: "",
-    category: "videokuzatuv",
+    category: "",
     message: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadCategories() {
+      try {
+        const cats = await fetchCategories(locale);
+        if (isMounted && cats && cats.length > 0) {
+          setCategories(cats);
+          setFormData((prev) => ({
+            ...prev,
+            category: prev.category || cats[0].name,
+          }));
+        }
+      } catch (err) {
+        // Fallback handled
+      }
+    }
+    loadCategories();
+    return () => {
+      isMounted = false;
+    };
+  }, [locale]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,9 +170,22 @@ export function ContactForm() {
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               className="w-full p-3 border border-industrial-border rounded bg-industrial-surface-low text-industrial-text focus:outline-none focus:border-industrial-blue text-xs font-bold cursor-pointer"
             >
-              <option value="videokuzatuv">Videokuzatuv / CCTV</option>
-              <option value="skud">SKUD / Access Control</option>
-              <option value="yongin">Yong'in Xavfsizligi / Fire Safety</option>
+              {categories.length > 0 ? (
+                categories.map((cat) => (
+                  <option key={cat.id || cat.slug} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))
+              ) : (
+                <>
+                  <option value="Elektr Hisoblagichlar">Elektr Hisoblagichlar</option>
+                  <option value="Pnevmatika va Fitinglar">Pnevmatika va Fitinglar</option>
+                  <option value="KIPiA va Avtomatika">KIPiA va Avtomatika</option>
+                  <option value="Videokuzatuv Tizimlari">Videokuzatuv Tizimlari</option>
+                  <option value="Kirishni Boshqarish (SKUD)">Kirishni Boshqarish (SKUD)</option>
+                  <option value="Yong'in Xavfsizligi">Yong'in Xavfsizligi</option>
+                </>
+              )}
             </select>
           </div>
         </div>

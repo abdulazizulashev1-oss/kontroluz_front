@@ -1,37 +1,20 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import {
-  Star,
-  ShieldCheck,
-  Truck,
-  ShoppingCart,
   Check,
-  Phone,
-  FileText,
-  Download,
   Bolt,
   Gauge,
   Shield,
   Settings,
-  Plus,
-  ArrowRight,
-  Heart,
-  ArrowLeftRight,
   TrendingUp,
   Tag,
-  ChevronLeft,
-  ChevronRight,
-  ZoomIn,
-  PlayCircle,
 } from "lucide-react";
 import { fetchProductBySlug, fetchProducts, fetchCategories } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
+import { translations } from "@/lib/i18n/translations";
 import { formatPrice } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/features/json-ld";
 import { ProductCard } from "@/components/features/product-card";
@@ -40,6 +23,7 @@ import { ProductGallery } from "@/components/features/product-gallery";
 import { RelatedProductsCarousel } from "@/components/features/related-products-carousel";
 import { ProductDetailTabs } from "@/components/features/product-detail-tabs";
 import { CategoryGrid } from "@/components/features/category-grid";
+import { CatalogCategorySidebar } from "@/components/features/catalog-category-sidebar";
 
 interface ProductPageProps {
   params: {
@@ -50,24 +34,42 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const locale = getServerLocale();
+  const dict = translations[locale] || translations.ru || translations.uz;
   const product = await fetchProductBySlug(params.slug, locale);
   if (!product) {
     return {
-      title: "Mahsulot Topilmadi",
+      title: dict.catalogPage.noProducts,
     };
   }
 
+  const formattedPrice = formatPrice(product.price, product.currency || "UZS");
+  const metaTitle = `${product.title} (${product.sku}) — Narxi: ${formattedPrice} | Kontrol.uz`;
+  const metaDesc =
+    product.seo?.description ||
+    product.shortDescription ||
+    `${product.title} (${product.sku}) sotib olish. Narxi: ${formattedPrice}. Kontrol.uz da rasmiy kafolat, texnik xizmat va O'zbekiston bo'ylab yetkazib berish.`;
+
   return {
-    title: `${product.title} — Kontrol.uz`,
-    description: product.seo.description || product.shortDescription,
-    keywords: [product.title, product.sku, product.categoryName, "Kontrol.uz"],
+    title: metaTitle,
+    description: metaDesc,
+    keywords: [
+      product.title,
+      product.sku,
+      product.categoryName || "Sanoat uskunalari",
+      "sotib olish",
+      "narxi",
+      "Toshkent",
+      "Kontrol.uz",
+    ],
     alternates: {
       canonical: `https://kontrol.uz/katalog/${params.category}/${params.slug}`,
     },
     openGraph: {
-      title: product.title,
-      description: product.shortDescription,
+      title: metaTitle,
+      description: metaDesc,
       url: `https://kontrol.uz/katalog/${params.category}/${params.slug}`,
+      siteName: "Kontrol.uz",
+      type: "article",
       images: [
         {
           url: product.image,
@@ -77,11 +79,18 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
         },
       ],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description: metaDesc,
+      images: [product.image],
+    },
   };
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const locale = getServerLocale();
+  const dict = translations[locale] || translations.ru || translations.uz;
   const product = await fetchProductBySlug(params.slug, locale);
   if (!product) notFound();
 
@@ -95,26 +104,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     .slice(0, 4);
 
   const breadcrumbs = [
-    { name: "Bosh sahifa", url: "https://kontrol.uz" },
-    { name: "Katalog", url: "https://kontrol.uz/katalog" },
+    { name: dict.nav.home, url: "https://kontrol.uz" },
+    { name: dict.nav.catalog, url: "https://kontrol.uz/katalog" },
     { name: product.categoryName, url: `https://kontrol.uz/katalog?category=${product.categorySlug}` },
     { name: product.title, url: `https://kontrol.uz/katalog/${params.category}/${params.slug}` },
   ];
-
-  const TILE_COLORS = [
-    "bg-[#fc8b91]",
-    "bg-[#7b81f1]",
-    "bg-[#7accee]",
-    "bg-[#5cdc69]",
-    "bg-[#c56dbb]",
-    "bg-[#a773ed]",
-  ];
-
-  const popularCategories = categories.map((cat, idx) => ({
-    name: cat.name,
-    slug: cat.slug,
-    color: TILE_COLORS[idx % TILE_COLORS.length],
-  }));
 
   return (
     <div className="bg-industrial-surface py-6 min-h-screen">
@@ -125,11 +119,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         {/* Breadcrumb Links */}
         <nav className="text-xs text-industrial-text-muted flex items-center gap-2 flex-wrap">
           <Link href="/" className="hover:underline">
-            Bosh sahifa
+            {dict.nav.home}
           </Link>
           <span>/</span>
           <Link href="/katalog" className="hover:underline">
-            Katalog
+            {dict.nav.catalog}
           </Link>
           <span>/</span>
           <Link href={`/katalog?category=${product.categorySlug}`} className="hover:underline font-medium">
@@ -143,38 +137,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Categories Sidebar */}
           <aside className="hidden lg:block lg:col-span-3 space-y-6">
-            <Card className="p-5 bg-white border border-industrial-border">
-              <div className="text-sm font-extrabold text-industrial-blue uppercase border-b border-industrial-border pb-3 mb-4">
-                Kategoriyalar
-              </div>
-              <ul className="space-y-1.5 text-xs font-medium">
-                {categories.map((cat) => (
-                  <li key={cat.id}>
-                    <Link
-                      href={`/katalog?category=${cat.slug}`}
-                      className={`flex justify-between items-center p-2.5 rounded transition-colors ${
-                        product.categorySlug === cat.slug
-                          ? "bg-industrial-blue text-white font-bold"
-                          : "hover:bg-industrial-surface-low text-industrial-text"
-                      }`}
-                    >
-                      <span>{cat.name}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-black/10 font-mono font-bold">
-                        {cat.productCount}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                variant="outline"
-                className="w-full gap-2 text-xs font-bold border-industrial-blue text-industrial-blue mt-6"
-              >
-                <Download className="w-4 h-4" />
-                Sanoat Katalogi (PDF)
-              </Button>
-            </Card>
+            <CatalogCategorySidebar
+              categories={categories}
+              selectedCategorySlug={product.categorySlug}
+              showPdfButton={true}
+            />
           </aside>
 
           {/* Product Detail Main Canvas */}
@@ -191,11 +158,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <div>
                   <div className="flex items-center justify-between text-xs text-industrial-text-muted mb-2">
                     <span className="bg-industrial-surface-low px-2 py-1 rounded font-mono font-bold">
-                      SKU / Artikul: {product.sku}
+                      {dict.products.sku}: {product.sku}
                     </span>
                     <div className="flex items-center gap-1 text-emerald-600 font-bold">
                       <Check className="w-4 h-4 text-emerald-600" />
-                      <span>Omborda mavjud ({product.stockCount} ta)</span>
+                      <span>
+                        {dict.productDetail.inStockAvailable} ({product.stockCount} {dict.productDetail.perUnit})
+                      </span>
                     </div>
                   </div>
 
@@ -219,7 +188,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                         {formatPrice(product.oldPrice, product.currency)}
                       </span>
                     )}
-                    <span className="text-xs text-industrial-text-muted">/ 1 dona</span>
+                    <span className="text-xs text-industrial-text-muted">
+                      / 1 {dict.productDetail.perUnit}
+                    </span>
                   </div>
 
                   <AddToCartSection product={product} />
@@ -230,29 +201,39 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   <div className="flex items-center gap-2">
                     <Bolt className="w-4 h-4 text-industrial-blue" />
                     <div>
-                      <div className="text-[10px] text-industrial-text-muted uppercase">Kuchlanish</div>
+                      <div className="text-[10px] text-industrial-text-muted uppercase">
+                        {dict.productDetail.specsSummary.voltage}
+                      </div>
                       <div className="font-bold text-industrial-text">12 kV / 380V</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Gauge className="w-4 h-4 text-industrial-blue" />
                     <div>
-                      <div className="text-[10px] text-industrial-text-muted uppercase">Tok kuchi</div>
+                      <div className="text-[10px] text-industrial-text-muted uppercase">
+                        {dict.productDetail.specsSummary.current}
+                      </div>
                       <div className="font-bold text-industrial-text">630 A - 100A</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Shield className="w-4 h-4 text-industrial-blue" />
                     <div>
-                      <div className="text-[10px] text-industrial-text-muted uppercase">Himoya</div>
+                      <div className="text-[10px] text-industrial-text-muted uppercase">
+                        {dict.productDetail.specsSummary.protection}
+                      </div>
                       <div className="font-bold text-industrial-text">IP67 / IK10</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Settings className="w-4 h-4 text-industrial-blue" />
                     <div>
-                      <div className="text-[10px] text-industrial-text-muted uppercase">Kafolat</div>
-                      <div className="font-bold text-industrial-text">36 Oy Rasmiy</div>
+                      <div className="text-[10px] text-industrial-text-muted uppercase">
+                        {dict.productDetail.specsSummary.warranty}
+                      </div>
+                      <div className="font-bold text-industrial-text">
+                        {dict.productDetail.specsSummary.officialMonths}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -274,7 +255,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <div className="flex justify-between items-end border-b border-industrial-border pb-2">
                   <h2 className="text-xl font-black text-rose-600 flex items-center gap-2">
                     <Tag className="w-5 h-5 text-rose-600" />
-                    Chegirmali Mahsulotlar
+                    {dict.products.discountedProducts}
                   </h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
@@ -291,7 +272,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <div className="flex justify-between items-end border-b border-industrial-border pb-2">
                   <h2 className="text-xl font-black text-industrial-blue flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-amber-500" />
-                    Bestsellerlar (TOP Xitlar)
+                    {dict.products.bestsellers}
                   </h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
@@ -304,7 +285,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
             {/* Frequently Bought Together Slider Carousel */}
             {relatedProducts.length > 0 && (
-              <RelatedProductsCarousel products={relatedProducts} />
+              <RelatedProductsCarousel
+                products={relatedProducts}
+                title={dict.products.relatedProducts}
+              />
             )}
           </main>
         </div>

@@ -33,7 +33,7 @@ const DISTRIBUTORS_DATA = [
   { id: 8, name: "Olmaliq Tech Partner", region: "Toshkent vil.", address: "Olmaliq sh., Metallurglar 5", phone: "+998 70 614-33-11", category: "Kon va sanoat avtomatikasi" },
   { id: 9, name: "Angren Automation Hub", region: "Toshkent vil.", address: "Angren sh., Istiqlol 33", phone: "+998 70 662-88-99", category: "Sensorlar & Datchiklar" },
   { id: 10, name: "Bekobod Industrial Supply", region: "Toshkent vil.", address: "Bekobod sh., Sir-Daryo 77", phone: "+998 70 913-22-33", category: "Elektrotexnika" },
-  { id: 11, name: "Universal Sensor Toshkent", region: "Toshkent sh.", address: "Uchtepa tumani, Farhod 15", phone: "+998 90 123-45-67", category: "KIPiA & Manometrlar" },
+  { id: 11, name: "Universal Sensor Toshkent", region: "Toshkent sh.", address: "Uchtepa tumani, Farhod 15", phone: "+998 78 113-70-27", category: "KIPiA & Manometrlar" },
   { id: 12, name: "Smart Flow Toshkent", region: "Toshkent sh.", address: "Mirobod tumani, Nukus 29", phone: "+998 71 255-88-00", category: "Sarflash o'lchagichlar" },
 
   // Samarqand viloyati (10 ta)
@@ -114,25 +114,25 @@ export function StatisticsInteractiveSection() {
   return (
     <>
       {/* Statistics 3 Interactive Cards */}
-      <section className="bg-industrial-surface-low rounded-2xl p-6 sm:p-10 md:p-12 border border-industrial-border shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center">
+      <section className="bg-industrial-surface-low rounded-2xl p-4 sm:p-10 md:p-12 border border-industrial-border shadow-2xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6 md:gap-8 text-center">
           {/* Card 1: 2 ta Filial */}
           <button
             type="button"
             onClick={() => setActiveModal("branches")}
-            className="flex flex-col items-center p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-blue hover:shadow-lg transition-all group cursor-pointer text-center"
+            className="flex flex-col items-center p-4 sm:p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-blue hover:shadow-lg transition-all group cursor-pointer text-center shadow-2xs"
           >
-            <div className="w-16 h-16 bg-industrial-blue text-white rounded-2xl flex items-center justify-center mb-3 shadow-md group-hover:scale-110 group-hover:bg-industrial-blue-dark transition-transform">
-              <Building2 className="w-8 h-8 text-industrial-orange" />
+            <div className="w-13 h-13 sm:w-16 sm:h-16 bg-industrial-blue text-white rounded-2xl flex items-center justify-center mb-2.5 sm:mb-3 shadow-md group-hover:scale-110 group-hover:bg-industrial-blue-dark transition-transform">
+              <Building2 className="w-6 h-6 sm:w-8 sm:h-8 text-industrial-orange" />
             </div>
-            <span className="text-4xl sm:text-5xl font-black text-industrial-blue mb-1 group-hover:text-industrial-orange transition-colors">
+            <span className="text-3xl sm:text-5xl font-black text-industrial-blue mb-0.5 sm:mb-1 group-hover:text-industrial-orange transition-colors">
               2
             </span>
-            <span className="text-sm font-extrabold text-industrial-text uppercase tracking-wider">
-              {locale === "ru" ? "Официальных Филиала" : locale === "en" ? "Official Branches" : "Rasmiy Filiallar"}
+            <span className="text-xs sm:text-sm font-extrabold text-industrial-text uppercase tracking-wider">
+              {t("statistics.branchesTitle")}
             </span>
-            <span className="mt-2 text-[11px] font-bold text-industrial-orange bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200/60 group-hover:bg-industrial-orange group-hover:text-white transition-colors flex items-center gap-1">
-              <span>{locale === "ru" ? "Посмотреть адреса" : locale === "en" ? "View addresses" : "Manzillarni ko'rish"}</span> →
+            <span className="mt-2 text-[10px] sm:text-[11px] font-bold text-industrial-orange bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200/60 group-hover:bg-industrial-orange group-hover:text-white transition-colors flex items-center gap-1">
+              <span>{t("statistics.viewAddresses")}</span> →
             </span>
           </button>
 
@@ -140,19 +140,19 @@ export function StatisticsInteractiveSection() {
           <button
             type="button"
             onClick={() => setActiveModal("distributors")}
-            className="flex flex-col items-center p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-blue hover:shadow-lg transition-all group cursor-pointer text-center"
+            className="flex flex-col items-center p-4 sm:p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-blue hover:shadow-lg transition-all group cursor-pointer text-center shadow-2xs"
           >
-            <div className="w-16 h-16 bg-industrial-blue-dark text-white rounded-2xl flex items-center justify-center mb-3 shadow-md group-hover:scale-110 group-hover:bg-industrial-blue transition-transform">
-              <Truck className="w-8 h-8 text-industrial-orange" />
+            <div className="w-13 h-13 sm:w-16 sm:h-16 bg-industrial-blue-dark text-white rounded-2xl flex items-center justify-center mb-2.5 sm:mb-3 shadow-md group-hover:scale-110 group-hover:bg-industrial-blue transition-transform">
+              <Truck className="w-6 h-6 sm:w-8 sm:h-8 text-industrial-orange" />
             </div>
-            <span className="text-4xl sm:text-5xl font-black text-industrial-blue mb-1 group-hover:text-industrial-orange transition-colors">
+            <span className="text-3xl sm:text-5xl font-black text-industrial-blue mb-0.5 sm:mb-1 group-hover:text-industrial-orange transition-colors">
               86
             </span>
-            <span className="text-sm font-extrabold text-industrial-text uppercase tracking-wider">
-              {locale === "ru" ? "Официальных Дистрибьютора" : locale === "en" ? "Official Distributors" : "Rasmiy Distribyutorlar"}
+            <span className="text-xs sm:text-sm font-extrabold text-industrial-text uppercase tracking-wider">
+              {t("statistics.distributorsTitle")}
             </span>
-            <span className="mt-2 text-[11px] font-bold text-industrial-blue bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60 group-hover:bg-industrial-blue group-hover:text-white transition-colors flex items-center gap-1">
-              <span>{locale === "ru" ? "Список по регионам" : locale === "en" ? "List by regions" : "Hududlar bo'yicha ro'yxat"}</span> →
+            <span className="mt-2 text-[10px] sm:text-[11px] font-bold text-industrial-blue bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60 group-hover:bg-industrial-blue group-hover:text-white transition-colors flex items-center gap-1">
+              <span>{t("statistics.listByRegions")}</span> →
             </span>
           </button>
 
@@ -160,19 +160,19 @@ export function StatisticsInteractiveSection() {
           <button
             type="button"
             onClick={() => setActiveModal("service")}
-            className="flex flex-col items-center p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-orange hover:shadow-lg transition-all group cursor-pointer text-center"
+            className="flex flex-col items-center p-4 sm:p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-orange hover:shadow-lg transition-all group cursor-pointer text-center shadow-2xs"
           >
-            <div className="w-16 h-16 bg-industrial-orange text-white rounded-2xl flex items-center justify-center mb-3 shadow-md group-hover:scale-110 group-hover:bg-industrial-orange-dark transition-transform">
-              <Wrench className="w-8 h-8 text-white" />
+            <div className="w-13 h-13 sm:w-16 sm:h-16 bg-industrial-orange text-white rounded-2xl flex items-center justify-center mb-2.5 sm:mb-3 shadow-md group-hover:scale-110 group-hover:bg-industrial-orange-dark transition-transform">
+              <Wrench className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
-            <span className="text-4xl sm:text-5xl font-black text-industrial-orange mb-1 group-hover:text-industrial-blue transition-colors">
+            <span className="text-3xl sm:text-5xl font-black text-industrial-orange mb-0.5 sm:mb-1 group-hover:text-industrial-blue transition-colors">
               2
             </span>
-            <span className="text-sm font-extrabold text-industrial-text uppercase tracking-wider">
-              {locale === "ru" ? "Сервисных Центра" : locale === "en" ? "Service & Tech Centers" : "Servis Xizmatlari"}
+            <span className="text-xs sm:text-sm font-extrabold text-industrial-text uppercase tracking-wider">
+              {t("statistics.serviceTitle")}
             </span>
-            <span className="mt-2 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60 group-hover:bg-emerald-600 group-hover:text-white transition-colors flex items-center gap-1">
-              <span>{locale === "ru" ? "Услуги и контакты" : locale === "en" ? "Services & Contacts" : "Xizmatlar va aloqa"}</span> →
+            <span className="mt-2 text-[10px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60 group-hover:bg-emerald-600 group-hover:text-white transition-colors flex items-center gap-1">
+              <span>{t("statistics.servicesAndContacts")}</span> →
             </span>
           </button>
         </div>
@@ -192,14 +192,14 @@ export function StatisticsInteractiveSection() {
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-black tracking-tight">
-                    {activeModal === "branches" && (locale === "ru" ? "2 Официальных Филиала Kontrol.uz" : locale === "en" ? "2 Official Kontrol.uz Branches" : "2 ta Rasmiy Filial — Kontrol.uz")}
-                    {activeModal === "distributors" && (locale === "ru" ? "86 Официальных Дистрибьюторов по Узбекистану" : locale === "en" ? "86 Official Distributors Across Uzbekistan" : "86 ta Rasmiy Distribyutorlar Ro'yxati")}
-                    {activeModal === "service" && (locale === "ru" ? "2 Авторизованных Сервисных Центра" : locale === "en" ? "2 Authorized Service Centers" : "2 ta Rasmiy Servis va Texnik Markaz")}
+                    {activeModal === "branches" && t("statistics.modalBranchesTitle")}
+                    {activeModal === "distributors" && t("statistics.modalDistributorsTitle")}
+                    {activeModal === "service" && t("statistics.modalServiceTitle")}
                   </h3>
                   <p className="text-xs text-white/80 font-medium">
-                    {activeModal === "branches" && "Toshkent shahridagi rasmiy savdo va ko'rgazma zallari"}
-                    {activeModal === "distributors" && "Respublikaning barcha hududlaridagi rasmiy diler va hamkorlar"}
-                    {activeModal === "service" && "Diagnostika, kafolatli ta'mirlash va texnik xizmat ko'rsatish"}
+                    {activeModal === "branches" && t("statistics.branchesDesc")}
+                    {activeModal === "distributors" && t("statistics.distributorsDesc")}
+                    {activeModal === "service" && t("statistics.serviceDesc")}
                   </p>
                 </div>
               </div>
@@ -221,29 +221,29 @@ export function StatisticsInteractiveSection() {
                   <div className="p-5 rounded-2xl bg-white border-2 border-industrial-blue/30 hover:border-industrial-blue shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-mono font-bold bg-industrial-blue text-white px-2.5 py-0.5 rounded-full">
-                        1-FILIAL
+                        {t("branches.qorasaroy.badge")}
                       </span>
                       <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Ochiq
+                        <CheckCircle2 className="w-3.5 h-3.5" /> {t("branches.openStatus")}
                       </span>
                     </div>
                     <div>
-                      <h4 className="text-lg font-black text-industrial-blue">Kontrol Qorasaroy</h4>
+                      <h4 className="text-lg font-black text-industrial-blue">{t("branches.qorasaroy.name")}</h4>
                       <p className="text-xs text-industrial-text-muted mt-1 flex items-start gap-1.5">
                         <MapPin className="w-4 h-4 text-industrial-orange shrink-0 mt-0.5" />
-                        <span>Toshkent sh., Olmazor tumani, Qorasaroy ko'chasi (Mo'ljal: Qorasaroy chorrahasi)</span>
+                        <span>{t("branches.qorasaroy.address")} ({t("branches.qorasaroy.landmark")})</span>
                       </p>
                     </div>
                     <div className="space-y-1.5 text-xs text-industrial-text">
                       <div className="flex items-center gap-2">
                         <Phone className="w-3.5 h-3.5 text-industrial-blue" />
-                        <a href="tel:+998712006800" className="font-bold hover:text-industrial-orange transition-colors">
-                          +998 (71) 200-68-00
+                        <a href="tel:+998781137027" className="font-bold hover:text-industrial-orange transition-colors">
+                          +998 (78) 113-70-27
                         </a>
                       </div>
                       <div className="flex items-center gap-2 text-industrial-text-muted">
                         <Clock className="w-3.5 h-3.5" />
-                        <span>Dush-Juma: 09:00 - 18:00 | Shanba: 09:00 - 15:00</span>
+                        <span>{t("branches.qorasaroy.hours")}</span>
                       </div>
                     </div>
                     <a
@@ -253,7 +253,7 @@ export function StatisticsInteractiveSection() {
                       className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-industrial-blue text-white rounded-xl text-xs font-bold hover:bg-industrial-blue-dark transition-colors shadow-xs"
                     >
                       <Navigation className="w-3.5 h-3.5 text-industrial-orange" />
-                      Google Maps da ochish
+                      {t("branches.googleMapsBtn")}
                     </a>
                   </div>
 
@@ -261,17 +261,17 @@ export function StatisticsInteractiveSection() {
                   <div className="p-5 rounded-2xl bg-white border-2 border-industrial-blue/30 hover:border-industrial-blue shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-mono font-bold bg-industrial-orange text-white px-2.5 py-0.5 rounded-full">
-                        BOSH OFIS & SKLAD
+                        {t("branches.mainOffice.badge")}
                       </span>
                       <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Ochiq
+                        <CheckCircle2 className="w-3.5 h-3.5" /> {t("branches.openStatus")}
                       </span>
                     </div>
                     <div>
-                      <h4 className="text-lg font-black text-industrial-blue">Kontrol Bosh Ofis</h4>
+                      <h4 className="text-lg font-black text-industrial-blue">{t("branches.mainOffice.name")}</h4>
                       <p className="text-xs text-industrial-text-muted mt-1 flex items-start gap-1.5">
                         <MapPin className="w-4 h-4 text-industrial-orange shrink-0 mt-0.5" />
-                        <span>Toshkent sh., Chilonzor tumani, Kontrol Markaziy Savdo va Ombor Majmuasi</span>
+                        <span>{t("branches.mainOffice.address")}</span>
                       </p>
                     </div>
                     <div className="space-y-1.5 text-xs text-industrial-text">
@@ -283,7 +283,7 @@ export function StatisticsInteractiveSection() {
                       </div>
                       <div className="flex items-center gap-2 text-industrial-text-muted">
                         <Clock className="w-3.5 h-3.5" />
-                        <span>Dush-Juma: 09:00 - 18:00 | Shanba: 09:00 - 15:00</span>
+                        <span>{t("branches.mainOffice.hours")}</span>
                       </div>
                     </div>
                     <a
@@ -293,7 +293,7 @@ export function StatisticsInteractiveSection() {
                       className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-industrial-blue text-white rounded-xl text-xs font-bold hover:bg-industrial-blue-dark transition-colors shadow-xs"
                     >
                       <Navigation className="w-3.5 h-3.5 text-industrial-orange" />
-                      Google Maps da ochish
+                      {t("branches.googleMapsBtn")}
                     </a>
                   </div>
                 </div>
@@ -308,7 +308,7 @@ export function StatisticsInteractiveSection() {
                       <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
-                        placeholder="Distribyutor nomi, shahar yoki mahsulot bo'yicha qidirish..."
+                        placeholder={t("statistics.searchPlaceholder")}
                         value={distributorSearch}
                         onChange={(e) => setDistributorSearch(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-industrial-border focus:outline-none focus:border-industrial-blue"
@@ -319,7 +319,7 @@ export function StatisticsInteractiveSection() {
                       onChange={(e) => setSelectedRegion(e.target.value)}
                       className="px-3 py-2 text-xs rounded-xl border border-industrial-border bg-white text-industrial-text font-bold focus:outline-none focus:border-industrial-blue"
                     >
-                      <option value="all">Barcha Hududlar (86)</option>
+                      <option value="all">{t("statistics.allRegions")} (86)</option>
                       {regions.filter((r) => r !== "all").map((r) => (
                         <option key={r} value={r}>
                           {r}
@@ -395,8 +395,8 @@ export function StatisticsInteractiveSection() {
                     </div>
                     <div className="flex items-center justify-between text-xs pt-1">
                       <span className="text-industrial-text-muted font-medium">Aloqa telefoni:</span>
-                      <a href="tel:+998712006800" className="font-extrabold text-industrial-blue hover:text-industrial-orange">
-                        +998 (71) 200-68-00
+                      <a href="tel:+998781137027" className="font-extrabold text-industrial-blue hover:text-industrial-orange">
+                        +998 (78) 113-70-27
                       </a>
                     </div>
                   </div>
@@ -443,8 +443,8 @@ export function StatisticsInteractiveSection() {
             <div className="p-4 bg-industrial-surface-low border-t border-industrial-border flex items-center justify-between text-xs">
               <span className="text-industrial-text-muted font-medium">
                 Savollar bormi? Mutaxassis bilan bog'laning:{" "}
-                <a href="tel:+998712006800" className="font-bold text-industrial-blue hover:underline">
-                  +998 (71) 200-68-00
+                <a href="tel:+998781137027" className="font-bold text-industrial-blue hover:underline">
+                  +998 (78) 113-70-27
                 </a>
               </span>
               <button
@@ -452,7 +452,7 @@ export function StatisticsInteractiveSection() {
                 onClick={() => setActiveModal(null)}
                 className="px-5 py-2 rounded-xl bg-industrial-blue text-white font-bold hover:bg-industrial-blue-dark transition-colors cursor-pointer"
               >
-                Yopish
+                {t("statistics.closeBtn")}
               </button>
             </div>
           </div>

@@ -8,7 +8,7 @@ export const MOCK_ORGANIZATION: OrganizationInfo = {
   legalName: "Kontrol Security Systems LLC",
   url: "https://kontrol.uz",
   logo: "https://kontrol.uz/logo.png",
-  telephone: "+998 71 200 68 00",
+  telephone: "+998 78 113 70 27",
   email: "info@kontrol.uz",
   address: {
     streetAddress: "Amir Temur shoh ko'chasi, 108",
@@ -18,7 +18,7 @@ export const MOCK_ORGANIZATION: OrganizationInfo = {
   openingHours: "Mo-Fr 09:00-18:00, Sa 09:00-15:00",
   sameAs: [
     "https://t.me/kontrol_uz",
-    "https://instagram.com/kontrol.uz",
+    "https://www.instagram.com/kontroluz/?hl=en",
     "https://facebook.com/kontroluz",
   ],
 };
@@ -84,10 +84,6 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 28,
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyqjiOEcFGtxX6g26mIdTmvAvszSZIyZzXdworrhjGkdghbYC_AMrGMsFE_dMK2IyC35be2rXiLNPcAw4b_ZoNvm8QGjrFafcnBgqS-OtNhCmgfGm7yYazFl7qADnI_n0znGPw0Mwjsa91c2c27MVnoehYMS2A5wj3oPOQwTkQnJzggSZmqjXt0fReD0c0wvDgjb7498nIa15XQ_aJ0h1XWpKm42FtVBlnNnDrArPf2A_Dq3x54YJo",
-    additionalImages: [
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=800&auto=format&fit=crop&q=80",
-    ],
     shortDescription: "12kV podstansiyalar uchun yuqori kuchlanishli vakuumli sanoat avtomat o'chirgichi.",
     fullDescription: "VS1-12 seriyali vakuumli o'chirgich uch fazali o'zgaruvchan tok 50Hz energetika tizimlarida kommutatsiya uchun mo'ljallangan. 20,000 mexanik operatsiyalarga chidamli.",
     specifications: {
@@ -116,9 +112,6 @@ export const MOCK_PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 14,
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGX5I0at_nx8EKPNKDFKpbsdmLJEFJbA0_eBgCdSZq2M9N-f45eESzjFRrOAnyeMEFmmws8BgP6_NSIsqsT6m733oJr0_RpPRIAczKtFJKrrYKewim4s1ylqM3CBsvixqXrOE5AAiteMVl6Mhi_uIiBKJQus2pUAlw0n342pZApcNhEW01ijbAoHTIHkjnvKlNkNcRkmmZPNEKTeEeWASVsGP9h6iKaJa__z1Mwux9-NCILJEAI8SC",
-    additionalImages: [
-      "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&auto=format&fit=crop&q=80",
-    ],
     shortDescription: "Og'ir sanoat sharoitlari va agressiv muhitlar uchun Siemens 15kW uch fazali asinxron dvigatel.",
     fullDescription: "Siemens SIMOTICS SD yuqori samaradorlik va uzoq xizmat muddatini ta'minlovchi quyma temir korpusli induksion motor.",
     specifications: {
@@ -300,11 +293,11 @@ export const MOCK_PRODUCTS: Product[] = [
 // ==========================================
 
 export function resolveStrapiMediaUrl(rawMedia: any, fallbackUrl?: string): string {
-  if (!rawMedia) return fallbackUrl || "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&auto=format&fit=crop&q=80";
+  if (!rawMedia) return fallbackUrl || "";
 
   // Case 1: Direct string URL
   if (typeof rawMedia === "string") {
-    if (rawMedia.startsWith("http://") || rawMedia.startsWith("https://")) {
+    if (rawMedia.startsWith("http://") || rawMedia.startsWith("https://") || rawMedia.startsWith("data:")) {
       return rawMedia;
     }
     return `${STRAPI_HOST}${rawMedia.startsWith("/") ? "" : "/"}${rawMedia}`;
@@ -324,7 +317,7 @@ export function resolveStrapiMediaUrl(rawMedia: any, fallbackUrl?: string): stri
     return `${STRAPI_HOST}${v5Url.startsWith("/") ? "" : "/"}${v5Url}`;
   }
 
-  return fallbackUrl || "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&auto=format&fit=crop&q=80";
+  return fallbackUrl || "";
 }
 
 export function mapStrapiCategory(rawItem: any): Category {
@@ -388,10 +381,7 @@ export function mapStrapiCategory(rawItem: any): Category {
     name: attrs.name || "Kategoriya",
     description: attrs.description || "",
     iconName: attrs.iconName || "ShieldCheck",
-    imageUrl: resolveStrapiMediaUrl(
-      attrs.imageUrl || attrs.image,
-      "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&auto=format&fit=crop&q=80"
-    ),
+    imageUrl: resolveStrapiMediaUrl(attrs.imageUrl || attrs.image, ""),
     productCount: Number(
       attrs.productCount || (subcategories.length > 0 ? subcategories.length * 10 : 10)
     ),
@@ -410,34 +400,66 @@ export function mapStrapiProduct(rawItem: any): Product {
   const categorySlug = categoryRelationSlug || attrs.categorySlug || "uskunalar";
   const categoryName = rawCat.name || attrs.categoryName || "Sanoat Uskunalari";
 
-  // Robust image extraction: check coverImage, images array, image, imageUrl
+  // Extract video if present in Strapi
+  let videoUrl: string | undefined = undefined;
+  const rawVideo =
+    attrs.videoUrl ||
+    attrs.video_url ||
+    attrs.video ||
+    attrs.videoFile ||
+    attrs.youtubeUrl ||
+    attrs.youtube_url;
+
+  if (typeof rawVideo === "string" && rawVideo.trim()) {
+    videoUrl = rawVideo.trim();
+  } else if (rawVideo && typeof rawVideo === "object") {
+    const resolvedV = resolveStrapiMediaUrl(rawVideo, "");
+    if (resolvedV) videoUrl = resolvedV;
+  }
+
+  // Robust image extraction: check coverImage, images array, image, imageUrl, media
   const rawCover = attrs.coverImage || attrs.image || attrs.imageUrl;
-  const rawFirstImage = Array.isArray(attrs.images?.data)
-    ? attrs.images.data[0]
-    : Array.isArray(attrs.images)
-    ? attrs.images[0]
-    : null;
-
-  const mainImage = resolveStrapiMediaUrl(
-    rawCover || rawFirstImage,
-    "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&auto=format&fit=crop&q=80"
-  );
-
-  // Additional images
-  const additionalImages: string[] = [];
   const rawImagesList =
     attrs.images?.data ||
     attrs.images ||
     attrs.additionalImages?.data ||
-    attrs.additionalImages;
+    attrs.additionalImages ||
+    attrs.gallery?.data ||
+    attrs.gallery ||
+    attrs.media?.data ||
+    attrs.media;
+
+  let mainImage = "";
+  if (rawCover) {
+    mainImage = resolveStrapiMediaUrl(rawCover, "");
+  }
+
+  const additionalImages: string[] = [];
 
   if (Array.isArray(rawImagesList)) {
     rawImagesList.forEach((img: any) => {
-      const resolved = resolveStrapiMediaUrl(img);
-      if (resolved && resolved !== mainImage && !additionalImages.includes(resolved)) {
-        additionalImages.push(resolved);
+      // Check if this media item is a video
+      const mime = img?.attributes?.mime || img?.mime || "";
+      if (typeof mime === "string" && mime.startsWith("video/")) {
+        const vUrl = resolveStrapiMediaUrl(img, "");
+        if (vUrl && !videoUrl) videoUrl = vUrl;
+        return;
+      }
+
+      const resolved = resolveStrapiMediaUrl(img, "");
+      if (resolved) {
+        if (!mainImage) {
+          mainImage = resolved;
+        } else if (resolved !== mainImage && !additionalImages.includes(resolved)) {
+          additionalImages.push(resolved);
+        }
       }
     });
+  }
+
+  // Fallback default image placeholder if no image exists in Strapi
+  if (!mainImage) {
+    mainImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23f1f4f9'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' font-weight='bold' fill='%23004094'%3EKONTROL.UZ%3C/text%3E%3C/svg%3E";
   }
 
   return {
@@ -457,6 +479,7 @@ export function mapStrapiProduct(rawItem: any): Product {
     reviewCount: Number(attrs.reviewCount || 0),
     image: mainImage,
     additionalImages: additionalImages.length > 0 ? additionalImages : undefined,
+    videoUrl,
     shortDescription: attrs.shortDescription || "",
     fullDescription: attrs.fullDescription || "",
     specifications: attrs.specifications || {},
@@ -487,7 +510,7 @@ export async function fetchCategories(
         ? { locale: localeOrOptions }
         : localeOrOptions || {};
 
-    const targetLocale = opts.locale || "uz";
+    const targetLocale = opts.locale || "ru";
 
     const fetchByLocale = async (loc: string) => {
       const params = new URLSearchParams();
@@ -568,7 +591,7 @@ export async function fetchProducts(
         ? { categorySlug: categorySlugOrOptions }
         : categorySlugOrOptions || {};
 
-    const targetLocale = opts.locale || "uz";
+    const targetLocale = opts.locale || "ru";
 
     const fetchByLocale = async (loc: string) => {
       const params = new URLSearchParams();
@@ -631,7 +654,7 @@ export async function fetchProducts(
 
 export async function fetchProductBySlug(slug: string, locale?: string): Promise<Product | null> {
   try {
-    const targetLocale = locale || "uz";
+    const targetLocale = locale || "ru";
 
     const fetchByLocale = async (loc: string) => {
       const res = await fetch(
@@ -676,7 +699,10 @@ export async function submitLead(payload: {
   items?: any[];
 }): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/leads`, {
+    const isClient = typeof window !== "undefined";
+    const endpoint = isClient ? "/api/leads" : `${API_BASE_URL}/leads`;
+
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -730,7 +756,10 @@ export async function submitOrder(payload: {
   totalAmount: number;
 }): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/orders`, {
+    const isClient = typeof window !== "undefined";
+    const endpoint = isClient ? "/api/orders" : `${API_BASE_URL}/orders`;
+
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

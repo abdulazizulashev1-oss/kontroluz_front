@@ -15,7 +15,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const STORAGE_KEY = "kontrol_lang";
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Language>("uz");
+  const [locale, setLocaleState] = useState<Language>("ru");
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -23,6 +23,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const savedLang = localStorage.getItem(STORAGE_KEY) as Language;
       if (savedLang && (savedLang === "uz" || savedLang === "ru" || savedLang === "en")) {
         setLocaleState(savedLang);
+        document.cookie = `kontrol_lang=${encodeURIComponent(savedLang)}; path=/; max-age=31536000; SameSite=Lax`;
+      } else {
+        setLocaleState("ru");
+        document.cookie = `kontrol_lang=ru; path=/; max-age=31536000; SameSite=Lax`;
       }
     } catch (e) {
       console.warn("Could not access localStorage for language preference.");
@@ -41,7 +45,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const dict = translations[locale] || translations.uz;
+  const dict = translations[locale] || translations.ru || translations.uz;
 
   const t = (path: string): string => {
     const keys = path.split(".");
@@ -50,7 +54,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       if (current && typeof current === "object" && key in current) {
         current = current[key];
       } else {
-        return path;
+        // Fallback to ru translation, then uz
+        let fallbackCurrent: any = translations.ru || translations.uz;
+        for (const k of keys) {
+          if (fallbackCurrent && typeof fallbackCurrent === "object" && k in fallbackCurrent) {
+            fallbackCurrent = fallbackCurrent[k];
+          } else {
+            return path;
+          }
+        }
+        return typeof fallbackCurrent === "string" ? fallbackCurrent : path;
       }
     }
     return typeof current === "string" ? current : path;

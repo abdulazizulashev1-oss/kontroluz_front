@@ -33,14 +33,14 @@ export function HomeProductsSection({ initialProducts, type }: HomeProductsSecti
 
   if (type === "bestseller") {
     return (
-      <section className="space-y-6">
-        <div className="flex justify-between items-end pb-3 border-b-2 border-industrial-orange">
+      <section className="space-y-4 sm:space-y-6">
+        <div className="flex justify-between items-end pb-2.5 sm:pb-3 border-b-2 border-industrial-orange">
           <div>
-            <span className="text-xs font-extrabold uppercase text-industrial-blue tracking-widest flex items-center gap-1">
+            <span className="text-[10px] sm:text-xs font-extrabold uppercase text-industrial-blue tracking-widest flex items-center gap-1">
               <Flame className="w-3.5 h-3.5 text-industrial-orange" />
               {t("hero.badge")}
             </span>
-            <h2 className="text-2xl font-black text-industrial-text mt-1">
+            <h2 className="text-lg sm:text-2xl font-black text-industrial-text mt-0.5 sm:mt-1">
               {locale === "ru"
                 ? "Хиты Продаж"
                 : locale === "en"
@@ -50,14 +50,14 @@ export function HomeProductsSection({ initialProducts, type }: HomeProductsSecti
           </div>
           <Link
             href="/katalog"
-            className="text-xs font-extrabold text-industrial-blue hover:text-industrial-orange flex items-center gap-1 uppercase"
+            className="text-[11px] sm:text-xs font-extrabold text-industrial-blue hover:text-industrial-orange flex items-center gap-1 uppercase shrink-0"
           >
             <span>{t("categories.viewAll")}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
           {displayList.map((product) => (
             <ProductCard key={`hit-${product.id}`} product={product} />
           ))}
@@ -67,10 +67,10 @@ export function HomeProductsSection({ initialProducts, type }: HomeProductsSecti
   }
 
   return (
-    <section className="space-y-6">
-      <div className="flex justify-between items-end pb-3 border-b-2 border-industrial-blue">
+    <section className="space-y-4 sm:space-y-6">
+      <div className="flex justify-between items-end pb-2.5 sm:pb-3 border-b-2 border-industrial-blue">
         <div>
-          <span className="text-xs font-extrabold uppercase text-industrial-orange tracking-widest flex items-center gap-1">
+          <span className="text-[10px] sm:text-xs font-extrabold uppercase text-industrial-orange tracking-widest flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5" />
             {locale === "ru"
               ? "Новинки каталога"
@@ -78,7 +78,7 @@ export function HomeProductsSection({ initialProducts, type }: HomeProductsSecti
               ? "New Arrivals"
               : "Tizim yangiliklari"}
           </span>
-          <h2 className="text-2xl font-black text-industrial-text mt-1">
+          <h2 className="text-lg sm:text-2xl font-black text-industrial-text mt-0.5 sm:mt-1">
             {locale === "ru"
               ? "Новое Оборудование"
               : locale === "en"
@@ -88,14 +88,14 @@ export function HomeProductsSection({ initialProducts, type }: HomeProductsSecti
         </div>
         <Link
           href="/katalog"
-          className="text-xs font-extrabold text-industrial-blue hover:text-industrial-orange flex items-center gap-1 uppercase"
+          className="text-[11px] sm:text-xs font-extrabold text-industrial-blue hover:text-industrial-orange flex items-center gap-1 uppercase shrink-0"
         >
           <span>{t("categories.viewAll")}</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6">
         {displayList.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

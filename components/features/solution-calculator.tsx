@@ -131,7 +131,7 @@ export function SolutionCalculator() {
 
                   <div>
                     <label className="block text-xs font-bold uppercase text-industrial-text mb-1">
-                      SKUD / Eshiklar Nuqtalari: <span className="text-industrial-orange font-extrabold">{payload.entryPointsCount} ta</span>
+                      {t("calculator.entryPoints")}: <span className="text-industrial-orange font-extrabold">{payload.entryPointsCount}</span>
                     </label>
                     <input
                       type="number"
@@ -181,7 +181,7 @@ export function SolutionCalculator() {
                 {/* Additional Modules */}
                 <div>
                   <label className="block text-xs font-bold uppercase text-industrial-text mb-2">
-                    Qo'shimcha Modullar
+                    {t("calculator.additionalModules")}
                   </label>
                   <div className="flex flex-wrap gap-4 text-xs font-semibold">
                     <label className="flex items-center gap-2 cursor-pointer">
@@ -210,7 +210,7 @@ export function SolutionCalculator() {
                 </div>
 
                 <Button type="submit" variant="cta" size="lg" className="w-full gap-2 text-base font-extrabold">
-                  {loading ? "Hisoblanmoqda..." : t("calculator.calculateBtn")}
+                  {loading ? t("calculator.calculating") : t("calculator.calculateBtn")}
                   <ArrowRight className="w-5 h-5" />
                 </Button>
               </form>
@@ -248,7 +248,7 @@ export function SolutionCalculator() {
                           className="flex justify-between items-center bg-white/5 p-2 rounded"
                         >
                           <span className="font-semibold text-slate-100">
-                            {item.name} ({item.quantity} ta)
+                            {item.name} ({item.quantity})
                           </span>
                           <span className="font-extrabold text-industrial-orange">
                             {formatPrice(item.unitPrice * item.quantity)}
@@ -309,41 +309,41 @@ export function SolutionCalculator() {
                 <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h3 className="text-xl font-black text-industrial-blue">Smeta So'rovingiz Qabul Qilindi!</h3>
+                <h3 className="text-xl font-black text-industrial-blue">{t("calculator.submitSuccess")}</h3>
                 <p className="text-xs text-industrial-text-muted">
-                  Tijoriy taklif va hisob-kitoblar bo'yicha mutaxassisimiz tez orada <span className="font-bold text-industrial-text">{leadPhone}</span> raqamingizga bog'lanadi.
+                  <span className="font-bold text-industrial-text">{leadPhone}</span>
                 </p>
                 <Button
                   variant="cta"
                   onClick={() => setIsLeadModalOpen(false)}
                   className="w-full font-bold text-xs"
                 >
-                  Yopish
+                  {t("calculator.closeBtn")}
                 </Button>
               </div>
             ) : (
               <form onSubmit={handleLeadSubmit} className="space-y-4">
                 <div>
                   <span className="text-[11px] font-mono font-bold text-industrial-orange uppercase">
-                    B2B Tijoriy Taklif & Smeta
+                    {t("calculator.badge")}
                   </span>
                   <h3 className="text-lg font-black text-industrial-text mt-0.5">
-                    Mutaxassis bilan bog'lanish
+                    {t("calculator.modalTitle")}
                   </h3>
                   <p className="text-xs text-industrial-text-muted mt-1">
-                    Hisoblangan smetani rasmiy PDF formatida olish uchun ma'lumotlaringizni qoldiring.
+                    {t("calculator.modalDesc")}
                   </p>
                 </div>
 
                 <div className="space-y-3 text-xs">
                   <div>
                     <label className="font-bold text-industrial-text flex items-center gap-1.5 mb-1">
-                      <User className="w-3.5 h-3.5 text-industrial-orange" /> Ismingiz *
+                      <User className="w-3.5 h-3.5 text-industrial-orange" /> {t("calculator.nameLabel")} *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Masalan: Jamshid Aliyev"
+                      placeholder={t("calculator.namePlaceholder")}
                       value={leadName}
                       onChange={(e) => setLeadName(e.target.value)}
                       className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -352,12 +352,12 @@ export function SolutionCalculator() {
 
                   <div>
                     <label className="font-bold text-industrial-text flex items-center gap-1.5 mb-1">
-                      <Phone className="w-3.5 h-3.5 text-industrial-orange" /> Telefon raqamingiz *
+                      <Phone className="w-3.5 h-3.5 text-industrial-orange" /> {t("calculator.phoneLabel")} *
                     </label>
                     <input
                       type="tel"
                       required
-                      placeholder="+998 90 123 45 67"
+                      placeholder={t("calculator.phonePlaceholder")}
                       value={leadPhone}
                       onChange={(e) => setLeadPhone(e.target.value)}
                       className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -366,11 +366,11 @@ export function SolutionCalculator() {
 
                   <div>
                     <label className="font-bold text-industrial-text block mb-1">
-                      Tashkilot / Kompaniya nomi (ixtiyoriy)
+                      {t("calculator.companyLabel")}
                     </label>
                     <input
                       type="text"
-                      placeholder="MChJ yoki Zavod nomi"
+                      placeholder={t("calculator.companyPlaceholder")}
                       value={leadCompany}
                       onChange={(e) => setLeadCompany(e.target.value)}
                       className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -384,7 +384,7 @@ export function SolutionCalculator() {
                   disabled={leadSubmitting}
                   className="w-full py-3 text-xs font-extrabold"
                 >
-                  {leadSubmitting ? "Yuborilmoqda..." : "Smetani Yuborish"}
+                  {leadSubmitting ? t("calculator.submittingBtn") : t("calculator.submitBtn")}
                 </Button>
               </form>
             )}

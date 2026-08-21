@@ -3,7 +3,7 @@ import { Language } from "./translations";
 
 /**
  * Server-side helper to get the active language from request cookies.
- * Defaults to 'uz' (O'zbekcha) if not set.
+ * Defaults to 'ru' (Русский) if not set.
  */
 export function getServerLocale(): Language {
   try {
@@ -15,5 +15,5 @@ export function getServerLocale(): Language {
   } catch (err) {
     // In static generation or when headers are unavailable
   }
-  return "uz";
+  return "ru";
 }

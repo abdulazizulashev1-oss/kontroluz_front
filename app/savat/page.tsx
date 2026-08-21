@@ -268,12 +268,12 @@ export default function CartPage() {
                 <div className="space-y-2 text-[11px] text-industrial-text-muted pt-2">
                   <div className="flex items-center gap-2.5 p-2.5 bg-industrial-surface-low rounded border border-industrial-border-subtle">
                     <ShieldCheck className="w-4 h-4 text-industrial-blue shrink-0" />
-                    <span>256-bit SSL Shifrlash & Kafolat</span>
+                    <span>{t("cartPage.trustSSL")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5 p-2.5 bg-industrial-surface-low rounded border border-industrial-border-subtle">
                     <Headphones className="w-4 h-4 text-industrial-blue shrink-0" />
-                    <span>24/7 Muhandislik & Servis Ko'magi</span>
+                    <span>{t("cartPage.trustSupport")}</span>
                   </div>
                 </div>
               </Card>
@@ -306,14 +306,14 @@ export default function CartPage() {
                 </div>
                 <div className="space-y-1">
                   <span className="text-[11px] font-mono font-bold bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
-                    Buyurtma Raqami: {orderId}
+                    {t("cartPage.orderNumPrefix")}: {orderId}
                   </span>
                   <h3 className="text-xl font-black text-industrial-blue pt-2">
-                    Buyurtmangiz Muvaffaqiyatli Rasmiylashtirildi!
+                    {t("cartPage.checkoutSuccess")}
                   </h3>
                 </div>
                 <p className="text-xs text-industrial-text-muted leading-relaxed max-w-sm mx-auto">
-                  Hurmatli <span className="font-bold text-industrial-text">{clientName}</span>, buyurtma tafsilotlari va rasmiy invoys hisob-faktura tayyorlanmoqda. Menejerimiz <span className="font-bold text-industrial-blue">{phone}</span> raqami orqali bog'lanadi.
+                  Hurmatli <span className="font-bold text-industrial-text">{clientName}</span>, {t("cartPage.successDesc")}
                 </p>
                 <Button
                   variant="cta"
@@ -323,32 +323,32 @@ export default function CartPage() {
                   }}
                   className="w-full font-bold text-xs"
                 >
-                  Tushundim
+                  {t("cartPage.understoodBtn")}
                 </Button>
               </div>
             ) : (
               <form onSubmit={handleCheckoutSubmit} className="space-y-4">
                 <div>
                   <span className="text-[11px] font-mono font-bold text-industrial-orange uppercase">
-                    B2B & Korporativ Xarid
+                    {t("cartPage.modalSubtitle")}
                   </span>
                   <h3 className="text-lg font-black text-industrial-text mt-0.5">
-                    Buyurtmani Rasmiylashtirish
+                    {t("cartPage.modalTitle")}
                   </h3>
                   <p className="text-xs text-industrial-text-muted mt-1">
-                    Jami to'lov: <span className="font-black text-industrial-blue">{formatPrice(total, "UZS")}</span> (QQS 12% hisoblangan)
+                    {t("cartPage.grandTotal")}: <span className="font-black text-industrial-blue">{formatPrice(total, "UZS")}</span> ({t("cartPage.vat")})
                   </p>
                 </div>
 
                 <div className="space-y-3 text-xs">
                   <div>
                     <label className="font-bold text-industrial-text flex items-center gap-1.5 mb-1">
-                      <User className="w-3.5 h-3.5 text-industrial-orange" /> Mas'ul shaxs (Ism-familiya) *
+                      <User className="w-3.5 h-3.5 text-industrial-orange" /> {t("cartPage.nameLabel")} *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Masalan: Sardor Rustamov"
+                      placeholder={t("cartPage.namePlaceholder")}
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
                       className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -357,12 +357,12 @@ export default function CartPage() {
 
                   <div>
                     <label className="font-bold text-industrial-text flex items-center gap-1.5 mb-1">
-                      <Phone className="w-3.5 h-3.5 text-industrial-orange" /> Telefon raqam *
+                      <Phone className="w-3.5 h-3.5 text-industrial-orange" /> {t("cartPage.phoneLabel")} *
                     </label>
                     <input
                       type="tel"
                       required
-                      placeholder="+998 90 123 45 67"
+                      placeholder={t("cartPage.phonePlaceholder")}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -372,11 +372,11 @@ export default function CartPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="font-bold text-industrial-text flex items-center gap-1.5 mb-1">
-                        <Building2 className="w-3.5 h-3.5 text-industrial-blue" /> Tashkilot / Korxona
+                        <Building2 className="w-3.5 h-3.5 text-industrial-blue" /> {t("cartPage.companyLabel")}
                       </label>
                       <input
                         type="text"
-                        placeholder="MChJ yoki Zavod"
+                        placeholder={t("cartPage.companyPlaceholder")}
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -385,11 +385,11 @@ export default function CartPage() {
 
                     <div>
                       <label className="font-bold text-industrial-text flex items-center gap-1.5 mb-1">
-                        <FileText className="w-3.5 h-3.5 text-industrial-blue" /> Yetkazish manzili
+                        <FileText className="w-3.5 h-3.5 text-industrial-blue" /> {t("cartPage.addressLabel")}
                       </label>
                       <input
                         type="text"
-                        placeholder="Toshkent sh., Chilonzor..."
+                        placeholder={t("cartPage.addressPlaceholder")}
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="w-full p-2.5 border border-industrial-border rounded bg-industrial-surface-low text-xs font-semibold focus:outline-none focus:border-industrial-blue"
@@ -405,7 +405,7 @@ export default function CartPage() {
                   className="w-full py-3.5 text-xs font-extrabold gap-2"
                 >
                   <CheckCircle className="w-4 h-4" />
-                  <span>{isSubmitting ? "Rasmiylashtirilmoqda..." : "Buyurtmani Tasdiqlash"}</span>
+                  <span>{isSubmitting ? t("cartPage.submittingBtn") : t("cartPage.confirmBtn")}</span>
                 </Button>
               </form>
             )}

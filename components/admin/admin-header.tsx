@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Timeframe } from "@/lib/admin/analytics-data";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 import {
   ShieldCheck,
   Calendar,
@@ -71,23 +72,7 @@ export function AdminHeader({
       <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Brand & Badge */}
         <div className="flex items-center gap-4">
-          <Link href="/admin" className="flex items-center gap-3 group">
-            <Image
-              src="/images/logo-icon.png"
-              alt="Kontrol.uz"
-              width={40}
-              height={40}
-              className="w-9 h-9 object-contain rounded-full bg-white p-0.5 shadow-sm group-hover:scale-105 transition-transform"
-            />
-            <div>
-              <span className="text-xl font-black tracking-tight leading-none">
-                KONTROL<span className="text-industrial-orange">.UZ</span>
-              </span>
-              <div className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-emerald-400">
-                Super Admin Dashboard
-              </div>
-            </div>
-          </Link>
+          <Logo variant="admin" href="/admin" />
 
           {/* Live Clock Indicator */}
           {timeStr && (

@@ -13,14 +13,15 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "@/lib/i18n/context";
+import { DynamicWorkingHours } from "@/components/features/dynamic-working-hours";
 
 export function GlobalContactSection() {
   const { t } = useTranslation();
 
   const phoneNumbers = [
-    { label: t("contact.contactInfoTitle"), number: "+998 (71) 200-68-00", raw: "+998712006800" },
+    { label: t("contact.contactInfoTitle"), number: "+998 (78) 113-70-27", raw: "+998781137027" },
     { label: t("engineering.feature4Title"), number: "+998 (71) 200-55-44", raw: "+998712005544" },
-    { label: t("hero.stat2Label"), number: "+998 (90) 123-45-67", raw: "+998901234567" },
+    { label: t("hero.stat2Label"), number: "+998 (78) 113-70-27", raw: "+998781137027" },
   ];
 
   const socialLinks = [
@@ -33,17 +34,17 @@ export function GlobalContactSection() {
     },
     {
       name: "WhatsApp",
-      url: "https://wa.me/998712006800",
+      url: "https://wa.me/998903291284",
       icon: MessageCircle,
       color: "bg-[#25D366] hover:bg-[#20ba5a] text-white",
-      tag: "WhatsApp Business",
+      tag: "+998 90 329 12 84",
     },
     {
       name: "Instagram",
-      url: "https://instagram.com/kontrol.uz",
+      url: "https://www.instagram.com/kontroluz/?hl=en",
       icon: Instagram,
       color: "bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90 text-white",
-      tag: "@kontrol.uz",
+      tag: "@kontroluz",
     },
     {
       name: "Facebook",
@@ -103,7 +104,7 @@ export function GlobalContactSection() {
             <Card className="p-6 bg-white border border-industrial-border space-y-4 shadow-sm">
               <h3 className="font-extrabold text-sm text-industrial-blue flex items-center gap-2 border-b border-industrial-border pb-3">
                 <MessageCircle className="w-4 h-4 text-industrial-orange" />
-                <span>Social Media & Messengers</span>
+                <span>{t("nav.contacts")}</span>
               </h3>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -136,11 +137,9 @@ export function GlobalContactSection() {
                 <div className="flex items-center justify-between border-b border-industrial-border pb-2.5">
                   <h3 className="font-extrabold text-sm text-industrial-blue flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-industrial-orange" />
-                    <span>Filiallarimiz Joylashuvi</span>
+                    <span>{t("branches.mapSectionSubtitle")}</span>
                   </h3>
-                  <span className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" /> Dush-Juma: 09:00-18:00
-                  </span>
+                  <DynamicWorkingHours variant="badge" />
                 </div>
 
                 {/* Branch Quick Switcher */}
@@ -148,10 +147,10 @@ export function GlobalContactSection() {
                   <div className="p-2.5 bg-blue-50/60 rounded-lg border border-industrial-blue/30 space-y-1">
                     <div className="font-extrabold text-industrial-blue flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-industrial-blue" />
-                      <span>1-Filial: Qorasaroy</span>
+                      <span>{t("branches.qorasaroy.badge")}</span>
                     </div>
                     <p className="text-[11px] text-industrial-text-muted leading-tight">
-                      Olmazor tumani, Qorasaroy ko'chasi
+                      {t("branches.qorasaroy.address")}
                     </p>
                     <a
                       href="https://www.google.com/maps/place/Kontrol+Qorasaroy/@41.3572598,69.2427857,19z"
@@ -159,7 +158,7 @@ export function GlobalContactSection() {
                       rel="noopener noreferrer"
                       className="text-[10px] font-bold text-industrial-orange hover:underline flex items-center gap-1 pt-0.5"
                     >
-                      <span>Google Xaritada</span>
+                      <span>{t("contact.directionsGoogleMaps")}</span>
                       <ExternalLink className="w-2.5 h-2.5" />
                     </a>
                   </div>
@@ -167,10 +166,10 @@ export function GlobalContactSection() {
                   <div className="p-2.5 bg-industrial-surface-low rounded-lg border border-industrial-border-subtle space-y-1">
                     <div className="font-extrabold text-industrial-text flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-industrial-orange" />
-                      <span>Bosh Ofis: Chilonzor</span>
+                      <span>{t("branches.mainOffice.badge")}</span>
                     </div>
                     <p className="text-[11px] text-industrial-text-muted leading-tight">
-                      Chilonzor tumani, Bosh Ofis & Sklad
+                      {t("branches.mainOffice.address")}
                     </p>
                     <a
                       href="https://www.google.com/maps/place/Kontrol/@41.2547777,69.2019358,19z"
@@ -178,7 +177,7 @@ export function GlobalContactSection() {
                       rel="noopener noreferrer"
                       className="text-[10px] font-bold text-industrial-orange hover:underline flex items-center gap-1 pt-0.5"
                     >
-                      <span>Google Xaritada</span>
+                      <span>{t("contact.directionsGoogleMaps")}</span>
                       <ExternalLink className="w-2.5 h-2.5" />
                     </a>
                   </div>

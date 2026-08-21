@@ -12,7 +12,7 @@ import {
   TrendingUp,
   RefreshCw,
 } from "lucide-react";
-import { Timeframe, getAnalyticsForTimeframe } from "@/lib/admin/analytics-data";
+import { Timeframe, getAnalyticsForTimeframe, OrderItem } from "@/lib/admin/analytics-data";
 import { fetchProducts, fetchCategories } from "@/lib/api";
 import { Product, Category } from "@/shared/types";
 import { formatPrice } from "@/lib/utils";
@@ -31,6 +31,7 @@ export default function SuperAdminDashboardPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [orders, setOrders] = useState<OrderItem[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
 
   // Check authentication status
@@ -56,12 +57,19 @@ export default function SuperAdminDashboardPage() {
   const loadData = async () => {
     setIsDataLoading(true);
     try {
-      const [prods, cats] = await Promise.all([
+      const [prods, cats, leadsRes, ordersRes] = await Promise.all([
         fetchProducts(),
         fetchCategories(),
+        fetch("/api/leads").then((r) => r.json()).catch(() => ({ data: [] })),
+        fetch("/api/orders").then((r) => r.json()).catch(() => ({ data: [] })),
       ]);
+
       setProducts(prods);
       setCategories(cats);
+
+      const liveLeads = Array.isArray(leadsRes.data) ? leadsRes.data : [];
+      const liveOrders = Array.isArray(ordersRes.data) ? ordersRes.data : [];
+      setOrders([...liveOrders, ...liveLeads]);
     } catch (e) {
       // Fallback handled in lib/api.ts
     } finally {
@@ -88,7 +96,7 @@ export default function SuperAdminDashboardPage() {
     );
   }
 
-  const analytics = getAnalyticsForTimeframe(timeframe, products, categories);
+  const analytics = getAnalyticsForTimeframe(timeframe, products, categories, orders);
 
   return (
     <div className="min-h-screen bg-industrial-surface pb-16">

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, ShoppingCart, Check, CheckCircle2 } from "lucide-react";
+import { Star, ShoppingCart, CheckCircle2 } from "lucide-react";
 import { Product } from "@/shared/types";
 import { formatPrice, calculateDiscountPercentage } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -111,9 +111,6 @@ export function ProductCard({ product }: ProductCardProps) {
                 </div>
               )}
             </div>
-            <span className="text-[9px] sm:text-[11px] text-emerald-600 font-bold flex items-center gap-0.5 shrink-0">
-              <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> QQS
-            </span>
           </div>
 
           <Button

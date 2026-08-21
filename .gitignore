@@ -24,24 +24,23 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Environment variables (Security Standard - All .env files ignored)
+# Environment variables (Security Standard - All secret .env files ignored)
 .env
-.env*
-.env.example
-.env.local
 .env*.local
+.env.local
 .env.development
 .env.development.local
 .env.test
 .env.test.local
 .env.production
 .env.production.local
+!.env.example
 
-# Internal Agent & Specification Markdown Files (Security Standard)
+# Internal Agent & Specification Markdown Files (Security Standard - Never upload any .md files)
+*.md
+**/*.md
+.agents/
 /.agents/
-/DESIGN.md
-/ARCHITECTURE.md
-/DEPLOYMENT.md
 
 # Vercel
 .vercel

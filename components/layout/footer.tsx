@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Shield, Phone, Mail, MapPin, Clock, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "@/lib/i18n/context";
+import { Logo } from "@/components/ui/logo";
+import { DynamicWorkingHours } from "@/components/features/dynamic-working-hours";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -14,75 +16,25 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         {/* Brand & Organization Bio */}
         <div className="space-y-4">
-          <Link href="/" className="flex items-center gap-3 group">
-            <Image
-              src="/images/logo-icon.png"
-              alt="Kontrol.uz"
-              width={44}
-              height={44}
-              className="w-10 h-10 object-contain rounded-full bg-white p-0.5 shadow-md group-hover:scale-105 transition-transform"
-            />
-            <span className="text-2xl font-black tracking-tight text-white">
-              KONTROL<span className="text-industrial-orange">.UZ</span>
-            </span>
-          </Link>
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <Logo variant="footer" />
+          <p className="text-xs text-slate-300 leading-relaxed">
             {t("footer.description")}
           </p>
-          <div className="flex items-center gap-2 text-xs text-emerald-400 font-semibold">
-            <CheckCircle2 className="w-4 h-4" />
-            <span>ISO 9001 / ISO 14001</span>
+          <div className="flex items-center gap-2 text-xs text-slate-300 font-semibold">
+            <CheckCircle2 className="w-4 h-4 text-industrial-orange flex-shrink-0" />
+            <span>ISO 9001:2026 Sertifikatlangan Diler</span>
           </div>
         </div>
 
-        {/* Categories Navigation */}
-        <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-industrial-orange mb-4 border-b border-blue-900/50 pb-2">
-            {t("footer.categories")}
-          </h3>
-          <ul className="space-y-2.5 text-sm text-slate-300">
-            <li>
-              <Link href="/katalog?category=videokuzatuv" className="hover:text-white transition-colors">
-                IP & PTZ Cameras
-              </Link>
-            </li>
-            <li>
-              <Link href="/katalog?category=videokuzatuv" className="hover:text-white transition-colors">
-                4K NVR Recorders
-              </Link>
-            </li>
-            <li>
-              <Link href="/katalog?category=kirishni-boshqarish" className="hover:text-white transition-colors">
-                Biometric Turnstiles
-              </Link>
-            </li>
-            <li>
-              <Link href="/katalog?category=yongin-xavfsizligi" className="hover:text-white transition-colors">
-                Fire Safety Sensors
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Quick Links */}
-        <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-industrial-orange mb-4 border-b border-blue-900/50 pb-2">
+        {/* Quick Navigation */}
+        <div className="space-y-3">
+          <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
             {t("footer.navigation")}
-          </h3>
-          <ul className="space-y-2.5 text-sm text-slate-300">
-            <li>
-              <Link href="/" className="hover:text-white transition-colors">
-                {t("nav.home")}
-              </Link>
-            </li>
+          </h4>
+          <ul className="space-y-2 text-xs text-slate-300">
             <li>
               <Link href="/katalog" className="hover:text-white transition-colors">
                 {t("nav.catalog")}
-              </Link>
-            </li>
-            <li>
-              <Link href="/#calculator" className="hover:text-white transition-colors">
-                {t("nav.calculator")}
               </Link>
             </li>
             <li>
@@ -90,22 +42,56 @@ export function Footer() {
                 {t("nav.contacts")}
               </Link>
             </li>
+            <li>
+              <Link href="/savat" className="hover:text-white transition-colors">
+                {t("nav.cart")}
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* Contact Info & Address */}
-        <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-industrial-orange mb-4 border-b border-blue-900/50 pb-2">
+        {/* Top Product Categories */}
+        <div className="space-y-3">
+          <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
+            {t("footer.categories")}
+          </h4>
+          <ul className="space-y-2 text-xs text-slate-300">
+            <li>
+              <Link href="/katalog?category=videokuzatuv" className="hover:text-white transition-colors">
+                {t("footer.catCctv")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/katalog?category=nvr-videoregistratorlar" className="hover:text-white transition-colors">
+                {t("footer.catNvr")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/katalog?category=skud-va-turniketlar" className="hover:text-white transition-colors">
+                {t("footer.catTurnstiles")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/katalog?category=yongin-xavfsizligi" className="hover:text-white transition-colors">
+                {t("footer.catFire")}
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Official Head Office Contacts */}
+        <div className="space-y-3">
+          <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
             {t("footer.contacts")}
-          </h3>
-          <ul className="space-y-3 text-sm text-slate-300">
+          </h4>
+          <ul className="space-y-2.5 text-xs text-slate-300">
             <li className="flex items-start gap-2.5">
               <MapPin className="w-4 h-4 text-industrial-orange flex-shrink-0 mt-0.5" />
               <span>{t("footer.address")}</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="w-4 h-4 text-industrial-orange flex-shrink-0" />
-              <a href="tel:+998712006800" className="hover:underline font-bold text-white">
+              <a href="tel:+998781137027" className="hover:underline font-bold text-white">
                 {t("nav.phone")}
               </a>
             </li>
@@ -115,7 +101,7 @@ export function Footer() {
             </li>
             <li className="flex items-center gap-2.5">
               <Clock className="w-4 h-4 text-industrial-orange flex-shrink-0" />
-              <span>{t("nav.workingHours")}</span>
+              <DynamicWorkingHours variant="badge" className="bg-white/10 text-white border-white/20" />
             </li>
           </ul>
         </div>

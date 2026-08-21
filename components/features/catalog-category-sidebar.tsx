@@ -2,20 +2,23 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { SlidersHorizontal, ChevronDown, ChevronRight, Plus, Minus } from "lucide-react";
+import { SlidersHorizontal, ChevronRight, Plus, Minus, Download } from "lucide-react";
 import { Category } from "@/shared/types";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/context";
 import { fetchCategories } from "@/lib/api";
 
 interface CatalogCategorySidebarProps {
   categories: Category[];
   selectedCategorySlug?: string;
+  showPdfButton?: boolean;
 }
 
 export function CatalogCategorySidebar({
   categories,
   selectedCategorySlug,
+  showPdfButton = true,
 }: CatalogCategorySidebarProps) {
   const { t, locale } = useTranslation();
   const [currentCategories, setCurrentCategories] = useState<Category[]>(categories || []);
@@ -32,14 +35,16 @@ export function CatalogCategorySidebar({
     };
   }, [locale]);
 
-  // Initialize open state: open category if selectedCategorySlug matches it or its subcategories
+  // Initialize open state: only open if selectedCategorySlug matches it or its subcategories
   const [openMap, setOpenMap] = useState<Record<string, boolean>>(() => {
     const map: Record<string, boolean> = {};
     (categories || []).forEach((cat) => {
       const isSelected =
         selectedCategorySlug === cat.slug ||
         cat.subcategories?.some((s) => s.slug === selectedCategorySlug);
-      map[cat.slug] = isSelected ? true : true; // Default open for rich discovery
+      if (isSelected) {
+        map[cat.slug] = true;
+      }
     });
     return map;
   });
@@ -71,7 +76,7 @@ export function CatalogCategorySidebar({
                 : "hover:bg-industrial-surface-low text-industrial-text font-bold"
             }`}
           >
-            {t("catalog.allEquipment")}
+            {t("categories.allEquipment")}
           </Link>
         </li>
 
@@ -109,7 +114,7 @@ export function CatalogCategorySidebar({
                     type="button"
                     onClick={(e) => toggleCategory(cat.slug, e)}
                     className="p-1 rounded hover:bg-black/10 transition-colors text-industrial-blue shrink-0 cursor-pointer"
-                    aria-label="Subkategoriyalarni ochish"
+                    aria-label={t("categories.expand")}
                   >
                     {isOpen ? (
                       <Minus className="w-3.5 h-3.5 text-industrial-orange" />
@@ -151,6 +156,16 @@ export function CatalogCategorySidebar({
           );
         })}
       </ul>
+
+      {showPdfButton && (
+        <Button
+          variant="outline"
+          className="w-full gap-2 text-xs font-bold border-industrial-blue text-industrial-blue hover:bg-industrial-blue hover:text-white mt-6 cursor-pointer"
+        >
+          <Download className="w-4 h-4" />
+          <span>{t("categories.downloadPdf")}</span>
+        </Button>
+      )}
     </Card>
   );
 }

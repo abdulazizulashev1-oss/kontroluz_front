@@ -78,11 +78,11 @@ export function AddToCartSection({ product }: AddToCartSectionProps) {
       </div>
 
       <div className="flex items-center justify-between border-t border-industrial-border-subtle pt-3 text-xs">
-        <button type="button" className="text-industrial-blue hover:underline flex items-center gap-1 font-bold">
-          <Heart className="w-3.5 h-3.5" /> Sevimlilarga Qo'shish
+        <button type="button" className="text-industrial-blue hover:underline flex items-center gap-1 font-bold cursor-pointer">
+          <Heart className="w-3.5 h-3.5" /> {t("products.wishlist")}
         </button>
-        <button type="button" className="text-industrial-text-muted hover:text-industrial-blue flex items-center gap-1 font-medium">
-          <ArrowLeftRight className="w-3.5 h-3.5" /> Solishtirish
+        <button type="button" className="text-industrial-text-muted hover:text-industrial-blue flex items-center gap-1 font-medium cursor-pointer">
+          <ArrowLeftRight className="w-3.5 h-3.5" /> {t("products.compare")}
         </button>
       </div>
     </div>

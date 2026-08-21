@@ -64,7 +64,7 @@ export default async function RootLayout({
   const orgInfo = await fetchOrganizationInfo();
 
   return (
-    <html lang="uz" className={inter.variable}>
+    <html lang="ru" className={inter.variable}>
       <head>
         <OrganizationJsonLd org={orgInfo} />
         <LocalBusinessJsonLd org={orgInfo} />

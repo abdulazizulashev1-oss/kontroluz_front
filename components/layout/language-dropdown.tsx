@@ -13,8 +13,8 @@ export function LanguageDropdown() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const languages: { code: Language; label: string; flag: string; name: string }[] = [
-    { code: "uz", label: "UZ", flag: "🇺🇿", name: "O'zbekcha" },
     { code: "ru", label: "RU", flag: "🇷🇺", name: "Русский" },
+    { code: "uz", label: "UZ", flag: "🇺🇿", name: "O'zbekcha" },
     { code: "en", label: "EN", flag: "🇬🇧", name: "English" },
   ];
 

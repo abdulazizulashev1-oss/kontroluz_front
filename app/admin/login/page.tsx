@@ -7,6 +7,7 @@ import Image from "next/image";
 import { ShieldCheck, Lock, Mail, ArrowRight, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Logo } from "@/components/ui/logo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -55,16 +56,9 @@ export default function AdminLoginPage() {
       <div className="max-w-md w-full space-y-6 relative z-10">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-flex items-center justify-center group mb-2">
-            <Image
-              src="/images/logo.png"
-              alt="Kontrol.uz"
-              width={240}
-              height={56}
-              className="h-12 w-auto object-contain group-hover:scale-102 transition-transform"
-              priority
-            />
-          </Link>
+          <div className="mb-2">
+            <Logo variant="login" href="/" />
+          </div>
           <div className="inline-block bg-industrial-blue/10 text-industrial-blue px-3 py-1 rounded-full text-xs font-mono font-bold">
             SUPER ADMIN DASHBOARD
           </div>

@@ -31,6 +31,7 @@ export interface Product {
   reviewCount: number;
   image: string;
   additionalImages?: string[];
+  videoUrl?: string;
   shortDescription: string;
   fullDescription: string;
   specifications: Record<string, string>;

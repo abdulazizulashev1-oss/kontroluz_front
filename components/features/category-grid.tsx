@@ -95,12 +95,7 @@ export function CategoryGrid({
     };
   }, [locale]);
 
-  const [openStates, setOpenStates] = useState<Record<number, boolean>>({
-    0: true,
-    1: true,
-    2: true,
-    3: true,
-  });
+  const [openStates, setOpenStates] = useState<Record<number, boolean>>({});
 
   const toggleCategory = (index: number) => {
     setOpenStates((prev) => ({
@@ -327,22 +322,22 @@ export function CategoryGrid({
             Array.isArray(cat.subcategories) && cat.subcategories.length > 0
               ? cat.subcategories
               : [
-                  { name: `${cat.name} — Barchasi`, slug: cat.slug },
-                  { name: `${cat.name} Komponentlari`, slug: cat.slug },
+                  { name: `${cat.name} — ${t("categories.allSuffix")}`, slug: cat.slug },
+                  { name: `${cat.name} ${t("categories.componentsSuffix")}`, slug: cat.slug },
                 ],
         }))
-      : fallbackCategoriesByLang[locale] || fallbackCategoriesByLang.uz;
+      : fallbackCategoriesByLang[locale] || fallbackCategoriesByLang.ru || fallbackCategoriesByLang.uz;
 
   return (
-    <section className="mb-10">
-      <div className="flex items-center justify-between mb-6 pb-2 border-b-2 border-industrial-blue">
-        <h2 className="text-xl sm:text-2xl font-black text-industrial-blue">
+    <section className="mb-8 sm:mb-10">
+      <div className="flex items-center justify-between mb-4 sm:mb-6 pb-2 border-b-2 border-industrial-blue">
+        <h2 className="text-lg sm:text-2xl font-black text-industrial-blue">
           {title || t("categories.title")}
         </h2>
         {showViewAll && (
           <Link
             href="/katalog"
-            className="text-xs font-extrabold text-industrial-orange hover:underline uppercase"
+            className="text-[11px] sm:text-xs font-extrabold text-industrial-orange hover:underline uppercase shrink-0"
           >
             {t("categories.viewAll")} →
           </Link>
@@ -352,7 +347,7 @@ export function CategoryGrid({
       <div
         className={`grid grid-cols-1 ${
           gridCols === 3 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"
-        } gap-6 items-start`}
+        } gap-4 sm:gap-6 items-start`}
       >
         {displayCategories.map((cat, idx) => {
           const isOpen = !!openStates[idx];
@@ -362,29 +357,29 @@ export function CategoryGrid({
           return (
             <div
               key={`${cat.slug}-${idx}`}
-              className="rounded-lg overflow-hidden border border-industrial-border-subtle shadow-sm transition-all"
+              className="rounded-xl overflow-hidden border border-industrial-border-subtle shadow-xs transition-all"
             >
               {/* Header Bar with Toggle Button */}
               <button
                 type="button"
                 onClick={() => toggleCategory(idx)}
-                className={`w-full ${bgColor} text-white p-4 sm:p-5 flex items-center justify-between hover:brightness-105 transition-all text-left group cursor-pointer`}
+                className={`w-full ${bgColor} text-white p-3.5 sm:p-5 flex items-center justify-between hover:brightness-105 transition-all text-left group cursor-pointer`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-black text-xl shrink-0 group-hover:scale-110 transition-transform">
-                    {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded bg-white/20 flex items-center justify-center font-black text-lg sm:text-xl shrink-0 group-hover:scale-110 transition-transform">
+                    {isOpen ? <Minus className="w-4 h-4 sm:w-5 sm:h-5" /> : <Plus className="w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
-                  <span className="text-base sm:text-lg font-black tracking-tight leading-snug">
+                  <span className="text-sm sm:text-lg font-black tracking-tight leading-snug truncate">
                     {cat.name}
                   </span>
                 </div>
-                <div className="opacity-90 shrink-0">{icon}</div>
+                <div className="opacity-90 shrink-0 ml-2">{icon}</div>
               </button>
 
               {/* Subcategories List Panel (Shown when Open) */}
               {isOpen && (
-                <div className="bg-[#f9f9fc] p-5 border-t border-industrial-border-subtle animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                <div className="bg-[#f9f9fc] p-3.5 sm:p-5 border-t border-industrial-border-subtle animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 sm:gap-y-2 text-xs">
                     {cat.subcategories.map((sub, subIdx) => (
                       <Link
                         key={subIdx}

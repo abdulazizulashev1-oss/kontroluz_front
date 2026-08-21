@@ -73,9 +73,9 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
       {
         id: `rev-${Date.now()}`,
         author: newAuthor,
-        company: newCompany || "Mustaqil Mutaxassis",
+        company: newCompany || "Expert",
         rating: newRating,
-        date: "Hozirgina",
+        date: "Today",
         comment: newComment,
       },
       ...reviewsList,
@@ -91,21 +91,21 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
   const documents = [
     {
       id: "doc-1",
-      title: `${product.title} — Rasmiy Texnik Pasport (Datasheet)`,
+      title: `${product.title} — Datasheet / Passport`,
       size: "2.8 MB",
       format: "PDF",
       code: `PASSPORT-${product.sku}`,
     },
     {
       id: "doc-2",
-      title: "Muvofiqlik va Sanoat Xavfsizligi Sertifikati (ISO 9001 / GOST)",
+      title: "ISO 9001 / GOST Certificate",
       size: "1.4 MB",
       format: "PDF",
       code: "CERT-UZ-2026",
     },
     {
       id: "doc-3",
-      title: "O'rnatish, Montaj va Foydalanish Bo'yicha Qo'llanma",
+      title: "Installation & Technical Operation Manual",
       size: "4.2 MB",
       format: "PDF",
       code: "MANUAL-V2",
@@ -125,7 +125,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
               : "text-industrial-text-muted hover:text-industrial-blue"
           }`}
         >
-          <span>Texnik Xususiyatlar</span>
+          <span>{t("productDetail.tabs.specs")}</span>
         </button>
 
         <button
@@ -138,7 +138,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>Tavsif va Qo'llanma</span>
+          <span>{t("productDetail.tabs.description")}</span>
         </button>
 
         <button
@@ -151,7 +151,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
           }`}
         >
           <FileText className="w-4 h-4" />
-          <span>Hujjatlar (PDF)</span>
+          <span>{t("productDetail.tabs.documents")}</span>
           <span className="bg-industrial-surface-low text-industrial-blue px-2 py-0.5 rounded-full font-mono text-[10px] font-extrabold border border-industrial-border-subtle">
             {documents.length}
           </span>
@@ -167,7 +167,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
           }`}
         >
           <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-          <span>Sharhlar ({reviewsList.length})</span>
+          <span>{t("productDetail.tabs.reviews")} ({reviewsList.length})</span>
         </button>
       </div>
 
@@ -193,10 +193,10 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                   ))}
                   <tr className="bg-white">
                     <td className="p-3.5 font-extrabold text-industrial-text w-1/2">
-                      Sertifikatlash
+                      {t("productDetail.specsTable.certification")}
                     </td>
                     <td className="p-3.5 text-emerald-600 font-bold w-1/2 flex items-center gap-1">
-                      <Award className="w-4 h-4 text-emerald-600" /> ISO 9001 / GOST Sertifikatlangan
+                      <Award className="w-4 h-4 text-emerald-600" /> {t("productDetail.specsTable.isoCert")}
                     </td>
                   </tr>
                 </tbody>
@@ -205,24 +205,26 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
           </div>
 
           <div className="lg:col-span-5 space-y-4">
-            <h3 className="font-black text-base text-industrial-text">Batafsil Mahsulot Tavsifi</h3>
+            <h3 className="font-black text-base text-industrial-text">
+              {t("productDetail.specsTable.fullDescTitle")}
+            </h3>
             <p className="text-xs text-industrial-text-muted leading-relaxed">
               {product.fullDescription}
             </p>
 
             <div className="p-5 bg-industrial-blue/10 border border-industrial-blue/20 rounded-xl text-xs space-y-2">
               <div className="font-extrabold text-industrial-blue text-sm">
-                O'rnatish va Loyihalash bo'yicha Savollaringiz bormi?
+                {t("productDetail.consultation.title")}
               </div>
               <p className="text-industrial-text-muted leading-relaxed">
-                Mutaxassisimiz bilan bevosita bog'laning va muhandislik konsultatsiyasini oling.
+                {t("productDetail.consultation.subtitle")}
               </p>
               <a
-                href="tel:+998712006800"
+                href={`tel:${t("productDetail.consultation.phone").replace(/[^+\d]/g, "")}`}
                 className="inline-flex items-center gap-1.5 font-black text-industrial-orange hover:underline pt-2 text-sm"
               >
                 <Phone className="w-4 h-4" />
-                +998 (71) 200-68-00
+                {t("productDetail.consultation.phone")}
               </a>
             </div>
           </div>
@@ -234,7 +236,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="prose prose-sm max-w-none text-industrial-text leading-relaxed">
             <h3 className="text-lg font-black text-industrial-blue mb-2">
-              Mahsulot haqida to'liq ma'lumot
+              {t("productDetail.guide.fullInfoTitle")}
             </h3>
             <p className="text-xs text-industrial-text-muted leading-relaxed">
               {product.fullDescription}
@@ -245,26 +247,26 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
             <div className="p-5 bg-industrial-surface-low border border-industrial-border rounded-xl space-y-3">
               <h4 className="font-black text-sm text-industrial-text flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />
-                O'rnatish va Montaj Qoidalari
+                {t("productDetail.guide.installationRules")}
               </h4>
               <ul className="text-xs text-industrial-text-muted space-y-2 list-disc list-inside">
-                <li>Montaj ishlarini boshlashdan oldin asosiy elektr tarmoq ta'minotini uzing.</li>
-                <li>Uskunani faqat sertifikatlangan muhandis-texnik mutaxassislar o'rnatsin.</li>
-                <li>Barcha ulanish simlarini texnik pasportdagi elektr sxemaga muvofiq bajaring.</li>
-                <li>Yerga ulash (zazemleniye) konturini qat'iy standartlarga asosan tekshiring.</li>
+                <li>{t("productDetail.guide.rule1")}</li>
+                <li>{t("productDetail.guide.rule2")}</li>
+                <li>{t("productDetail.guide.rule3")}</li>
+                <li>{t("productDetail.guide.rule4")}</li>
               </ul>
             </div>
 
             <div className="p-5 bg-industrial-surface-low border border-industrial-border rounded-xl space-y-3">
               <h4 className="font-black text-sm text-industrial-text flex items-center gap-2">
                 <Award className="w-5 h-5 text-industrial-blue" />
-                Ekspluatatsiya va Ishchi Sharoitlar
+                {t("productDetail.guide.operatingConditions")}
               </h4>
               <ul className="text-xs text-industrial-text-muted space-y-2 list-disc list-inside">
-                <li>Ishchi harorat diapazoni: -30°C dan +60°C gacha.</li>
-                <li>Nisbiy namlik: 95% gacha (kondensat hosil bo'lmaydigan muhitda).</li>
-                <li>Chang va suvdan himoya: Yuqori sanoat himoya toifasi (IP65 / IP67).</li>
-                <li>Rejali texnik ko'rik davriyligi: Har 12 oyda 1 marotaba.</li>
+                <li>{t("productDetail.guide.cond1")}</li>
+                <li>{t("productDetail.guide.cond2")}</li>
+                <li>{t("productDetail.guide.cond3")}</li>
+                <li>{t("productDetail.guide.cond4")}</li>
               </ul>
             </div>
           </div>
@@ -275,7 +277,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
       {activeTab === "documents" && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <div className="text-xs text-industrial-text-muted">
-            Ushbu uskunaga tegishli barcha rasmiy texnik hujjatlar va sertifikatlar:
+            {t("productDetail.documents.docsIntro")}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -297,7 +299,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                     {doc.title}
                   </h4>
                   <div className="text-[10px] font-mono text-industrial-text-muted">
-                    Kod: {doc.code}
+                    {t("productDetail.documents.codePrefix")}: {doc.code}
                   </div>
                 </div>
 
@@ -305,12 +307,12 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                   href={`#download-${doc.id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    alert(`${doc.title} fayli yuklab olinmoqda...`);
+                    alert(`${doc.title} ${t("productDetail.documents.downloadingAlert")}`);
                   }}
                   className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-white border border-industrial-blue text-industrial-blue font-extrabold text-xs hover:bg-industrial-blue hover:text-white transition-all shadow-2xs"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Yuklab olish (PDF)</span>
+                  <span>{t("productDetail.documents.downloadPdf")}</span>
                 </a>
               </div>
             ))}
@@ -334,14 +336,15 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                   ))}
                 </div>
                 <div className="text-xs text-industrial-text-muted">
-                  Barcha <span className="font-bold text-industrial-text">{reviewsList.length} ta</span> tasdiqlangan sanoat sharhlari
+                  <span className="font-bold text-industrial-text">{reviewsList.length}</span>{" "}
+                  {t("productDetail.reviews.verifiedReviews")}
                 </div>
               </div>
             </div>
 
             <div className="text-xs text-industrial-text-muted flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>100% Haqiqiy xaridorlar bahosi</span>
+              <span>{t("productDetail.reviews.customerRatingBadge")}</span>
             </div>
           </div>
 
@@ -390,13 +393,13 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
           <div className="p-6 bg-industrial-surface-low border border-industrial-border rounded-xl space-y-4">
             <h4 className="font-black text-sm text-industrial-blue flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-industrial-orange" />
-              Fikr va Sharh Qoldirish
+              {t("productDetail.reviews.leaveReviewTitle")}
             </h4>
 
             {reviewSubmitted && (
               <div className="p-3 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-lg text-xs font-bold flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" />
-                <span>Sharhingiz muvaffaqiyatli qabul qilindi va ro'yxatga qo'shildi!</span>
+                <span>{t("productDetail.reviews.successMsg")}</span>
               </div>
             )}
 
@@ -404,12 +407,12 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="font-bold text-industrial-text block mb-1">
-                    Ism-familiyangiz *
+                    {t("productDetail.reviews.authorLabel")} *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Masalan: Sardor Rustamov"
+                    placeholder={t("productDetail.reviews.authorPlaceholder")}
                     value={newAuthor}
                     onChange={(e) => setNewAuthor(e.target.value)}
                     className="w-full p-2.5 bg-white border border-industrial-border rounded font-semibold focus:outline-none focus:border-industrial-blue"
@@ -418,11 +421,11 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
 
                 <div>
                   <label className="font-bold text-industrial-text block mb-1">
-                    Kompaniya / Korxona nomi
+                    {t("productDetail.reviews.companyLabel")}
                   </label>
                   <input
                     type="text"
-                    placeholder="Masalan: Techno Invest MChJ"
+                    placeholder={t("productDetail.reviews.companyPlaceholder")}
                     value={newCompany}
                     onChange={(e) => setNewCompany(e.target.value)}
                     className="w-full p-2.5 bg-white border border-industrial-border rounded font-semibold focus:outline-none focus:border-industrial-blue"
@@ -432,7 +435,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
 
               <div>
                 <label className="font-bold text-industrial-text block mb-1">
-                  Bahoingiz (Yulduzlar)
+                  {t("productDetail.reviews.ratingLabel")}
                 </label>
                 <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -459,12 +462,12 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
 
               <div>
                 <label className="font-bold text-industrial-text block mb-1">
-                  Sharh va Tajribangiz *
+                  {t("productDetail.reviews.commentLabel")} *
                 </label>
                 <textarea
                   rows={3}
                   required
-                  placeholder="Uskunaning ishlashi, yetkazilishi va sifati haqidagi xolis fikringiz..."
+                  placeholder={t("productDetail.reviews.commentPlaceholder")}
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   className="w-full p-2.5 bg-white border border-industrial-border rounded font-semibold focus:outline-none focus:border-industrial-blue"
@@ -477,7 +480,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                 className="gap-2 font-extrabold text-xs py-2.5 px-6"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>Sharhni Chop Etish</span>
+                <span>{t("productDetail.reviews.submitBtn")}</span>
               </Button>
             </form>
           </div>

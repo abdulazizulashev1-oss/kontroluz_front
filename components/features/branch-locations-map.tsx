@@ -3,64 +3,42 @@
 import React, { useState } from "react";
 import { MapPin, Navigation, Phone, Clock, ExternalLink, Building2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-
-export interface Branch {
-  id: string;
-  name: string;
-  badge: string;
-  address: string;
-  phone: string;
-  rawPhone: string;
-  workingHours: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  googleMapsUrl: string;
-  embedUrl: string;
-}
-
-export const BRANCHES: Branch[] = [
-  {
-    id: "qorasaroy",
-    name: "Kontrol Qorasaroy Filiali",
-    badge: "1-Filial & Do'kon",
-    address: "Toshkent shahri, Olmazor tumani, Qorasaroy ko'chasi",
-    phone: "+998 (71) 200-68-00",
-    rawPhone: "+998712006800",
-    workingHours: "Dush - Shan: 09:00 - 18:00",
-    coordinates: {
-      lat: 41.3572598,
-      lng: 69.2427857,
-    },
-    googleMapsUrl:
-      "https://www.google.com/maps/place/Kontrol+Qorasaroy/@41.3572598,69.2427857,19z/data=!4m12!1m5!3m4!2zNDHCsDIxJzI2LjAiTiA2OcKwMTQnMzMuNyJF!8m2!3d41.357225!4d69.242706!3m5!1s0x38ae8d007275dfa1:0x3f9cead8d5d7c99a!8m2!3d41.3572598!4d69.2427857!16s%2Fg%2F11x82xvmg6?entry=ttu",
-    embedUrl:
-      "https://maps.google.com/maps?q=41.3572598,69.2427857&hl=uz&z=17&output=embed",
-  },
-  {
-    id: "main-office",
-    name: "Kontrol Bosh Ofis & Servis Markazi",
-    badge: "Bosh Ofis & Sklad",
-    address: "Toshkent shahri, Chilonzor tumani, Kontrol Markaziy Ofis & Showroom",
-    phone: "+998 (71) 200-55-44",
-    rawPhone: "+998712005544",
-    workingHours: "Dush - Juma: 09:00 - 18:00",
-    coordinates: {
-      lat: 41.2547777,
-      lng: 69.2019358,
-    },
-    googleMapsUrl:
-      "https://www.google.com/maps/place/Kontrol/@41.2547777,69.2019358,19z/data=!3m1!4b1!4m6!3m5!1s0x38ae8b341f77f315:0xbf6396ddb0f36182!8m2!3d41.2547777!4d69.2019358!16s%2Fg%2F11k3_mf8xr?entry=ttu",
-    embedUrl:
-      "https://maps.google.com/maps?q=41.2547777,69.2019358&hl=uz&z=17&output=embed",
-  },
-];
+import { useTranslation } from "@/lib/i18n/context";
 
 export function BranchLocationsMap() {
+  const { t } = useTranslation();
   const [activeBranchId, setActiveBranchId] = useState<string>("qorasaroy");
 
-  const activeBranch = BRANCHES.find((b) => b.id === activeBranchId) || BRANCHES[0];
+  const branches = [
+    {
+      id: "qorasaroy",
+      name: t("branches.qorasaroy.name"),
+      badge: t("branches.qorasaroy.badge"),
+      address: t("branches.qorasaroy.address"),
+      phone: "+998 (78) 113-70-27",
+      rawPhone: "+998781137027",
+      workingHours: t("branches.qorasaroy.hours"),
+      googleMapsUrl:
+        "https://www.google.com/maps/place/Kontrol+Qorasaroy/@41.3572598,69.2427857,19z",
+      embedUrl:
+        "https://maps.google.com/maps?q=41.3572598,69.2427857&hl=uz&z=17&output=embed",
+    },
+    {
+      id: "main-office",
+      name: t("branches.mainOffice.name"),
+      badge: t("branches.mainOffice.badge"),
+      address: t("branches.mainOffice.address"),
+      phone: "+998 (71) 200-55-44",
+      rawPhone: "+998712005544",
+      workingHours: t("branches.mainOffice.hours"),
+      googleMapsUrl:
+        "https://www.google.com/maps/place/Kontrol/@41.2547777,69.2019358,19z",
+      embedUrl:
+        "https://maps.google.com/maps?q=41.2547777,69.2019358&hl=uz&z=17&output=embed",
+    },
+  ];
+
+  const activeBranch = branches.find((b) => b.id === activeBranchId) || branches[0];
 
   return (
     <Card className="p-6 bg-white border border-industrial-border shadow-sm rounded-2xl space-y-6">
@@ -69,16 +47,16 @@ export function BranchLocationsMap() {
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-industrial-blue uppercase">
             <Building2 className="w-4 h-4 text-industrial-orange" />
-            <span>Bizning Filiallarimiz va Xarita</span>
+            <span>{t("branches.mapSectionSubtitle")}</span>
           </div>
           <h3 className="text-xl font-black text-industrial-text mt-0.5">
-            Toshkentdagi Rasmiy Filiallarimiz
+            {t("branches.mapSectionTitle")}
           </h3>
         </div>
 
         {/* Branch Selector Tabs */}
         <div className="flex items-center gap-2 bg-industrial-surface-low p-1.5 rounded-xl border border-industrial-border-subtle text-xs font-bold">
-          {BRANCHES.map((b) => (
+          {branches.map((b) => (
             <button
               key={b.id}
               onClick={() => setActiveBranchId(b.id)}
@@ -97,7 +75,7 @@ export function BranchLocationsMap() {
 
       {/* Branch Info Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {BRANCHES.map((branch) => {
+        {branches.map((branch) => {
           const isActive = branch.id === activeBranchId;
           return (
             <div
@@ -148,7 +126,7 @@ export function BranchLocationsMap() {
                   onClick={(e) => e.stopPropagation()}
                   className="text-xs font-bold text-industrial-orange hover:underline flex items-center gap-1"
                 >
-                  <span>Google Xaritada Ochish</span>
+                  <span>{t("branches.googleMapsBtn")}</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
@@ -188,7 +166,7 @@ export function BranchLocationsMap() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 bg-industrial-orange text-white text-[10px] font-extrabold px-2.5 py-1 rounded hover:bg-industrial-orange-dark transition-colors shadow-2xs"
             >
-              <span>Marshrut tuzish (Google Maps)</span>
+              <span>{t("branches.routeBtn")}</span>
               <ExternalLink className="w-2.5 h-2.5" />
             </a>
           </div>
