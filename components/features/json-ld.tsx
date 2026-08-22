@@ -55,7 +55,34 @@ export function LocalBusinessJsonLd({ org }: { org: OrganizationInfo }) {
   );
 }
 
+export function WebSiteJsonLd() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kontrol.uz";
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Kontrol.uz",
+    alternateName: ["Kontrol Security", "Kontrol.uz Industrial"],
+    url: siteUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteUrl}/katalog?search={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export function ProductJsonLd({ product }: { product: Product }) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kontrol.uz";
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -63,10 +90,14 @@ export function ProductJsonLd({ product }: { product: Product }) {
     image: [product.image, ...(product.additionalImages || [])],
     description: product.shortDescription,
     sku: product.sku,
+    brand: {
+      "@type": "Brand",
+      name: "Kontrol.uz",
+    },
     offers: {
       "@type": "Offer",
-      url: `https://kontrol.uz/katalog/${product.categorySlug}/${product.slug}`,
-      priceCurrency: product.currency,
+      url: `${siteUrl}/katalog/${product.categorySlug}/${product.slug}`,
+      priceCurrency: product.currency || "UZS",
       price: product.price,
       itemCondition: "https://schema.org/NewCondition",
       availability: product.inStock

@@ -1,12 +1,14 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kontrol.uz";
+
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/admin/"],
+      disallow: ["/api/", "/admin/", "/savat", "/cart"],
     },
-    sitemap: "https://kontrol.uz/sitemap.xml",
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

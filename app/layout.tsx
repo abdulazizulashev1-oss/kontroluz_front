@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { GlobalContactSection } from "@/components/features/global-contact-section";
-import { OrganizationJsonLd, LocalBusinessJsonLd } from "@/components/features/json-ld";
+import {
+  OrganizationJsonLd,
+  LocalBusinessJsonLd,
+  WebSiteJsonLd,
+} from "@/components/features/json-ld";
 import { fetchOrganizationInfo } from "@/lib/api";
+import { LanguageProvider } from "@/lib/i18n/context";
+import { CartProvider } from "@/lib/cart/cart-context";
+import { FloatingContactButtons } from "@/components/features/floating-contact-buttons";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -13,8 +21,12 @@ const inter = Inter({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kontrol.uz";
+const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kontrol.uz"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Kontrol.uz — Intellektual Xavfsizlik va Muhandislik Tizimlari",
     template: "%s | Kontrol.uz",
@@ -28,33 +40,56 @@ export const metadata: Metadata = {
     "turniketlar sotib olish",
     "biometriya SKUD",
     "xavfsizlik tizimlari",
+    "Kontrol.uz",
   ],
   authors: [{ name: "Kontrol.uz Team" }],
+  alternates: {
+    canonical: siteUrl,
+    languages: {
+      "uz-UZ": siteUrl,
+      "ru-RU": siteUrl,
+      "en-US": siteUrl,
+      "x-default": siteUrl,
+    },
+  },
   openGraph: {
     type: "website",
-    locale: "uz_UZ",
-    url: "https://kontrol.uz",
+    locale: "ru_RU",
+    alternateLocale: ["uz_UZ", "en_US"],
+    url: siteUrl,
     siteName: "Kontrol.uz",
     title: "Kontrol.uz — Intellektual Xavfsizlik Tizimlari",
-    description: "Sanoat va tijorat ob'yektlari uchun videokuzatuv va SKUD tizimlari.",
+    description: "Sanoat va tijorat obyektlari uchun videokuzatuv va SKUD tizimlari.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=1200&h=630&auto=format&fit=crop&q=80",
+        url: `${siteUrl}/images/logo.png`,
         width: 1200,
         height: 630,
         alt: "Kontrol.uz Industrial Security Systems",
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kontrol.uz — Intellektual Xavfsizlik Tizimlari",
+    description: "Sanoat va tijorat obyektlari uchun videokuzatuv va SKUD tizimlari.",
+    images: [`${siteUrl}/images/logo.png`],
+  },
+  verification: {
+    google: googleVerification || "google_site_verification_code_here",
+  },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
-
-import { LanguageProvider } from "@/lib/i18n/context";
-import { CartProvider } from "@/lib/cart/cart-context";
-import { FloatingContactButtons } from "@/components/features/floating-contact-buttons";
 
 export default async function RootLayout({
   children,
@@ -68,6 +103,7 @@ export default async function RootLayout({
       <head>
         <OrganizationJsonLd org={orgInfo} />
         <LocalBusinessJsonLd org={orgInfo} />
+        <WebSiteJsonLd />
       </head>
       <body className="min-h-screen flex flex-col justify-between relative">
         <LanguageProvider>
@@ -79,6 +115,7 @@ export default async function RootLayout({
             <FloatingContactButtons />
           </CartProvider>
         </LanguageProvider>
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );
