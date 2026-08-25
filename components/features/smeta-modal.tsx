@@ -403,22 +403,7 @@ export function SmetaModal({ isOpen: propIsOpen, onClose }: SmetaModalProps) {
                 </div>
               </div>
 
-              {/* Real-Time Price Estimate Highlight Banner */}
-              <div className="bg-gradient-to-r from-industrial-blue/10 via-industrial-surface-low to-industrial-orange/10 p-4 rounded-xl border border-industrial-blue/20 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="space-y-0.5 text-center sm:text-left">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-industrial-text-muted flex items-center gap-1 justify-center sm:justify-start">
-                    <Sparkles className="w-3.5 h-3.5 text-industrial-orange" />
-                    <span>Hisoblangan Taxminiy Smeta Qiymati:</span>
-                  </div>
-                  <div className="text-lg sm:text-2xl font-black font-mono text-industrial-blue">
-                    {formatPrice(estimatedMin, "UZS")} – {formatPrice(estimatedMax, "UZS")}
-                  </div>
-                </div>
-                <div className="text-center sm:text-right text-[11px] text-industrial-text-muted">
-                  <div>Tavsiya: <span className="font-bold text-industrial-text">{camerasCount} ta kamera</span></div>
-                  <div>NVR registrator va kabellar kiritilgan</div>
-                </div>
-              </div>
+
 
               {/* Step 5: Contact Lead Form */}
               <div className="space-y-3 pt-1 border-t border-industrial-border">
