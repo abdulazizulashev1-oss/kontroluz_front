@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -100,10 +100,47 @@ function MobileInlineSearchBar({ onClose }: { onClose?: () => void }) {
 }
 
 export function Header() {
+  const router = useRouter();
   const { t } = useTranslation();
   const { totalCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSmetaModalOpen, setIsSmetaModalOpen] = useState(false);
+
+  // Branch Selector Dropdown State
+  const [isBranchDropdownOpen, setIsBranchDropdownOpen] = useState(false);
+  const branchDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        branchDropdownRef.current &&
+        !branchDropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsBranchDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelectBranch = (branchId: "qorasaroy" | "main-office") => {
+    setIsBranchDropdownOpen(false);
+
+    // Dispatch custom event for BranchLocationsMap
+    window.dispatchEvent(
+      new CustomEvent("select-branch-map", { detail: { branchId } })
+    );
+
+    // Scroll to branch map section
+    const mapEl =
+      document.getElementById("branches-map") ||
+      document.getElementById("branches");
+    if (mapEl) {
+      mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      router.push(`/#branches-map`);
+    }
+  };
 
   return (
     <>
@@ -111,14 +148,80 @@ export function Header() {
         {/* 1. Top Row: Compact, Responsive Info Bar */}
         <div className="border-b border-gray-200/80 py-1.5 sm:py-2 bg-industrial-surface-low text-xs text-industrial-text-muted">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2 sm:gap-4">
-            {/* Left: City & Service Center */}
+            {/* Left: City & Branch Dropdown Selector */}
             <div className="flex items-center gap-3 sm:gap-6 min-w-0">
-              <div className="flex items-center gap-1 cursor-pointer group shrink-0">
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-industrial-blue shrink-0" />
-                <span className="font-bold text-[11px] sm:text-xs text-industrial-blue border-b border-dotted border-industrial-blue group-hover:text-industrial-orange truncate">
-                  {t("nav.city")}
-                </span>
-                <ChevronDown className="w-3 h-3 text-gray-500 shrink-0" />
+              <div className="relative shrink-0" ref={branchDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsBranchDropdownOpen(!isBranchDropdownOpen)}
+                  className="flex items-center gap-1 cursor-pointer group text-left"
+                  aria-expanded={isBranchDropdownOpen}
+                  aria-label="Filialni tanlash"
+                >
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-industrial-blue shrink-0" />
+                  <span className="font-bold text-[11px] sm:text-xs text-industrial-blue border-b border-dotted border-industrial-blue group-hover:text-industrial-orange truncate">
+                    {t("nav.city")}
+                  </span>
+                  <ChevronDown
+                    className={`w-3 h-3 text-gray-500 shrink-0 transition-transform ${
+                      isBranchDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Dropdown Menu for 2 Branches */}
+                {isBranchDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 z-50 bg-white border border-industrial-border rounded-xl shadow-2xl p-2 w-72 sm:w-80 animate-in fade-in slide-in-from-top-2 duration-150 space-y-1">
+                    <div className="px-3 py-1.5 border-b border-gray-100 text-[10px] font-black uppercase text-industrial-blue tracking-wider flex items-center justify-between">
+                      <span>{t("branches.mapSectionTitle")}</span>
+                      <span className="text-industrial-orange font-mono font-bold">2 TA FILIAL</span>
+                    </div>
+
+                    {/* Branch 1 Option */}
+                    <button
+                      type="button"
+                      onClick={() => handleSelectBranch("qorasaroy")}
+                      className="w-full p-2.5 rounded-lg hover:bg-industrial-surface-low text-left transition-colors flex items-start gap-2.5 group/b cursor-pointer"
+                    >
+                      <div className="w-7 h-7 rounded-md bg-industrial-blue/10 text-industrial-blue flex items-center justify-center shrink-0 group-hover/b:bg-industrial-blue group-hover/b:text-white transition-colors mt-0.5">
+                        <MapPin className="w-4 h-4 text-industrial-orange group-hover/b:text-white" />
+                      </div>
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="font-extrabold text-xs text-industrial-text group-hover/b:text-industrial-blue transition-colors flex items-center gap-1.5">
+                          <span>{t("branches.qorasaroy.name")}</span>
+                          <span className="text-[9px] font-black bg-industrial-orange text-white px-1.5 py-0.2 rounded">
+                            {t("branches.qorasaroy.badge")}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-industrial-text-muted line-clamp-1">
+                          {t("branches.qorasaroy.address")}
+                        </p>
+                      </div>
+                    </button>
+
+                    {/* Branch 2 Option */}
+                    <button
+                      type="button"
+                      onClick={() => handleSelectBranch("main-office")}
+                      className="w-full p-2.5 rounded-lg hover:bg-industrial-surface-low text-left transition-colors flex items-start gap-2.5 group/b cursor-pointer"
+                    >
+                      <div className="w-7 h-7 rounded-md bg-industrial-orange/10 text-industrial-blue flex items-center justify-center shrink-0 group-hover/b:bg-industrial-orange group-hover/b:text-white transition-colors mt-0.5">
+                        <MapPin className="w-4 h-4 text-industrial-blue group-hover/b:text-white" />
+                      </div>
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="font-extrabold text-xs text-industrial-text group-hover/b:text-industrial-blue transition-colors flex items-center gap-1.5">
+                          <span>{t("branches.mainOffice.name")}</span>
+                          <span className="text-[9px] font-black bg-industrial-blue text-white px-1.5 py-0.2 rounded">
+                            {t("branches.mainOffice.badge")}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-industrial-text-muted line-clamp-1">
+                          {t("branches.mainOffice.address")}
+                        </p>
+                      </div>
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="hidden md:flex items-center gap-1.5">

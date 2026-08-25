@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapPin, Navigation, Phone, Clock, ExternalLink, Building2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "@/lib/i18n/context";
@@ -8,6 +8,18 @@ import { useTranslation } from "@/lib/i18n/context";
 export function BranchLocationsMap() {
   const { t } = useTranslation();
   const [activeBranchId, setActiveBranchId] = useState<string>("qorasaroy");
+
+  useEffect(() => {
+    const handleSelectBranchEvent = (e: any) => {
+      if (e.detail?.branchId) {
+        setActiveBranchId(e.detail.branchId);
+      }
+    };
+    window.addEventListener("select-branch-map" as any, handleSelectBranchEvent);
+    return () => {
+      window.removeEventListener("select-branch-map" as any, handleSelectBranchEvent);
+    };
+  }, []);
 
   const branches = [
     {
@@ -28,8 +40,8 @@ export function BranchLocationsMap() {
       name: t("branches.mainOffice.name"),
       badge: t("branches.mainOffice.badge"),
       address: t("branches.mainOffice.address"),
-      phone: "+998 (71) 200-55-44",
-      rawPhone: "+998712005544",
+      phone: "+998 (71) 200-68-00",
+      rawPhone: "+998712006800",
       workingHours: t("branches.mainOffice.hours"),
       googleMapsUrl:
         "https://www.google.com/maps/place/Kontrol/@41.2547777,69.2019358,19z",
@@ -41,7 +53,7 @@ export function BranchLocationsMap() {
   const activeBranch = branches.find((b) => b.id === activeBranchId) || branches[0];
 
   return (
-    <Card className="p-6 bg-white border border-industrial-border shadow-sm rounded-2xl space-y-6">
+    <Card id="branches-map" className="p-6 bg-white border border-industrial-border shadow-sm rounded-2xl space-y-6 scroll-mt-24">
       {/* Header with Title & Branch Switcher Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-industrial-border pb-4">
         <div>

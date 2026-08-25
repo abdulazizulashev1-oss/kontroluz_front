@@ -277,8 +277,8 @@ export function StatisticsInteractiveSection() {
                     <div className="space-y-1.5 text-xs text-industrial-text">
                       <div className="flex items-center gap-2">
                         <Phone className="w-3.5 h-3.5 text-industrial-blue" />
-                        <a href="tel:+998712005544" className="font-bold hover:text-industrial-orange transition-colors">
-                          +998 (71) 200-55-44
+                        <a href="tel:+998712006800" className="font-bold hover:text-industrial-orange transition-colors">
+                          +998 (71) 200-68-00
                         </a>
                       </div>
                       <div className="flex items-center gap-2 text-industrial-text-muted">
@@ -430,8 +430,8 @@ export function StatisticsInteractiveSection() {
                     </div>
                     <div className="flex items-center justify-between text-xs pt-1">
                       <span className="text-industrial-text-muted font-medium">Aloqa telefoni:</span>
-                      <a href="tel:+998712005544" className="font-extrabold text-industrial-blue hover:text-industrial-orange">
-                        +998 (71) 200-55-44
+                      <a href="tel:+998712006800" className="font-extrabold text-industrial-blue hover:text-industrial-orange">
+                        +998 (71) 200-68-00
                       </a>
                     </div>
                   </div>
