@@ -199,6 +199,7 @@ export interface TranslationDictionary {
     modalTitle: string;
     modalSubtitle: string;
     orderNumPrefix: string;
+    dearCustomer: string;
     successDesc: string;
     nameLabel: string;
     namePlaceholder: string;
@@ -552,6 +553,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       modalTitle: "Buyurtmani Rasmiylashtirish",
       modalSubtitle: "B2B & Korporativ Xarid",
       orderNumPrefix: "Buyurtma Raqami",
+      dearCustomer: "Hurmatli",
       successDesc: "buyurtma tafsilotlari va rasmiy invoys hisob-faktura tayyorlanmoqda. Menejerimiz tez orada bog'lanadi.",
       nameLabel: "Mas'ul shaxs (Ism-familiya)",
       namePlaceholder: "Masalan: Sardor Rustamov",
@@ -903,6 +905,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       modalTitle: "Оформление Заказа",
       modalSubtitle: "B2B и Корпоративная Закупка",
       orderNumPrefix: "Номер Заказа",
+      dearCustomer: "Уважаемый(ая)",
       successDesc: "детали заказа и официальный счет-фактура формируются. Наш менеджер скоро свяжется с вами.",
       nameLabel: "Ответственное лицо (Ф.И.О.)",
       namePlaceholder: "Например: Сардор Рустамов",
@@ -1254,6 +1257,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       modalTitle: "Checkout Order",
       modalSubtitle: "B2B & Corporate Procurement",
       orderNumPrefix: "Order Number",
+      dearCustomer: "Dear",
       successDesc: "order details and official invoice are being prepared. Our manager will contact you soon.",
       nameLabel: "Contact Person (Full Name)",
       namePlaceholder: "E.g.: Sardor Rustamov",

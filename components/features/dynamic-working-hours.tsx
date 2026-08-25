@@ -110,7 +110,7 @@ export function DynamicWorkingHours({
             <span>{schedule.weekdayText}</span>
             {!schedule.isWeekend && (
               <span className="text-[10px] text-industrial-blue font-black">
-                (Bugun)
+                ({schedule.todayBadgeText})
               </span>
             )}
           </div>
@@ -122,7 +122,7 @@ export function DynamicWorkingHours({
             <span>{schedule.weekendText}</span>
             {schedule.isWeekend && (
               <span className="text-[10px] text-industrial-orange font-black">
-                (Bugun)
+                ({schedule.todayBadgeText})
               </span>
             )}
           </div>

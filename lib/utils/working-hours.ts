@@ -22,6 +22,7 @@ export interface WorkingHoursInfo {
   statusText: string;
   weekdayText: string;
   weekendText: string;
+  todayBadgeText: string;
 }
 
 const DAY_NAMES: Record<Language, { full: string[]; short: string[]; today: string; open: string; closed: string; weekdayLabel: string; weekendLabel: string }> = {
@@ -108,5 +109,6 @@ export function getWorkingHoursInfo(locale: Language = "uz", customDate?: Date):
     statusText,
     weekdayText: langConfig.weekdayLabel,
     weekendText: langConfig.weekendLabel,
+    todayBadgeText: langConfig.today,
   };
 }

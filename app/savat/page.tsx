@@ -313,7 +313,7 @@ export default function CartPage() {
                   </h3>
                 </div>
                 <p className="text-xs text-industrial-text-muted leading-relaxed max-w-sm mx-auto">
-                  Hurmatli <span className="font-bold text-industrial-text">{clientName}</span>, {t("cartPage.successDesc")}
+                  {t("cartPage.dearCustomer")} <span className="font-bold text-industrial-text">{clientName}</span>, {t("cartPage.successDesc")}
                 </p>
                 <Button
                   variant="cta"
