@@ -143,6 +143,18 @@ export function Header() {
     }
   };
 
+  const handleScrollToContact = () => {
+    const contactEl =
+      document.getElementById("contact-section") ||
+      document.getElementById("contact") ||
+      document.getElementById("branches-map");
+    if (contactEl) {
+      contactEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      router.push(`/#contact-section`);
+    }
+  };
+
   return (
     <>
       <header className="w-full flex flex-col z-50 bg-white shadow-xs border-b border-industrial-border">
@@ -225,10 +237,17 @@ export function Header() {
                 )}
               </div>
 
-              <div className="hidden md:flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span>{t("nav.serviceCenter")}</span>
-              </div>
+              <button
+                type="button"
+                onClick={handleScrollToContact}
+                className="hidden md:flex items-center gap-1.5 cursor-pointer hover:text-industrial-blue text-industrial-text transition-colors group"
+                aria-label="Servis va ombor markaziga o'tish"
+              >
+                <MapPin className="w-4 h-4 text-industrial-orange shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="border-b border-dotted border-gray-400 group-hover:border-industrial-blue font-medium">
+                  {t("nav.serviceCenter")}
+                </span>
+              </button>
               <div className="hidden lg:flex items-center">
                 <DynamicWorkingHours variant="header" />
               </div>
