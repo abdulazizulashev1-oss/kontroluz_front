@@ -502,6 +502,7 @@ export async function fetchCategories(
         order?: number;
         id?: number | string;
         slug?: string;
+        rootOnly?: boolean;
       }
 ): Promise<Category[]> {
   try {
@@ -517,6 +518,12 @@ export async function fetchCategories(
       params.set("populate", "*");
       params.set("locale", loc);
       params.set("pagination[pageSize]", "100");
+
+      // Root category filtering per Backend 2026-08-25 spec (rootOnly=true / parent null)
+      if (opts.rootOnly || (opts.rootOnly === undefined && !opts.slug && opts.id === undefined)) {
+        params.set("rootOnly", "true");
+        params.set("filters[parent][$null]", "true");
+      }
 
       if (opts.order !== undefined) {
         params.set("filters[order][$eq]", String(opts.order));
