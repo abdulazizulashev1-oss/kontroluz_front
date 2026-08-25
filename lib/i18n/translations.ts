@@ -357,7 +357,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     nav: {
       home: "Bosh sahifa",
       catalog: "Katalog",
-      calculator: "Smeta Hisoblash",
+      calculator: "Ariza Yuborish",
       about: "Biz haqimizda",
       contacts: "Kontaktlar",
       cart: "Savat",
@@ -708,7 +708,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     nav: {
       home: "Главная",
       catalog: "Каталог",
-      calculator: "Расчет Сметы",
+      calculator: "Отправить заявку",
       about: "О нас",
       contacts: "Контакты",
       cart: "Корзина",
@@ -1059,7 +1059,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     nav: {
       home: "Home",
       catalog: "Catalog",
-      calculator: "Cost Calculator",
+      calculator: "Submit Request",
       about: "About Us",
       contacts: "Contacts",
       cart: "Cart",
