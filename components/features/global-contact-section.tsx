@@ -56,7 +56,7 @@ export function GlobalContactSection() {
   ];
 
   return (
-    <section className="bg-industrial-surface-low border-t border-industrial-border py-12">
+    <section id="contact-section" className="bg-industrial-surface-low border-t border-industrial-border py-12 scroll-mt-16">
       <div className="max-w-7xl mx-auto px-4 space-y-8">
         {/* Header Title */}
         <div className="text-center max-w-2xl mx-auto space-y-2">

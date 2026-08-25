@@ -16,23 +16,6 @@ export function BranchLocationsMap() {
       }
     };
     window.addEventListener("select-branch-map" as any, handleSelectBranchEvent);
-
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const branchParam = urlParams.get("branch");
-      if (branchParam === "main-office" || branchParam === "2-filial") {
-        setActiveBranchId("main-office");
-      } else if (branchParam === "qorasaroy" || branchParam === "1-filial") {
-        setActiveBranchId("qorasaroy");
-      }
-
-      if (window.location.hash === "#branches-map") {
-        setTimeout(() => {
-          document.getElementById("branches-map")?.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 150);
-      }
-    }
-
     return () => {
       window.removeEventListener("select-branch-map" as any, handleSelectBranchEvent);
     };

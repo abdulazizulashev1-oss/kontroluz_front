@@ -131,14 +131,15 @@ export function Header() {
       new CustomEvent("select-branch-map", { detail: { branchId } })
     );
 
-    // Scroll to branch map section
-    const mapEl =
-      document.getElementById("branches-map") ||
-      document.getElementById("branches");
-    if (mapEl) {
-      mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    // Scroll to contact section so user can get in touch & view branch map
+    const contactEl =
+      document.getElementById("contact-section") ||
+      document.getElementById("contact") ||
+      document.getElementById("branches-map");
+    if (contactEl) {
+      contactEl.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
-      router.push(`/#branches-map`);
+      router.push(`/#contact-section`);
     }
   };
 

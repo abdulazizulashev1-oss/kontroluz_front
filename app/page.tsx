@@ -9,7 +9,6 @@ import { PromoBanner } from "@/components/features/promo-banner";
 import { EngineeringExcellence } from "@/components/features/engineering-excellence";
 import { SolutionCalculator } from "@/components/features/solution-calculator";
 import { StatisticsInteractiveSection } from "@/components/features/statistics-interactive-section";
-import { BranchLocationsMap } from "@/components/features/branch-locations-map";
 import { fetchCategories, fetchProducts } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 
@@ -28,9 +27,6 @@ export default async function HomePage() {
 
       {/* 3. Interactive Statistics & Directory Block */}
       <StatisticsInteractiveSection />
-
-      {/* 4. Official Branches & Map */}
-      <BranchLocationsMap />
 
       {/* 4. New Arrivals (Yangi Kelgan Uskunalar) */}
       <HomeProductsSection initialProducts={featuredProducts} type="new" />
