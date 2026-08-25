@@ -22,6 +22,8 @@ export interface Product {
   categorySlug: string;
   categoryName: string;
   categoryRelationSlug?: string;
+  parentCategorySlug?: string;
+  allCategorySlugs?: string[];
   price: number;
   oldPrice?: number;
   currency: string;

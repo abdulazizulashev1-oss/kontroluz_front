@@ -14,6 +14,7 @@ export interface TranslationDictionary {
     serviceCenter: string;
     city: string;
     telegramBot: string;
+    logoSlogan: string;
   };
   hero: {
     badge: string;
@@ -177,6 +178,7 @@ export interface TranslationDictionary {
     openMap: string;
     floatingTgTooltip: string;
     floatingPhoneTooltip: string;
+    b2bPhoneLabel: string;
   };
   cartPage: {
     title: string;
@@ -368,6 +370,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       serviceCenter: "Servis va Sklad markazi",
       city: "Toshkent",
       telegramBot: "Telegram Bot",
+      logoSlogan: "Hamma Nazorat Ostida",
     },
     hero: {
       badge: "SANOAT XAVFSIZLIGI VA AVTOMATIKASI",
@@ -531,6 +534,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       openMap: "Marshrut tuzish (Google Maps)",
       floatingTgTooltip: "Telegram Bot orqali yozish",
       floatingPhoneTooltip: "+998 71 200 68 00 (Qo'ng'iroq qilish)",
+      b2bPhoneLabel: "B2B Takliflar & Hamkorlik",
     },
     cartPage: {
       title: "Xarid Savati",
@@ -720,6 +724,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       serviceCenter: "Сервисный и складской центр",
       city: "Ташкент",
       telegramBot: "Telegram Бот",
+      logoSlogan: "Всё под контролем",
     },
     hero: {
       badge: "ПРОМЫШЛЕННАЯ БЕЗОПАСНОСТЬ И АВТОМАТИКА",
@@ -883,6 +888,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       openMap: "Построить маршрут (Google Maps)",
       floatingTgTooltip: "Написать в Telegram Bot",
       floatingPhoneTooltip: "+998 71 200 68 00 (Позвонить)",
+      b2bPhoneLabel: "B2B Предложения и Сотрудничество",
     },
     cartPage: {
       title: "Корзина Покупок",
@@ -1072,6 +1078,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       serviceCenter: "Service & Warehouse Center",
       city: "Tashkent",
       telegramBot: "Telegram Bot",
+      logoSlogan: "Everything Under Control",
     },
     hero: {
       badge: "INDUSTRIAL SECURITY & AUTOMATION",
@@ -1235,6 +1242,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       openMap: "Get Directions (Google Maps)",
       floatingTgTooltip: "Message Telegram Bot",
       floatingPhoneTooltip: "+998 71 200 68 00 (Call Us)",
+      b2bPhoneLabel: "B2B Inquiries & Partnership",
     },
     cartPage: {
       title: "Shopping Cart",

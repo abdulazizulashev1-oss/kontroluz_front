@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/context";
 
 interface LogoProps {
   variant?: "header" | "footer" | "admin" | "login";
@@ -18,6 +19,7 @@ export function Logo({
   className = "",
   href = "/",
 }: LogoProps) {
+  const { t } = useTranslation();
   const [imageError, setImageError] = useState(false);
 
   const iconSizes = {
@@ -78,7 +80,7 @@ export function Logo({
           >
             {variant === "admin" || variant === "login"
               ? "Super Admin Dashboard"
-              : "Xavfsizlik Tizimlari"}
+              : t("nav.logoSlogan")}
           </span>
         </div>
       )}

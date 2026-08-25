@@ -116,25 +116,62 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const categories = await fetchCategories(locale);
   const allProducts = await fetchProducts({ locale });
 
+  // Build set of valid category identifiers (including parent and subcategories by slug and name)
+  const validCategorySlugs: string[] = [];
+  if (selectedCategorySlug) {
+    const targetSlug = String(selectedCategorySlug).toLowerCase();
+    validCategorySlugs.push(targetSlug);
+
+    categories.forEach((root) => {
+      const rootSlug = String(root.slug || "").toLowerCase();
+      const rootName = String(root.name || "").toLowerCase();
+      const rootMatch = rootSlug === targetSlug || rootName === targetSlug;
+      if (rootMatch) {
+        if (rootSlug) validCategorySlugs.push(rootSlug);
+        if (rootName) validCategorySlugs.push(rootName);
+        root.subcategories?.forEach((s) => {
+          if (s.slug) validCategorySlugs.push(String(s.slug).toLowerCase());
+          if (s.name) validCategorySlugs.push(String(s.name).toLowerCase());
+        });
+      }
+
+      root.subcategories?.forEach((sub) => {
+        const subSlug = String(sub.slug || "").toLowerCase();
+        const subName = String(sub.name || "").toLowerCase();
+        const subMatch = subSlug === targetSlug || subName === targetSlug;
+        if (subMatch) {
+          if (subSlug) validCategorySlugs.push(subSlug);
+          if (subName) validCategorySlugs.push(subName);
+          if (rootSlug) validCategorySlugs.push(rootSlug);
+          if (rootName) validCategorySlugs.push(rootName);
+        }
+      });
+    });
+  }
+
   // 1. Filtering products
   let products = allProducts.filter((p) => {
     // Category filter
     if (selectedCategorySlug) {
       const matchCat =
-        p.categorySlug === selectedCategorySlug ||
-        p.categoryRelationSlug === selectedCategorySlug ||
-        p.categorySlug?.toLowerCase() === selectedCategorySlug.toLowerCase();
+        validCategorySlugs.includes(String(p.categorySlug || "").toLowerCase()) ||
+        (p.categoryRelationSlug && validCategorySlugs.includes(String(p.categoryRelationSlug).toLowerCase())) ||
+        (p.parentCategorySlug && validCategorySlugs.includes(String(p.parentCategorySlug).toLowerCase())) ||
+        p.allCategorySlugs?.some((s) => typeof s === "string" && validCategorySlugs.includes(s.toLowerCase()));
+
       if (!matchCat) return false;
     }
 
     // Search query filter
     if (searchQuery) {
-      const titleMatch = p.title.toLowerCase().includes(searchQuery);
-      const skuMatch = p.sku.toLowerCase().includes(searchQuery);
-      const categoryMatch = p.categoryName.toLowerCase().includes(searchQuery);
-      const descMatch = p.shortDescription.toLowerCase().includes(searchQuery);
+      const titleMatch = String(p.title || "").toLowerCase().includes(searchQuery);
+      const skuMatch = String(p.sku || "").toLowerCase().includes(searchQuery);
+      const categoryMatch = String(p.categoryName || "").toLowerCase().includes(searchQuery);
+      const descMatch = String(p.shortDescription || "").toLowerCase().includes(searchQuery);
       const specMatch = Object.entries(p.specifications || {}).some(
-        ([k, v]) => k.toLowerCase().includes(searchQuery) || v.toLowerCase().includes(searchQuery)
+        ([k, v]) =>
+          String(k || "").toLowerCase().includes(searchQuery) ||
+          String(v || "").toLowerCase().includes(searchQuery)
       );
 
       if (!titleMatch && !skuMatch && !categoryMatch && !descMatch && !specMatch) {

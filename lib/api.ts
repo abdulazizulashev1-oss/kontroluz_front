@@ -395,10 +395,40 @@ export function mapStrapiProduct(rawItem: any): Product {
   const id = String(rawItem.id || attrs.id || attrs.slug || "prod");
   const slug = String(attrs.slug || id);
 
-  const rawCat = attrs.category?.data?.attributes || attrs.category?.attributes || attrs.category || {};
-  const categoryRelationSlug = rawCat.slug ? String(rawCat.slug) : undefined;
+  const rawCatObj =
+    attrs.category?.data?.attributes ||
+    attrs.category?.attributes ||
+    (Array.isArray(attrs.category?.data) ? attrs.category?.data[0]?.attributes : null) ||
+    (Array.isArray(attrs.category) ? attrs.category[0] : null) ||
+    attrs.category ||
+    {};
+
+  const categoryRelationSlug = rawCatObj.slug ? String(rawCatObj.slug) : attrs.categoryRelationSlug;
+  const parentCatObj =
+    rawCatObj.parent?.data?.attributes ||
+    rawCatObj.parent?.attributes ||
+    rawCatObj.parent;
+  const parentCategorySlug = parentCatObj?.slug ? String(parentCatObj.slug) : attrs.parentCategorySlug;
+
   const categorySlug = categoryRelationSlug || attrs.categorySlug || "uskunalar";
-  const categoryName = rawCat.name || attrs.categoryName || "Sanoat Uskunalari";
+  const categoryName = rawCatObj.name || attrs.categoryName || "Sanoat Uskunalari";
+
+  const allCategorySlugs: string[] = Array.isArray(attrs.allCategorySlugs) ? [...attrs.allCategorySlugs] : [];
+  if (categorySlug && !allCategorySlugs.includes(categorySlug)) allCategorySlugs.push(categorySlug);
+  if (categoryRelationSlug && !allCategorySlugs.includes(categoryRelationSlug)) allCategorySlugs.push(categoryRelationSlug);
+  if (parentCategorySlug && !allCategorySlugs.includes(parentCategorySlug)) allCategorySlugs.push(parentCategorySlug);
+  if (attrs.categorySlug && !allCategorySlugs.includes(String(attrs.categorySlug))) allCategorySlugs.push(String(attrs.categorySlug));
+
+  // Check plural categories relationship
+  const rawCatsList = attrs.categories?.data || attrs.categories;
+  if (Array.isArray(rawCatsList)) {
+    rawCatsList.forEach((c: any) => {
+      const cAttrs = c.attributes || c;
+      if (cAttrs.slug && !allCategorySlugs.includes(String(cAttrs.slug))) allCategorySlugs.push(String(cAttrs.slug));
+      const pAttrs = cAttrs.parent?.data?.attributes || cAttrs.parent?.attributes || cAttrs.parent;
+      if (pAttrs?.slug && !allCategorySlugs.includes(String(pAttrs.slug))) allCategorySlugs.push(String(pAttrs.slug));
+    });
+  }
 
   // Extract video if present in Strapi
   let videoUrl: string | undefined = undefined;
@@ -417,8 +447,8 @@ export function mapStrapiProduct(rawItem: any): Product {
     if (resolvedV) videoUrl = resolvedV;
   }
 
-  // Robust image extraction: check coverImage, images array, image, imageUrl, media
-  const rawCover = attrs.coverImage || attrs.image || attrs.imageUrl;
+  // Robust image extraction: check coverImageUrl, coverImage, images array, image, imageUrl, media
+  const rawCover = attrs.coverImageUrl || attrs.coverImage || attrs.image || attrs.imageUrl;
   const rawImagesList =
     attrs.images?.data ||
     attrs.images ||
@@ -470,6 +500,8 @@ export function mapStrapiProduct(rawItem: any): Product {
     categorySlug,
     categoryName,
     categoryRelationSlug,
+    parentCategorySlug,
+    allCategorySlugs,
     price: Number(attrs.price || 0),
     oldPrice: attrs.oldPrice ? Number(attrs.oldPrice) : undefined,
     currency: attrs.currency || "UZS",
@@ -514,37 +546,55 @@ export async function fetchCategories(
     const targetLocale = opts.locale || "ru";
 
     const fetchByLocale = async (loc: string) => {
-      const params = new URLSearchParams();
-      params.set("populate", "*");
-      params.set("locale", loc);
-      params.set("pagination[pageSize]", "100");
+      let allItems: any[] = [];
+      let page = 1;
+      let pageCount = 1;
+      const pageSize = 50000;
 
-      // Root category filtering per Backend 2026-08-25 spec (rootOnly=true / parent null)
-      if (opts.rootOnly || (opts.rootOnly === undefined && !opts.slug && opts.id === undefined)) {
-        params.set("rootOnly", "true");
-        params.set("filters[parent][$null]", "true");
-      }
+      do {
+        const params = new URLSearchParams();
+        params.set("populate", "*");
+        params.set("locale", loc);
+        params.set("pagination[page]", String(page));
+        params.set("pagination[pageSize]", String(pageSize));
 
-      if (opts.order !== undefined) {
-        params.set("filters[order][$eq]", String(opts.order));
-      }
-      if (opts.id !== undefined) {
-        params.set("filters[id][$eq]", String(opts.id));
-      }
-      if (opts.slug) {
-        params.set("filters[slug][$eq]", opts.slug);
-      }
+        // Root category filtering per Backend 2026-08-25 spec (rootOnly=true / parent null)
+        if (opts.rootOnly || (opts.rootOnly === undefined && !opts.slug && opts.id === undefined)) {
+          params.set("rootOnly", "true");
+          params.set("filters[parent][$null]", "true");
+        }
 
-      const url = `${API_BASE_URL}/categories?${params.toString()}`;
-      const isClient = typeof window !== "undefined";
-      const fetchOpts: RequestInit = isClient
-        ? { cache: "no-store" }
-        : { next: { revalidate: 30 } };
+        if (opts.order !== undefined) {
+          params.set("filters[order][$eq]", String(opts.order));
+        }
+        if (opts.id !== undefined) {
+          params.set("filters[id][$eq]", String(opts.id));
+        }
+        if (opts.slug) {
+          params.set("filters[slug][$eq]", opts.slug);
+        }
 
-      const res = await fetch(url, fetchOpts);
-      if (!res.ok) return [];
-      const json = await res.json();
-      return Array.isArray(json.data) ? json.data : [];
+        const url = `${API_BASE_URL}/categories?${params.toString()}`;
+        const isClient = typeof window !== "undefined";
+        const fetchOpts: RequestInit = isClient
+          ? { cache: "no-store" }
+          : { next: { revalidate: 30 } };
+
+        const res = await fetch(url, fetchOpts);
+        if (!res.ok) break;
+        const json = await res.json();
+        if (Array.isArray(json.data)) {
+          allItems.push(...json.data);
+        }
+        if (json.meta?.pagination?.pageCount) {
+          pageCount = json.meta.pagination.pageCount;
+        } else {
+          break;
+        }
+        page++;
+      } while (page <= pageCount);
+
+      return allItems;
     };
 
     // 1. First attempt with requested language (e.g. uz, ru, en)
@@ -559,7 +609,7 @@ export async function fetchCategories(
       // Prioritize root categories (where parent is null)
       const rootEntries = rawList.filter((item: any) => {
         const attrs = item.attributes || item;
-        const parentData = attrs.parent?.data;
+        const parentData = attrs.parent?.data || attrs.parent;
         return !parentData;
       });
       const targetEntries = rootEntries.length > 0 ? rootEntries : rawList;
@@ -600,46 +650,86 @@ export async function fetchProducts(
 
     const targetLocale = opts.locale || "ru";
 
-    const fetchByLocale = async (loc: string) => {
-      const params = new URLSearchParams();
-      params.set("populate", "*");
-      params.set("locale", loc);
-      params.set("pagination[pageSize]", "100");
+    const fetchAllProducts = async () => {
+      // 1. First attempt: Ultra-fast custom endpoint GET /api/products/all
+      try {
+        const params = new URLSearchParams();
+        params.set("locale", "all");
+        if (opts.search) params.set("search", opts.search);
+        if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
+        if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
+        if (opts.sort) params.set("sort", opts.sort);
 
-      if (opts.search) params.set("search", opts.search);
-      if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
-      if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
-      if (opts.sort) params.set("sort", opts.sort);
+        const url = `${API_BASE_URL}/products/all?${params.toString()}`;
+        const isClient = typeof window !== "undefined";
+        const fetchOpts: RequestInit = isClient
+          ? { cache: "no-store" }
+          : { next: { revalidate: 60 } };
 
-      const url = `${API_BASE_URL}/products?${params.toString()}`;
-      const isClient = typeof window !== "undefined";
-      const fetchOpts: RequestInit = isClient
-        ? { cache: "no-store" }
-        : { next: { revalidate: 30 } };
+        const res = await fetch(url, fetchOpts);
+        if (res.ok) {
+          const json = await res.json();
+          const list = Array.isArray(json.data) ? json.data : Array.isArray(json) ? json : [];
+          if (list.length > 0) return list;
+        }
+      } catch (e) {
+        // Fallback to standard Strapi endpoint
+      }
 
-      const res = await fetch(url, fetchOpts);
-      if (!res.ok) return [];
-      const json = await res.json();
-      return Array.isArray(json.data) ? json.data : [];
+      // 2. Standard Strapi REST API fallback with pagination accumulation
+      let allItems: any[] = [];
+      let page = 1;
+      let pageCount = 1;
+      const pageSize = 1000;
+
+      do {
+        const params = new URLSearchParams();
+        params.set("populate", "*");
+        params.set("locale", "all");
+        params.set("pagination[page]", String(page));
+        params.set("pagination[pageSize]", String(pageSize));
+
+        if (opts.search) params.set("search", opts.search);
+        if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
+        if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
+        if (opts.sort) params.set("sort", opts.sort);
+
+        const url = `${API_BASE_URL}/products?${params.toString()}`;
+        const isClient = typeof window !== "undefined";
+        const fetchOpts: RequestInit = isClient
+          ? { cache: "no-store" }
+          : { next: { revalidate: 60 } };
+
+        const res = await fetch(url, fetchOpts);
+        if (!res.ok) break;
+        const json = await res.json();
+        if (Array.isArray(json.data)) {
+          allItems.push(...json.data);
+        }
+        if (json.meta?.pagination?.pageCount) {
+          pageCount = json.meta.pagination.pageCount;
+        } else {
+          break;
+        }
+        page++;
+      } while (page <= pageCount);
+
+      return allItems;
     };
 
-    // 1. Fetch with requested language
-    let rawList = await fetchByLocale(targetLocale);
-
-    // 2. Fallback to all if empty
-    if (rawList.length === 0 && targetLocale !== "all") {
-      rawList = await fetchByLocale("all");
-    }
+    let rawList = await fetchAllProducts();
 
     if (rawList.length > 0) {
       let mapped = rawList.map(mapStrapiProduct);
       if (opts.categorySlug) {
-        mapped = mapped.filter(
-          (p: Product) =>
-            p.categorySlug === opts.categorySlug ||
-            p.categoryRelationSlug === opts.categorySlug ||
-            p.categorySlug.toLowerCase() === opts.categorySlug?.toLowerCase()
-        );
+        const catTarget = opts.categorySlug.toLowerCase();
+        mapped = mapped.filter((p: Product) => {
+          if (p.categorySlug?.toLowerCase() === catTarget) return true;
+          if (p.categoryRelationSlug?.toLowerCase() === catTarget) return true;
+          if (p.parentCategorySlug?.toLowerCase() === catTarget) return true;
+          if (p.allCategorySlugs?.some((s) => s.toLowerCase() === catTarget)) return true;
+          return false;
+        });
       }
       return mapped;
     }
