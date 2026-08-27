@@ -114,7 +114,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const locale = getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   const categories = await fetchCategories(locale);
-  const allProducts = await fetchProducts({ locale });
+  const allProducts = await fetchProducts({ locale, categorySlug: selectedCategorySlug });
 
   // Build set of valid category identifiers (including parent and subcategories by slug and name)
   const validCategorySlugs: string[] = [];

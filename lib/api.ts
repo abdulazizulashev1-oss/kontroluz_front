@@ -655,6 +655,7 @@ export async function fetchProducts(
       try {
         const params = new URLSearchParams();
         params.set("locale", "all");
+        if (opts.categorySlug) params.set("categorySlug", opts.categorySlug);
         if (opts.search) params.set("search", opts.search);
         if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
         if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
@@ -676,11 +677,12 @@ export async function fetchProducts(
         // Fallback to standard Strapi endpoint
       }
 
-      // 2. Standard Strapi REST API fallback with pagination accumulation
+      // 2. Standard Strapi REST API fallback with category filter & pagination accumulation
       let allItems: any[] = [];
       let page = 1;
       let pageCount = 1;
       const pageSize = 1000;
+      const maxPages = opts.categorySlug ? 10 : 3;
 
       do {
         const params = new URLSearchParams();
@@ -688,6 +690,12 @@ export async function fetchProducts(
         params.set("locale", "all");
         params.set("pagination[page]", String(page));
         params.set("pagination[pageSize]", String(pageSize));
+
+        if (opts.categorySlug) {
+          params.set("filters[$or][0][category][slug][$eq]", opts.categorySlug);
+          params.set("filters[$or][1][category][parent][slug][$eq]", opts.categorySlug);
+          params.set("filters[$or][2][categorySlug][$eq]", opts.categorySlug);
+        }
 
         if (opts.search) params.set("search", opts.search);
         if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
@@ -707,7 +715,7 @@ export async function fetchProducts(
           allItems.push(...json.data);
         }
         if (json.meta?.pagination?.pageCount) {
-          pageCount = json.meta.pagination.pageCount;
+          pageCount = Math.min(json.meta.pagination.pageCount, maxPages);
         } else {
           break;
         }
