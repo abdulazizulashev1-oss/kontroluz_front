@@ -135,9 +135,8 @@ export function StatisticsInteractiveSection() {
               <span>{t("statistics.viewAddresses")}</span> →
             </span>
           </button>
-
           {/* Card 2: 86 ta Distribyutor */}
-          <button
+          {/* <button
             type="button"
             onClick={() => setActiveModal("distributors")}
             className="flex flex-col items-center p-4 sm:p-5 rounded-2xl bg-white border-2 border-transparent hover:border-industrial-blue hover:shadow-lg transition-all group cursor-pointer text-center shadow-2xs"
@@ -154,7 +153,7 @@ export function StatisticsInteractiveSection() {
             <span className="mt-2 text-[10px] sm:text-[11px] font-bold text-industrial-blue bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60 group-hover:bg-industrial-blue group-hover:text-white transition-colors flex items-center gap-1">
               <span>{t("statistics.listByRegions")}</span> →
             </span>
-          </button>
+          </button> */}
 
           {/* Card 3: 2 ta Servis Xizmati */}
           <button
