@@ -157,7 +157,7 @@ export function Header() {
 
   return (
     <>
-      <header className="w-full flex flex-col z-50 bg-white shadow-xs border-b border-industrial-border">
+      <header className="w-full flex flex-col z-50 bg-white shadow-xs border-b border-industrial-border sticky top-0">
         {/* 1. Top Row: Compact, Responsive Info Bar */}
         <div className="border-b border-gray-200/80 py-1.5 sm:py-2 bg-industrial-surface-low text-xs text-industrial-text-muted">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2 sm:gap-4">

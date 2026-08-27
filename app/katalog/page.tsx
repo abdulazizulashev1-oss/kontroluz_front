@@ -114,7 +114,11 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const locale = getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   const categories = await fetchCategories(locale);
-  const allProducts = await fetchProducts({ locale, categorySlug: selectedCategorySlug });
+  const allProducts = await fetchProducts({
+    locale,
+    categorySlug: selectedCategorySlug,
+    search: searchQuery,
+  });
 
   // Build set of valid category identifiers (including parent and subcategories by slug and name)
   const validCategorySlugs: string[] = [];
@@ -164,17 +168,28 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
     // Search query filter
     if (searchQuery) {
-      const titleMatch = String(p.title || "").toLowerCase().includes(searchQuery);
-      const skuMatch = String(p.sku || "").toLowerCase().includes(searchQuery);
-      const categoryMatch = String(p.categoryName || "").toLowerCase().includes(searchQuery);
-      const descMatch = String(p.shortDescription || "").toLowerCase().includes(searchQuery);
+      const q = searchQuery.toLowerCase();
+      const qNormalized = q.replace(/[^a-z0-9а-яe-yu]/gi, "");
+
+      const titleStr = String(p.title || "").toLowerCase();
+      const skuStr = String(p.sku || "").toLowerCase();
+      const slugStr = String(p.slug || "").toLowerCase();
+      const catStr = String(p.categoryName || "").toLowerCase();
+      const shortDesc = String(p.shortDescription || "").toLowerCase();
+      const fullDesc = String(p.fullDescription || "").toLowerCase();
+
+      const titleMatch = titleStr.includes(q) || (qNormalized !== "" && titleStr.replace(/[^a-z0-9а-яe-yu]/gi, "").includes(qNormalized));
+      const skuMatch = skuStr.includes(q) || (qNormalized !== "" && skuStr.replace(/[^a-z0-9а-яe-yu]/gi, "").includes(qNormalized));
+      const slugMatch = slugStr.includes(q) || (qNormalized !== "" && slugStr.replace(/[^a-z0-9а-яe-yu]/gi, "").includes(qNormalized));
+      const categoryMatch = catStr.includes(q);
+      const descMatch = shortDesc.includes(q) || fullDesc.includes(q);
       const specMatch = Object.entries(p.specifications || {}).some(
         ([k, v]) =>
-          String(k || "").toLowerCase().includes(searchQuery) ||
-          String(v || "").toLowerCase().includes(searchQuery)
+          String(k || "").toLowerCase().includes(q) ||
+          String(v || "").toLowerCase().includes(q)
       );
 
-      if (!titleMatch && !skuMatch && !categoryMatch && !descMatch && !specMatch) {
+      if (!titleMatch && !skuMatch && !slugMatch && !categoryMatch && !descMatch && !specMatch) {
         return false;
       }
     }
@@ -251,9 +266,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         )}
 
         {/* 2. Main Catalog Section with Deep Filters Sidebar & Product Grid */}
-        <div className="pt-4 border-t border-industrial-border grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Sidebar (Categories with Subcategories Dropdown & Deep Filters) */}
-          <aside className="lg:col-span-3 space-y-6">
+        <div className="pt-4 border-t border-industrial-border grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Sidebar (Categories with Subcategories Dropdown & Deep Filters - Sticky on scroll) */}
+          <aside className="lg:col-span-3 space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto pr-1">
             {/* Category Navigation with Subcategories Dropdown */}
             <CatalogCategorySidebar
               categories={categories}

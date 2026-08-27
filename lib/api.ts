@@ -691,13 +691,28 @@ export async function fetchProducts(
         params.set("pagination[page]", String(page));
         params.set("pagination[pageSize]", String(pageSize));
 
-        if (opts.categorySlug) {
+        if (opts.search) {
+          const s = opts.search.trim();
+          params.set("search", s);
+          if (opts.categorySlug) {
+            params.set("filters[$and][0][$or][0][category][slug][$eq]", opts.categorySlug);
+            params.set("filters[$and][0][$or][1][category][parent][slug][$eq]", opts.categorySlug);
+            params.set("filters[$and][0][$or][2][categorySlug][$eq]", opts.categorySlug);
+            params.set("filters[$and][1][$or][0][title][$containsi]", s);
+            params.set("filters[$and][1][$or][1][sku][$containsi]", s);
+            params.set("filters[$and][1][$or][2][slug][$containsi]", s);
+            params.set("filters[$and][1][$or][3][shortDescription][$containsi]", s);
+          } else {
+            params.set("filters[$or][0][title][$containsi]", s);
+            params.set("filters[$or][1][sku][$containsi]", s);
+            params.set("filters[$or][2][slug][$containsi]", s);
+            params.set("filters[$or][3][shortDescription][$containsi]", s);
+          }
+        } else if (opts.categorySlug) {
           params.set("filters[$or][0][category][slug][$eq]", opts.categorySlug);
           params.set("filters[$or][1][category][parent][slug][$eq]", opts.categorySlug);
           params.set("filters[$or][2][categorySlug][$eq]", opts.categorySlug);
         }
-
-        if (opts.search) params.set("search", opts.search);
         if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
         if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
         if (opts.sort) params.set("sort", opts.sort);
