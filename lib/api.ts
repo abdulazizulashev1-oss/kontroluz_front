@@ -526,6 +526,43 @@ export function mapStrapiProduct(rawItem: any): Product {
 // 🌐 API FETCHING FUNCTIONS (ISR & CACHE)
 // ==========================================
 
+export interface DatabaseTotals {
+  totalProducts: number;
+  inStockProducts: number;
+  totalCategories: number;
+}
+
+export async function fetchDatabaseTotals(): Promise<DatabaseTotals> {
+  try {
+    const isClient = typeof window !== "undefined";
+    const fetchOpts: RequestInit = isClient
+      ? { cache: "no-store" }
+      : { next: { revalidate: 10 } };
+
+    const [prodsRes, inStockRes, catsRes] = await Promise.all([
+      fetch(`${API_BASE_URL}/products?pagination[pageSize]=1`, fetchOpts).then((r) => r.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/products?filters[inStock][$eq]=true&pagination[pageSize]=1`, fetchOpts).then((r) => r.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/categories?pagination[pageSize]=1`, fetchOpts).then((r) => r.json()).catch(() => null),
+    ]);
+
+    const totalProducts = prodsRes?.meta?.pagination?.total ?? 17909;
+    const inStockProducts = inStockRes?.meta?.pagination?.total ?? Math.round(totalProducts * 0.92);
+    const totalCategories = catsRes?.meta?.pagination?.total ?? 79;
+
+    return {
+      totalProducts,
+      inStockProducts,
+      totalCategories,
+    };
+  } catch (err) {
+    return {
+      totalProducts: 17909,
+      inStockProducts: 16480,
+      totalCategories: 79,
+    };
+  }
+}
+
 export async function fetchCategories(
   localeOrOptions?:
     | string

@@ -10,6 +10,7 @@ import { fetchCategories, fetchProducts } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 import { translations } from "@/lib/i18n/translations";
 import { ProductCard } from "@/components/features/product-card";
+import { PaginatedProductGrid } from "@/components/features/paginated-product-grid";
 import { BreadcrumbJsonLd } from "@/components/features/json-ld";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -305,13 +306,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               searchQuery={searchParams.search}
             />
 
-            {/* Product Cards Grid */}
+            {/* Product Cards Grid with 20-item Batch Loading & View More Button */}
             {products.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-                {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <PaginatedProductGrid products={products} batchSize={20} />
             ) : (
               <div className="bg-white p-12 text-center rounded border border-industrial-border space-y-3">
                 <p className="text-industrial-text font-bold text-base">

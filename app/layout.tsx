@@ -91,6 +91,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { InitialPreloader } from "@/components/ui/initial-preloader";
+
 export default async function RootLayout({
   children,
 }: {
@@ -108,6 +110,7 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col justify-between relative">
         <LanguageProvider>
           <CartProvider>
+            <InitialPreloader />
             <Header />
             <main className="flex-1">{children}</main>
             <GlobalContactSection />
