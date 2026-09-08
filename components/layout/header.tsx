@@ -256,11 +256,11 @@ export function Header() {
             {/* Right: Phone Number & Language Selector */}
             <div className="flex items-center gap-2 sm:gap-4 shrink-0">
               <a
-                href="tel:+998781137027"
+                href="tel:+998712006800"
                 className="text-[11px] sm:text-xs md:text-sm font-extrabold text-industrial-text hover:text-industrial-blue flex items-center gap-1 shrink-0"
               >
                 <Phone className="w-3 h-3 text-industrial-orange sm:hidden" />
-                <span>+998 78 113 70 27</span>
+                <span>+998 71 200-68-00</span>
               </a>
 
               <div className="shrink-0">
