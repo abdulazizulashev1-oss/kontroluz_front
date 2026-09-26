@@ -27,10 +27,10 @@ export function GlobalContactSection() {
   const socialLinks = [
     {
       name: "Telegram Bot",
-      url: "https://t.me/kontrol_uz_bot",
+      url: "https://t.me/kontroluzn1bot",
       icon: Send,
       color: "bg-[#0088cc] hover:bg-[#0077b5] text-white",
-      tag: "@kontrol_uz_bot",
+      tag: "@kontroluzn1bot",
     },
     {
       name: "WhatsApp",

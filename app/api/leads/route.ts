@@ -1,11 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addStoredOrder, getStoredOrders } from "@/lib/admin/data-store";
+import { notifyTelegramLead } from "@/lib/telegram";
+import { checkRateLimit, getClientIp } from "@/lib/security/rate-limit";
 
 const GOOGLE_SHEETS_WEBHOOK_URL = process.env.GOOGLE_SHEETS_WEBHOOK_URL || "";
 const STRAPI_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.kontrol.uz/api";
 
 export async function POST(req: NextRequest) {
   try {
+    // 0. Rate Limiting: Max 5 leads per minute per IP to prevent spam attacks
+    const clientIp = getClientIp(req);
+    const rateCheck = checkRateLimit(`lead-submit:${clientIp}`, 5, 60 * 1000);
+    if (!rateCheck.success) {
+      const retrySec = Math.ceil((rateCheck.resetTime - Date.now()) / 1000);
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Juda ko'p so'rov yuborildi. Iltimos, ${retrySec} soniyadan keyin qayta urinib ko'ring.`,
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const payload = body.data || body;
 
@@ -35,7 +51,16 @@ export async function POST(req: NextRequest) {
       source: payload.source || "Kontrol.uz Veb-sayt",
     };
 
-    const results: { strapi?: any; googleSheets?: any } = {};
+    const results: { strapi?: any; googleSheets?: any; telegram?: any } = {};
+
+    // 0. Send to Telegram Group
+    try {
+      const tgRes = await notifyTelegramLead(leadData);
+      results.telegram = tgRes;
+    } catch (tgErr: any) {
+      console.warn("Telegram lead notification error:", tgErr?.message);
+      results.telegram = { success: false, error: tgErr?.message };
+    }
 
     // 1. Send to Strapi API
     try {

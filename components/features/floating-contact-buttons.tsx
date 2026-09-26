@@ -21,7 +21,7 @@ export function FloatingContactButtons() {
         )}
 
         <a
-          href="https://t.me/kontrol_uz_bot"
+          href="https://t.me/kontroluzn1bot"
           target="_blank"
           rel="noopener noreferrer"
           onMouseEnter={() => setHoveredBtn("telegram")}

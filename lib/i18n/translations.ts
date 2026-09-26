@@ -310,6 +310,32 @@ export interface TranslationDictionary {
     };
     orderConsultation: string;
     fastOrderTitle: string;
+    purchaseModal: {
+      modalTitle: string;
+      modalSubtitle: string;
+      contactToBuyBtn: string;
+      phoneTitle: string;
+      phoneSubtitle: string;
+      telegramTitle: string;
+      telegramSubtitle: string;
+      instagramTitle: string;
+      instagramSubtitle: string;
+      openTelegram: string;
+      openInstagram: string;
+      callDirect: string;
+      copyPhone: string;
+      copied: string;
+      callbackTitle: string;
+      callbackSubtitle: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      phoneLabel: string;
+      submitCallback: string;
+      successMsg: string;
+      productSku: string;
+      productPrice: string;
+      inStock: string;
+    };
   };
   statistics: {
     branchesTitle: string;
@@ -675,6 +701,32 @@ export const translations: Record<Language, TranslationDictionary> = {
       },
       orderConsultation: "Konsultatsiya va Narx Bilish",
       fastOrderTitle: "Tezkor buyurtma shakli",
+      purchaseModal: {
+        modalTitle: "Sotib olish uchun bog'laning",
+        modalSubtitle: "Ushbu mahsulotni xarid qilish, buyurtma berish yoki rasmiy shartnoma tuzish uchun biz bilan bog'laning.",
+        contactToBuyBtn: "Sotib olish uchun aloqa",
+        phoneTitle: "Telefon orqali tezkor aloqa",
+        phoneSubtitle: "Mutaxassis bilan to'g'ridan-to'g'ri bog'lanish va buyurtma berish",
+        telegramTitle: "Telegram orqali bog'lanish",
+        telegramSubtitle: "Rasmiy Telegram botimiz orqali menejer bilan bir zumda yozishing",
+        instagramTitle: "Instagram orqali bog'lanish",
+        instagramSubtitle: "Instagram sahifamizda mahsulot videolari va Direct orqali aloqa",
+        openTelegram: "Telegram orqali yozish",
+        openInstagram: "Instagram profiliga o'tish",
+        callDirect: "Qo'ng'iroq qilish",
+        copyPhone: "Nusxa olish",
+        copied: "Nusxalandi!",
+        callbackTitle: "Yoki telefon raqamingizni qoldiring",
+        callbackSubtitle: "Mutaxassisimiz 5 daqiqada siz bilan bog'lanib, barcha ma'lumotlarni beradi",
+        nameLabel: "Ismingiz",
+        namePlaceholder: "Masalan: Jasur",
+        phoneLabel: "Telefon raqamingiz",
+        submitCallback: "Menga qo'ng'iroq qiling",
+        successMsg: "Rahmat! So'rovingiz qabul qilindi. Menejerimiz tez orada siz bilan bog'lanadi.",
+        productSku: "Artikul",
+        productPrice: "Narxi",
+        inStock: "Omborda mavjud",
+      },
     },
     statistics: {
       branchesTitle: "Rasmiy Filiallar",
@@ -1038,6 +1090,32 @@ export const translations: Record<Language, TranslationDictionary> = {
       },
       orderConsultation: "Консультация и Узнать Цену",
       fastOrderTitle: "Форма быстрого заказа",
+      purchaseModal: {
+        modalTitle: "Связаться для покупки",
+        modalSubtitle: "Для покупки данного товара, оформления заказа или заключения договора свяжитесь с нами удобным способом.",
+        contactToBuyBtn: "Связаться для покупки",
+        phoneTitle: "Связь по телефону",
+        phoneSubtitle: "Прямая связь со специалистом и оформление заказа",
+        telegramTitle: "Связаться через Telegram",
+        telegramSubtitle: "Напишите нашему менеджеру в официальном Telegram боте",
+        instagramTitle: "Связаться через Instagram",
+        instagramSubtitle: "Видеообзоры оборудования и связь в Direct",
+        openTelegram: "Написать в Telegram",
+        openInstagram: "Перейти в Instagram",
+        callDirect: "Позвонить",
+        copyPhone: "Копировать",
+        copied: "Скопировано!",
+        callbackTitle: "Или оставьте свой номер",
+        callbackSubtitle: "Наш специалист перезвонит вам в течение 5 минут",
+        nameLabel: "Ваше имя",
+        namePlaceholder: "Например: Жасур",
+        phoneLabel: "Номер телефона",
+        submitCallback: "Заказать звонок",
+        successMsg: "Спасибо! Заявка принята. Наш менеджер свяжется с вами в ближайшее время.",
+        productSku: "Артикул",
+        productPrice: "Цена",
+        inStock: "В наличии",
+      },
     },
     statistics: {
       branchesTitle: "Официальных Филиала",
@@ -1401,6 +1479,32 @@ export const translations: Record<Language, TranslationDictionary> = {
       },
       orderConsultation: "Request Quote & Consultation",
       fastOrderTitle: "Quick order form",
+      purchaseModal: {
+        modalTitle: "Contact to Purchase",
+        modalSubtitle: "To purchase this item, request pricing, or place an order, contact our specialists directly.",
+        contactToBuyBtn: "Contact to Buy",
+        phoneTitle: "Direct Phone Contact",
+        phoneSubtitle: "Speak with our sales engineers immediately",
+        telegramTitle: "Contact via Telegram",
+        telegramSubtitle: "Message our manager instantly via official Telegram bot",
+        instagramTitle: "Contact via Instagram",
+        instagramSubtitle: "Explore product videos and reach us via Direct",
+        openTelegram: "Message on Telegram",
+        openInstagram: "Open Instagram",
+        callDirect: "Call Now",
+        copyPhone: "Copy",
+        copied: "Copied!",
+        callbackTitle: "Or request a quick callback",
+        callbackSubtitle: "Our specialist will call you back within 5 minutes",
+        nameLabel: "Your Name",
+        namePlaceholder: "E.g.: John Doe",
+        phoneLabel: "Phone Number",
+        submitCallback: "Request Callback",
+        successMsg: "Thank you! Your request has been received. Our manager will call you shortly.",
+        productSku: "SKU",
+        productPrice: "Price",
+        inStock: "In Stock",
+      },
     },
     statistics: {
       branchesTitle: "Official Branches",

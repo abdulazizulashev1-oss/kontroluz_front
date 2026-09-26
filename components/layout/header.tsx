@@ -280,11 +280,11 @@ export function Header() {
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               {/* Telegram Bot Button */}
               <a
-                href="https://t.me/kontrol_uz_bot"
+                href="https://t.me/kontroluzn1bot"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 bg-[#229ED9] hover:bg-[#1E88C7] text-white p-2 sm:px-3.5 sm:py-2.5 rounded-lg text-xs font-extrabold shadow-2xs hover:shadow-md transition-all group shrink-0"
-                title="Telegram Bot (@kontrol_uz_bot)"
+                title="Telegram Bot (@kontroluzn1bot)"
               >
                 <svg
                   className="w-4 h-4 text-white fill-current group-hover:scale-110 transition-transform"
