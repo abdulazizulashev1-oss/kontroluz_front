@@ -6,11 +6,10 @@ import {
 } from "@/lib/auth/session";
 import { checkRateLimit, getClientIp } from "@/lib/security/rate-limit";
 
-const ADMIN_LOGIN = process.env.ADMIN_LOGIN || "admin@kontrol.uz";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "KontrolAdmin2026!";
-const ADMIN_SESSION_SECRET =
-  process.env.ADMIN_SESSION_SECRET ||
-  "fallback_kontrol_secret_key_change_in_env_local_2026";
+// Credentials come only from env; no hardcoded fallbacks
+const ADMIN_LOGIN = process.env.ADMIN_LOGIN;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET;
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,6 +28,14 @@ export async function POST(request: NextRequest) {
 
     // 2. Handle Login
     if (action === "login") {
+      if (!ADMIN_LOGIN || !ADMIN_PASSWORD || !ADMIN_SESSION_SECRET) {
+        console.error("[Admin Auth] ADMIN_LOGIN / ADMIN_PASSWORD / ADMIN_SESSION_SECRET is not configured");
+        return NextResponse.json(
+          { success: false, error: "Server sozlanmagan" },
+          { status: 500 }
+        );
+      }
+
       const clientIp = getClientIp(request);
       const rateLimitKey = `admin-login:${clientIp}`;
 
@@ -88,8 +95,9 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   } catch (err: any) {
+    console.error("[Admin Auth] Unexpected error:", err);
     return NextResponse.json(
-      { success: false, error: String(err?.message || err) },
+      { success: false, error: "Serverda xatolik yuz berdi" },
       { status: 500 }
     );
   }
@@ -98,7 +106,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME);
 
-  if (sessionCookie?.value) {
+  if (sessionCookie?.value && ADMIN_SESSION_SECRET) {
     const verifyResult = await verifySessionToken(
       sessionCookie.value,
       ADMIN_SESSION_SECRET

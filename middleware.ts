@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth/session";
 
-const ADMIN_SESSION_SECRET =
-  process.env.ADMIN_SESSION_SECRET ||
-  "fallback_kontrol_secret_key_change_in_env_local_2026";
+// No fallback: without a configured secret every admin session is rejected
+const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET;
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -14,7 +13,7 @@ export async function middleware(request: NextRequest) {
     const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
     let isAuthenticated = false;
-    if (sessionCookie) {
+    if (sessionCookie && ADMIN_SESSION_SECRET) {
       const verification = await verifySessionToken(
         sessionCookie,
         ADMIN_SESSION_SECRET
@@ -43,7 +42,7 @@ export async function middleware(request: NextRequest) {
       const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
       let isAuthenticated = false;
 
-      if (sessionCookie) {
+      if (sessionCookie && ADMIN_SESSION_SECRET) {
         const verification = await verifySessionToken(
           sessionCookie,
           ADMIN_SESSION_SECRET

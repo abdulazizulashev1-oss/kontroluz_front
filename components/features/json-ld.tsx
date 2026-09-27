@@ -1,6 +1,11 @@
 import React from "react";
 import { Product, OrganizationInfo, BreadcrumbItem } from "@/shared/types";
 
+// Escape "<" so CMS text containing "</script>" cannot break out of the tag
+function toJsonLd(schema: object): string {
+  return JSON.stringify(schema).replace(/</g, "\\u003c");
+}
+
 export function OrganizationJsonLd({ org }: { org: OrganizationInfo }) {
   const schema = {
     "@context": "https://schema.org",
@@ -23,7 +28,7 @@ export function OrganizationJsonLd({ org }: { org: OrganizationInfo }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: toJsonLd(schema) }}
     />
   );
 }
@@ -50,7 +55,7 @@ export function LocalBusinessJsonLd({ org }: { org: OrganizationInfo }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: toJsonLd(schema) }}
     />
   );
 }
@@ -76,7 +81,7 @@ export function WebSiteJsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: toJsonLd(schema) }}
     />
   );
 }
@@ -119,7 +124,7 @@ export function ProductJsonLd({ product }: { product: Product }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: toJsonLd(schema) }}
     />
   );
 }
@@ -139,7 +144,7 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: toJsonLd(schema) }}
     />
   );
 }
