@@ -104,11 +104,16 @@ export function ProductJsonLd({ product }: { product: Product }) {
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: product.rating,
-      reviewCount: product.reviewCount,
-    },
+    // Google rejects aggregateRating without real reviews (reviewCount must be > 0)
+    ...(product.reviewCount > 0 && product.rating > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.rating,
+            reviewCount: product.reviewCount,
+          },
+        }
+      : {}),
   };
 
   return (
