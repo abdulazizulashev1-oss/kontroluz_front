@@ -9,6 +9,7 @@ export interface SEOData {
 export interface Review {
   id: string;
   author: string;
+  company?: string;
   rating: number;
   date: string;
   comment: string;

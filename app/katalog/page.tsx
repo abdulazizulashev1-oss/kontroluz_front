@@ -223,7 +223,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   });
 
   const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price);
-  const bestsellerProducts = allProducts.filter((p) => p.rating >= 4.9);
+  const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9);
   const activeCategory = categories.find((c) => c.slug === selectedCategorySlug);
 
   const breadcrumbs = [

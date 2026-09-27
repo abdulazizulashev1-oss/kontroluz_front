@@ -14,7 +14,7 @@ import {
   User,
   MessageSquare,
 } from "lucide-react";
-import { Product } from "@/shared/types";
+import { Product, Review } from "@/shared/types";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/context";
 
@@ -28,36 +28,17 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("specs");
 
-  // Reviews state
-  const [reviewsList, setReviewsList] = useState([
-    {
-      id: "rev-1",
-      author: "Farrux Qodirov",
-      company: "Toshkent Neft-Gaz Zavodi",
-      rating: 5,
-      date: "14-Iyun, 2026",
-      comment:
-        "Uskuna zavodimiz podstansiyasiga o'rnatildi. Sifati a'lo darajada, pasport va barcha GOST sertifikatlari to'liq taqdim etildi. Yetkazib berish ham tezkor bo'ldi.",
-    },
-    {
-      id: "rev-2",
-      author: "Rustam Inoyatov",
-      company: "Orient Industrial MChJ",
-      rating: 5,
-      date: "28-May, 2026",
-      comment:
-        "Kontrol.uz muhandislari o'rnatish va dastlabki kalibrovka jarayonida katta yordam berishdi. 3 yillik rasmiy kafolat berilgani korporativ xaridor uchun katta ustunlik.",
-    },
-    {
-      id: "rev-3",
-      author: "Shavkat Mahmudov",
-      company: "Bekobod Metallurgiya Kombinati",
-      rating: 4.8,
-      date: "02-May, 2026",
-      comment:
-        "Sanoat sharoitida 24/7 yuklamada mukammal ishlamoqda. Texnik parametrlari e'lon qilingan ko'rsatkichlarga 100% javob beradi.",
-    },
-  ]);
+  // Only real reviews from the CMS; products without reviews show none
+  const [reviewsList, setReviewsList] = useState<Review[]>(product.reviews ?? []);
+
+  React.useEffect(() => {
+    setReviewsList(product.reviews ?? []);
+  }, [product.id, product.reviews]);
+
+  const averageRating =
+    reviewsList.length > 0
+      ? Math.round((reviewsList.reduce((sum, r) => sum + r.rating, 0) / reviewsList.length) * 10) / 10
+      : 0;
 
   const [newAuthor, setNewAuthor] = useState("");
   const [newCompany, setNewCompany] = useState("");
@@ -72,11 +53,11 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
     setReviewsList([
       {
         id: `rev-${Date.now()}`,
-        author: newAuthor,
-        company: newCompany || "Expert",
+        author: newAuthor.trim(),
+        company: newCompany.trim() || undefined,
         rating: newRating,
-        date: "Today",
-        comment: newComment,
+        date: "Hozirgina",
+        comment: newComment.trim(),
       },
       ...reviewsList,
     ]);
@@ -324,15 +305,19 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
       {activeTab === "reviews" && (
         <div className="space-y-8 animate-in fade-in duration-200">
           {/* Reviews Summary Header */}
+          {reviewsList.length > 0 && (
           <div className="p-6 bg-industrial-surface-low border border-industrial-border rounded-xl flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4 text-center sm:text-left">
               <div className="text-4xl font-black text-industrial-blue">
-                {product.rating}
+                {averageRating}
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-1 text-amber-500">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500" />
+                    <Star
+                      key={i}
+                      className={i < Math.round(averageRating) ? "w-4 h-4 fill-amber-500" : "w-4 h-4 text-gray-300"}
+                    />
                   ))}
                 </div>
                 <div className="text-xs text-industrial-text-muted">
@@ -347,6 +332,7 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
               <span>{t("productDetail.reviews.customerRatingBadge")}</span>
             </div>
           </div>
+          )}
 
           {/* Reviews List */}
           <div className="space-y-4">
@@ -364,9 +350,11 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
                       <div className="font-extrabold text-xs text-industrial-text">
                         {rev.author}
                       </div>
-                      <div className="text-[11px] text-industrial-text-muted font-medium">
-                        {rev.company}
-                      </div>
+                      {rev.company && (
+                        <div className="text-[11px] text-industrial-text-muted font-medium">
+                          {rev.company}
+                        </div>
+                      )}
                     </div>
                   </div>
 

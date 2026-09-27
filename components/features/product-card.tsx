@@ -67,11 +67,13 @@ export function ProductCard({ product }: ProductCardProps) {
         <div>
           <div className="flex items-center justify-between text-[10px] sm:text-xs text-industrial-text-muted mb-1">
             <span className="font-mono font-bold truncate max-w-[90px] sm:max-w-none">SKU: {product.sku}</span>
-            <div className="flex items-center gap-0.5 sm:gap-1 text-amber-500 font-bold shrink-0">
-              <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
-              <span>{product.rating}</span>
-              <span className="text-gray-400 text-[9px] sm:text-xs">({product.reviewCount})</span>
-            </div>
+            {product.reviewCount > 0 && (
+              <div className="flex items-center gap-0.5 sm:gap-1 text-amber-500 font-bold shrink-0">
+                <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
+                <span>{product.rating}</span>
+                <span className="text-gray-400 text-[9px] sm:text-xs">({product.reviewCount})</span>
+              </div>
+            )}
           </div>
 
           <Link

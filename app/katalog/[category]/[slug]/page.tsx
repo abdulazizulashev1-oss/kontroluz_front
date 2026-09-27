@@ -98,7 +98,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const allProducts = await fetchProducts({ locale });
   
   const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price);
-  const bestsellerProducts = allProducts.filter((p) => p.rating >= 4.9);
+  const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9);
   const relatedProducts = allProducts
     .filter((p) => p.id !== product.id)
     .slice(0, 4);
