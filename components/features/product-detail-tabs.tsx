@@ -29,11 +29,11 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
   const [activeTab, setActiveTab] = useState<TabType>("specs");
 
   // Only real reviews from the CMS; products without reviews show none
-  const [reviewsList, setReviewsList] = useState<Review[]>(product.reviews ?? []);
+  const [reviewsList, setReviewsList] = useState<Review[]>(Array.isArray(product.reviews) ? product.reviews : []);
 
   React.useEffect(() => {
-    setReviewsList(product.reviews ?? []);
-  }, [product.id, product.reviews]);
+    setReviewsList(Array.isArray(product.reviews) ? product.reviews : []);
+  }, [product.id]);
 
   const averageRating =
     reviewsList.length > 0

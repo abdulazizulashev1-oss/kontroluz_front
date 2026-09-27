@@ -1,4 +1,4 @@
-import { Product, Category, CalculatorPayload, CalculatorResult, OrganizationInfo } from "@/shared/types";
+import { Product, Category, CalculatorPayload, CalculatorResult, OrganizationInfo, Review } from "@/shared/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.kontrol.uz/api";
 const STRAPI_HOST = API_BASE_URL.replace(/\/api\/?$/, "");
@@ -390,6 +390,24 @@ export function mapStrapiCategory(rawItem: any): Category {
   };
 }
 
+// Strapi returns relations as { data: [...] } (v4) or a plain array (v5)
+function mapStrapiReviews(raw: any): Review[] {
+  const list = Array.isArray(raw) ? raw : Array.isArray(raw?.data) ? raw.data : [];
+  return list
+    .map((item: any) => {
+      const r = item?.attributes || item || {};
+      return {
+        id: String(item?.id ?? r.id ?? ""),
+        author: r.author || r.name || "",
+        company: r.company || undefined,
+        rating: Number(r.rating) || 0,
+        date: r.date || (r.createdAt ? String(r.createdAt).slice(0, 10) : ""),
+        comment: r.comment || r.text || "",
+      };
+    })
+    .filter((r: Review) => r.author && r.comment && r.rating > 0);
+}
+
 export function mapStrapiProduct(rawItem: any): Product {
   const attrs = rawItem.attributes || rawItem;
   const id = String(rawItem.id || attrs.id || attrs.slug || "prod");
@@ -519,7 +537,7 @@ export function mapStrapiProduct(rawItem: any): Product {
       title: `${attrs.title || "Mahsulot"} — Kontrol.uz`,
       description: attrs.shortDescription || "Sanoat uskunalari katalogi",
     },
-    reviews: attrs.reviews || undefined,
+    reviews: mapStrapiReviews(attrs.reviews),
   };
 }
 
