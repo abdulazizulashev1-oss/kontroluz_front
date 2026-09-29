@@ -5,9 +5,9 @@ import { Language } from "./translations";
  * Server-side helper to get the active language from request cookies.
  * Defaults to 'ru' (Русский) if not set.
  */
-export function getServerLocale(): Language {
+export async function getServerLocale(): Promise<Language> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const lang = cookieStore.get("kontrol_lang")?.value as Language;
     if (lang && (lang === "uz" || lang === "ru" || lang === "en")) {
       return lang;

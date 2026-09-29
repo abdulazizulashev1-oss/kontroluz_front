@@ -4,13 +4,12 @@ import React from "react";
 import {
   Phone,
   MessageCircle,
-  Instagram,
-  Facebook,
   MapPin,
   Send,
   ExternalLink,
   Clock,
 } from "lucide-react";
+import { Instagram, Facebook } from "@/components/ui/brand-icons";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "@/lib/i18n/context";
 import { DynamicWorkingHours } from "@/components/features/dynamic-working-hours";

@@ -19,7 +19,7 @@ import { translations } from "@/lib/i18n/translations";
 import { DynamicWorkingHours } from "@/components/features/dynamic-working-hours";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
+  const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   return {
     title: `${dict.nav.contacts} — Kontrol.uz`,
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactsPage() {
-  const locale = getServerLocale();
+  const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
 
   const breadcrumbs = [

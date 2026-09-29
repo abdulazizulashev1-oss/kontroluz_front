@@ -26,14 +26,15 @@ import { CategoryGrid } from "@/components/features/category-grid";
 import { CatalogCategorySidebar } from "@/components/features/catalog-category-sidebar";
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     category: string;
     slug: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const locale = getServerLocale();
+export async function generateMetadata(props: ProductPageProps): Promise<Metadata> {
+  const params = await props.params;
+  const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   const product = await fetchProductBySlug(params.slug, locale);
   if (!product) {
@@ -88,15 +89,16 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
-export default async function ProductDetailPage({ params }: ProductPageProps) {
-  const locale = getServerLocale();
+export default async function ProductDetailPage(props: ProductPageProps) {
+  const params = await props.params;
+  const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   const product = await fetchProductBySlug(params.slug, locale);
   if (!product) notFound();
 
   const categories = await fetchCategories(locale);
   const allProducts = await fetchProducts({ locale });
-  
+
   const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price);
   const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9);
   const relatedProducts = allProducts

@@ -19,10 +19,9 @@ import { CatalogCategorySidebar } from "@/components/features/catalog-category-s
 import { CatalogFilterToolbar } from "@/components/features/catalog-filter-toolbar";
 import { PriceFilterForm } from "@/components/features/price-filter-form";
 
-export async function generateMetadata({
-  searchParams,
-}: CatalogPageProps): Promise<Metadata> {
-  const locale = getServerLocale();
+export async function generateMetadata(props: CatalogPageProps): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   const selectedCategorySlug = searchParams?.category;
   const searchQuery = searchParams?.search;
@@ -96,23 +95,24 @@ export async function generateMetadata({
 }
 
 interface CatalogPageProps {
-  searchParams: {
+  searchParams: Promise<{
     category?: string;
     search?: string;
     sort?: string;
     minPrice?: string;
     maxPrice?: string;
-  };
+  }>;
 }
 
-export default async function CatalogPage({ searchParams }: CatalogPageProps) {
+export default async function CatalogPage(props: CatalogPageProps) {
+  const searchParams = await props.searchParams;
   const selectedCategorySlug = searchParams.category;
   const searchQuery = searchParams.search?.trim().toLowerCase();
   const sortOption = searchParams.sort || "popular";
   const minPriceNum = searchParams.minPrice ? Number(searchParams.minPrice) : null;
   const maxPriceNum = searchParams.maxPrice ? Number(searchParams.maxPrice) : null;
 
-  const locale = getServerLocale();
+  const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
   const categories = await fetchCategories(locale);
   const allProducts = await fetchProducts({

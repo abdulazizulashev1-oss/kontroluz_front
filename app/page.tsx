@@ -13,7 +13,7 @@ import { fetchCategories, fetchProducts } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 
 export default async function HomePage() {
-  const locale = getServerLocale();
+  const locale = await getServerLocale();
   const categories = await fetchCategories(locale);
   const featuredProducts = await fetchProducts({ locale });
 

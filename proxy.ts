@@ -4,7 +4,7 @@ import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth/session";
 // No fallback: without a configured secret every admin session is rejected
 const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET;
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Protect Admin Panel Pages (/admin, /admin/...)

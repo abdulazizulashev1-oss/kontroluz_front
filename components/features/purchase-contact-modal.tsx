@@ -5,8 +5,8 @@ import {
   X,
   Phone,
   Send,
-  Instagram,
 } from "lucide-react";
+import { Instagram } from "@/components/ui/brand-icons";
 import { useTranslation } from "@/lib/i18n/context";
 import { Product } from "@/shared/types";
 
