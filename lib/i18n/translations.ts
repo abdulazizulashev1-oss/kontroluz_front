@@ -92,12 +92,6 @@ export interface TranslationDictionary {
     showAll: string;
     showingProducts: string;
   };
-  preloader: {
-    status1: string;
-    status2: string;
-    status3: string;
-    tagline: string;
-  };
   calculator: {
     badge: string;
     title: string;
@@ -483,12 +477,6 @@ export const translations: Record<Language, TranslationDictionary> = {
       showAll: "Barcha tovarlarni ko'rsatish",
       showingProducts: "Jami {total} tadan {visible} ta tovar ko'rsatilyapti",
     },
-    preloader: {
-      status1: "KONTROL.UZ — Intellektual Xavfsizlik Tizimlari",
-      status2: "Katalog va sanoat uskunalar bazasi yuklanmoqda...",
-      status3: "Tizim muvaffaqiyatli tayyorlandi!",
-      tagline: "HAMMA NAZORAT OSTIDA",
-    },
     calculator: {
       badge: "ONLAYN SMETA KALKULYATORI",
       title: "Obyektingiz uchun xavfsizlik tizimi smetasini hisoblang",
@@ -872,12 +860,6 @@ export const translations: Record<Language, TranslationDictionary> = {
       showAll: "Показать все товары",
       showingProducts: "Показано {visible} из {total} товаров",
     },
-    preloader: {
-      status1: "KONTROL.UZ — Системы Интеллектуальной Безопасности",
-      status2: "Загрузка каталога и базы оборудования...",
-      status3: "Система успешно готова!",
-      tagline: "ВСЁ ПОД КОНТРОЛЕМ",
-    },
     calculator: {
       badge: "ОНЛАЙН КАЛЬКУЛЯТОР СМЕТЫ",
       title: "Рассчитайте смету системы безопасности для вашего объекта",
@@ -1260,12 +1242,6 @@ export const translations: Record<Language, TranslationDictionary> = {
       loadMore: "Show 20 More Products",
       showAll: "Show All Products",
       showingProducts: "Showing {visible} of {total} products",
-    },
-    preloader: {
-      status1: "KONTROL.UZ — Intelligent Security Systems",
-      status2: "Loading catalog & equipment database...",
-      status3: "System ready successfully!",
-      tagline: "EVERYTHING UNDER CONTROL",
     },
     calculator: {
       badge: "ONLINE COST CALCULATOR",
