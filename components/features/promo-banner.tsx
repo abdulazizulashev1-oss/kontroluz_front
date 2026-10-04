@@ -51,8 +51,8 @@ export function PromoBanner() {
           alt="Modern Industrial Automation Control Panel"
           width={800}
           height={600}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="w-full h-full object-cover"
-          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-industrial-blue via-transparent to-transparent opacity-90 md:opacity-75"></div>
       </div>

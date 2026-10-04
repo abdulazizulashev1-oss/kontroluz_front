@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { SlidersHorizontal, ChevronRight, Plus, Minus, Download } from "lucide-react";
 import { Category } from "@/shared/types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/context";
-import { fetchCategories } from "@/lib/api";
 
 interface CatalogCategorySidebarProps {
   categories: Category[];
@@ -21,19 +20,8 @@ export function CatalogCategorySidebar({
   showPdfButton = true,
 }: CatalogCategorySidebarProps) {
   const { t, locale } = useTranslation();
-  const [currentCategories, setCurrentCategories] = useState<Category[]>(categories || []);
-
-  useEffect(() => {
-    let active = true;
-    fetchCategories(locale).then((data) => {
-      if (active && Array.isArray(data) && data.length > 0) {
-        setCurrentCategories(data);
-      }
-    });
-    return () => {
-      active = false;
-    };
-  }, [locale]);
+  // Categories come from the server; the language switcher calls router.refresh()
+  const currentCategories = categories || [];
 
   // Initialize open state: only open if selectedCategorySlug matches it or its subcategories
   const [openMap, setOpenMap] = useState<Record<string, boolean>>(() => {

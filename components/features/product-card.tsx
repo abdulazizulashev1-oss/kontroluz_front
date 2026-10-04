@@ -56,8 +56,8 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={product.title}
             width={400}
             height={300}
+            sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 300px"
             className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-            unoptimized
           />
         </Link>
       </div>

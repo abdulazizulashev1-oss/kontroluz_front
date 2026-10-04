@@ -686,6 +686,31 @@ export async function fetchCategories(
   }
 }
 
+// Minimal product shape for cards and lists: client components receive only what
+// ProductCard and the cart need, which keeps the serialized page payload small
+export function toCardProduct(p: Product): Product {
+  return {
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    sku: p.sku,
+    categorySlug: p.categorySlug,
+    categoryName: p.categoryName,
+    price: p.price,
+    oldPrice: p.oldPrice,
+    currency: p.currency,
+    inStock: p.inStock,
+    stockCount: p.stockCount,
+    rating: p.rating,
+    reviewCount: p.reviewCount,
+    image: p.image,
+    shortDescription: "",
+    fullDescription: "",
+    specifications: Object.fromEntries(Object.entries(p.specifications || {}).slice(0, 2)),
+    seo: { title: "", description: "" },
+  };
+}
+
 export async function fetchProducts(
   categorySlugOrOptions?:
     | string
@@ -707,33 +732,7 @@ export async function fetchProducts(
     const targetLocale = opts.locale || "ru";
 
     const fetchAllProducts = async () => {
-      // 1. First attempt: Ultra-fast custom endpoint GET /api/products/all
-      try {
-        const params = new URLSearchParams();
-        params.set("locale", "all");
-        if (opts.categorySlug) params.set("categorySlug", opts.categorySlug);
-        if (opts.search) params.set("search", opts.search);
-        if (opts.minPrice !== undefined) params.set("minPrice", String(opts.minPrice));
-        if (opts.maxPrice !== undefined) params.set("maxPrice", String(opts.maxPrice));
-        if (opts.sort) params.set("sort", opts.sort);
-
-        const url = `${API_BASE_URL}/products/all?${params.toString()}`;
-        const isClient = typeof window !== "undefined";
-        const fetchOpts: RequestInit = isClient
-          ? { cache: "no-store" }
-          : { next: { revalidate: 60 } };
-
-        const res = await fetch(url, fetchOpts);
-        if (res.ok) {
-          const json = await res.json();
-          const list = Array.isArray(json.data) ? json.data : Array.isArray(json) ? json : [];
-          if (list.length > 0) return list;
-        }
-      } catch (e) {
-        // Fallback to standard Strapi endpoint
-      }
-
-      // 2. Standard Strapi REST API fallback with category filter & pagination accumulation
+      // Standard Strapi REST API (custom /products/all endpoint returns 500, so it is not used) with category filter & pagination accumulation
       let allItems: any[] = [];
       let page = 1;
       let pageCount = 1;

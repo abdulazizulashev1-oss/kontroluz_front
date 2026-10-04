@@ -9,13 +9,17 @@ import { PromoBanner } from "@/components/features/promo-banner";
 import { EngineeringExcellence } from "@/components/features/engineering-excellence";
 import { SolutionCalculator } from "@/components/features/solution-calculator";
 import { StatisticsInteractiveSection } from "@/components/features/statistics-interactive-section";
-import { fetchCategories, fetchProducts } from "@/lib/api";
+import { fetchCategories, fetchProducts, toCardProduct } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 
 export default async function HomePage() {
   const locale = await getServerLocale();
-  const categories = await fetchCategories(locale);
-  const featuredProducts = await fetchProducts({ locale });
+  const [categories, allProducts] = await Promise.all([
+    fetchCategories(locale),
+    fetchProducts({ locale }),
+  ]);
+  // Sections show at most 8 products; don't ship the whole catalog to the browser
+  const featuredProducts = allProducts.slice(0, 8).map(toCardProduct);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">

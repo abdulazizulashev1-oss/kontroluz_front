@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { Sparkles, Flame, ArrowRight } from "lucide-react";
 import { Product } from "@/shared/types";
 import { ProductCard } from "@/components/features/product-card";
 import { useTranslation } from "@/lib/i18n/context";
-import { fetchProducts } from "@/lib/api";
 
 interface HomeProductsSectionProps {
   initialProducts: Product[];
@@ -15,19 +14,7 @@ interface HomeProductsSectionProps {
 
 export function HomeProductsSection({ initialProducts, type }: HomeProductsSectionProps) {
   const { t, locale } = useTranslation();
-  const [products, setProducts] = useState<Product[]>(initialProducts || []);
-
-  useEffect(() => {
-    let active = true;
-    fetchProducts({ locale }).then((data) => {
-      if (active && Array.isArray(data) && data.length > 0) {
-        setProducts(data);
-      }
-    });
-    return () => {
-      active = false;
-    };
-  }, [locale]);
+  const products = initialProducts || [];
 
   const displayList = type === "bestseller" ? products.slice(0, 4) : products.slice(0, 8);
 

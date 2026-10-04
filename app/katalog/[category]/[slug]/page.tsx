@@ -11,7 +11,7 @@ import {
   TrendingUp,
   Tag,
 } from "lucide-react";
-import { fetchProductBySlug, fetchProducts, fetchCategories } from "@/lib/api";
+import { fetchProductBySlug, fetchProducts, fetchCategories, toCardProduct } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 import { translations } from "@/lib/i18n/translations";
 import { formatPrice } from "@/lib/utils";
@@ -96,14 +96,21 @@ export default async function ProductDetailPage(props: ProductPageProps) {
   const product = await fetchProductBySlug(params.slug, locale);
   if (!product) notFound();
 
-  const categories = await fetchCategories(locale);
-  const allProducts = await fetchProducts({ locale });
+  const [categories, allProducts] = await Promise.all([
+    fetchCategories(locale),
+    fetchProducts({ locale }),
+  ]);
 
-  const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price);
-  const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9);
-  const relatedProducts = allProducts
-    .filter((p) => p.id !== product.id)
-    .slice(0, 4);
+  const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price).slice(0, 4).map(toCardProduct);
+  const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9).slice(0, 4).map(toCardProduct);
+  // Prefer products from the same category, then fill with the rest
+  const otherProducts = allProducts.filter((p) => p.id !== product.id);
+  const relatedProducts = [
+    ...otherProducts.filter((p) => p.categorySlug === product.categorySlug),
+    ...otherProducts.filter((p) => p.categorySlug !== product.categorySlug),
+  ]
+    .slice(0, 4)
+    .map(toCardProduct);
 
   const breadcrumbs = [
     { name: dict.nav.home, url: "https://kontrol.uz" },

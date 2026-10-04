@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 import { Category } from "@/shared/types";
 import { useTranslation } from "@/lib/i18n/context";
-import { fetchCategories } from "@/lib/api";
 
 export interface CategoryGridProps {
   categories?: Category[];
@@ -81,19 +80,8 @@ export function CategoryGrid({
   gridCols = 2,
 }: CategoryGridProps) {
   const { t, locale } = useTranslation();
-  const [currentCategories, setCurrentCategories] = useState<Category[]>(categories || []);
-
-  useEffect(() => {
-    let active = true;
-    fetchCategories(locale).then((data) => {
-      if (active && Array.isArray(data) && data.length > 0) {
-        setCurrentCategories(data);
-      }
-    });
-    return () => {
-      active = false;
-    };
-  }, [locale]);
+  // Categories come from the server; the language switcher calls router.refresh()
+  const currentCategories = categories || [];
 
   const [openStates, setOpenStates] = useState<Record<number, boolean>>({});
 

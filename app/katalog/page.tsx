@@ -6,7 +6,7 @@ import {
   Tag,
   TrendingUp,
 } from "lucide-react";
-import { fetchCategories, fetchProducts } from "@/lib/api";
+import { fetchCategories, fetchProducts, toCardProduct } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 import { translations } from "@/lib/i18n/translations";
 import { ProductCard } from "@/components/features/product-card";
@@ -114,12 +114,14 @@ export default async function CatalogPage(props: CatalogPageProps) {
 
   const locale = await getServerLocale();
   const dict = translations[locale] || translations.ru || translations.uz;
-  const categories = await fetchCategories(locale);
-  const allProducts = await fetchProducts({
-    locale,
-    categorySlug: selectedCategorySlug,
-    search: searchQuery,
-  });
+  const [categories, allProducts] = await Promise.all([
+    fetchCategories(locale),
+    fetchProducts({
+      locale,
+      categorySlug: selectedCategorySlug,
+      search: searchQuery,
+    }),
+  ]);
 
   // Build set of valid category identifiers (including parent and subcategories by slug and name)
   const validCategorySlugs: string[] = [];
@@ -222,8 +224,8 @@ export default async function CatalogPage(props: CatalogPageProps) {
     return 0;
   });
 
-  const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price);
-  const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9);
+  const onSaleProducts = allProducts.filter((p) => p.oldPrice && p.oldPrice > p.price).map(toCardProduct);
+  const bestsellerProducts = allProducts.filter((p) => p.reviewCount > 0 && p.rating >= 4.9).slice(0, 4).map(toCardProduct);
   const activeCategory = categories.find((c) => c.slug === selectedCategorySlug);
 
   const breadcrumbs = [
@@ -308,7 +310,7 @@ export default async function CatalogPage(props: CatalogPageProps) {
 
             {/* Product Cards Grid with 20-item Batch Loading & View More Button */}
             {products.length > 0 ? (
-              <PaginatedProductGrid products={products} batchSize={20} />
+              <PaginatedProductGrid products={products.map(toCardProduct)} batchSize={20} />
             ) : (
               <div className="bg-white p-12 text-center rounded border border-industrial-border space-y-3">
                 <p className="text-industrial-text font-bold text-base">

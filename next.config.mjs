@@ -36,6 +36,12 @@ const nextConfig = {
     ];
   },
   images: {
+    // Serve resized AVIF/WebP from the CDN instead of the original PNGs from api.kontrol.uz
+    formats: ['image/avif', 'image/webp'],
+    // Product photos rarely change; keep optimized copies cached for 31 days
+    minimumCacheTTL: 2678400,
+    deviceSizes: [640, 828, 1080, 1200, 1920],
+    imageSizes: [64, 96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: 'https',

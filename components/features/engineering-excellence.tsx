@@ -66,8 +66,8 @@ export function EngineeringExcellence() {
           alt="Kontrol.uz Professional Engineer"
           width={800}
           height={600}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="w-full h-full object-cover"
-          unoptimized
         />
         <div className="absolute inset-0 bg-industrial-blue-dark/10"></div>
       </div>
