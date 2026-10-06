@@ -373,14 +373,19 @@ export interface TranslationDictionary {
     navigation: string;
     categories: string;
     contacts: string;
+    branches: string;
+    socials: string;
     address: string;
     allRightsReserved: string;
     privacyPolicy: string;
     termsOfService: string;
-    catCctv: string;
-    catNvr: string;
-    catTurnstiles: string;
-    catFire: string;
+    catCounters: string;
+    catElectrical: string;
+    catPneumatics: string;
+    catAutomation: string;
+    catElectricityMeters: string;
+    catMiscTools: string;
+    viewAllCategories: string;
   };
 }
 
@@ -754,18 +759,23 @@ export const translations: Record<Language, TranslationDictionary> = {
       mapSectionSubtitle: "Bizning Filiallarimiz va Xarita",
     },
     footer: {
-      description: "Sanoat obyektlari, tijorat bino va uylar uchun professional videokuzatuv, SKUD va avtomatika tizimlari.",
+      description: "Sanoat korxonalari va energetika tizimlari uchun elektr uskunalar, pnevmatika, KIPiA va hisoblagichlar yetkazib berish.",
       navigation: "Navigatsiya",
       categories: "Kategoriyalar",
       contacts: "Kontaktlar",
-      address: "Toshkent sh., Amir Temur 108",
+      branches: "Filiallar",
+      socials: "Ijtimoiy Tarmoqlar",
+      address: "Toshkent shahri, Olmazor tumani, Qorasaroy ko'chasi 18",
       allRightsReserved: "Barcha huquqlar himoyalangan.",
       privacyPolicy: "Maxfiylik Siyosati",
       termsOfService: "Foydalanish Shartlari",
-      catCctv: "Videokuzatuv Tizimlari",
-      catNvr: "4K NVR Registratorlar",
-      catTurnstiles: "Biometrik SKUD & Turniketlar",
-      catFire: "Yong'in Xavfsizligi Tizimlari",
+      catCounters: "Hisoblagichlar",
+      catElectrical: "Elektr Uskunalar",
+      catPneumatics: "Pnevmatika",
+      catAutomation: "Nazorat-O'lchov va Avtomatika (KIPiA)",
+      catElectricityMeters: "Elektr Energiyasi Hisoblagichlari",
+      catMiscTools: "Nasoslar va Sanoat Asboblari",
+      viewAllCategories: "Barcha Kategoriyalar",
     },
   },
   ru: {
@@ -1137,18 +1147,23 @@ export const translations: Record<Language, TranslationDictionary> = {
       mapSectionSubtitle: "Наши Филиалы и Карта",
     },
     footer: {
-      description: "Профессиональное видеонаблюдение, СКУД и автоматика для промышленных объектов, коммерческих зданий и домов.",
+      description: "Поставка электрооборудования, пневматики, КИПиА и приборов учета для промышленных предприятий и энергетики.",
       navigation: "Навигация",
       categories: "Категории",
       contacts: "Контакты",
-      address: "г. Ташкент, пр. Амира Темура 108",
+      branches: "Филиалы",
+      socials: "Социальные Сети",
+      address: "г. Ташкент, Алмазарский р-н, ул. Карасарай 18",
       allRightsReserved: "Все права защищены.",
       privacyPolicy: "Политика Конфиденциальности",
       termsOfService: "Условия Использования",
-      catCctv: "Системы Видеонаблюдения",
-      catNvr: "4K NVR Регистраторы",
-      catTurnstiles: "Биометрический СКУД и Турникеты",
-      catFire: "Пожарная Безопасность",
+      catCounters: "Счетчики и Приборы Учета",
+      catElectrical: "Электрооборудование",
+      catPneumatics: "Пневматика",
+      catAutomation: "КИПиА и Автоматика",
+      catElectricityMeters: "Счетчики Электроэнергии",
+      catMiscTools: "Насосы и Инструменты",
+      viewAllCategories: "Все Категории",
     },
   },
   en: {
@@ -1520,18 +1535,23 @@ export const translations: Record<Language, TranslationDictionary> = {
       mapSectionSubtitle: "Our Branches & Map",
     },
     footer: {
-      description: "Professional CCTV surveillance, access control and automation for industrial plants, commercial buildings and homes.",
+      description: "Supply of electrical equipment, pneumatics, instrumentation, automation, and metering devices for industrial and power sectors.",
       navigation: "Navigation",
       categories: "Categories",
       contacts: "Contacts",
-      address: "108 Amir Temur Ave, Tashkent",
+      branches: "Branches",
+      socials: "Social Networks",
+      address: "18 Qorasaroy Street, Olmazor District, Tashkent",
       allRightsReserved: "All rights reserved.",
       privacyPolicy: "Privacy Policy",
       termsOfService: "Terms of Service",
-      catCctv: "CCTV Video Surveillance",
-      catNvr: "4K NVR Recorders",
-      catTurnstiles: "Biometric ACS & Turnstiles",
-      catFire: "Fire Safety Systems",
+      catCounters: "Counters & Metering",
+      catElectrical: "Electrical Equipment",
+      catPneumatics: "Pneumatics",
+      catAutomation: "Instrumentation & Automation (I&C)",
+      catElectricityMeters: "Electricity Meters",
+      catMiscTools: "Pumps & Industrial Tools",
+      viewAllCategories: "All Categories",
     },
   },
 };
