@@ -90,10 +90,10 @@ export function PurchaseContactModal({
     },
     {
       name: "Telegram",
-      href: "https://t.me/kontroluzn1bot",
+      href: "https://t.me/Kontrollshopbot",
       icon: Send,
       bgColor: "bg-[#0088cc] hover:bg-[#0077b5] text-white shadow-[#0088cc]/20",
-      ariaLabel: "Telegram orqali bog'lanish: @kontroluzn1bot",
+      ariaLabel: "Telegram orqali bog'lanish: @Kontrollshopbot",
       isExternal: true,
     },
     {
