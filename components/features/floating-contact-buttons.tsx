@@ -77,7 +77,7 @@ export function FloatingContactButtons() {
         )}
 
         <a
-          href="tel:+998781137027"
+          href="tel:+998712006800"
           onMouseEnter={() => setHoveredBtn("phone")}
           onMouseLeave={() => setHoveredBtn(null)}
           className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#008f6c] via-[#00a67e] to-[#26d09e] text-white flex items-center justify-center shadow-lg hover:shadow-emerald-400/50 hover:scale-110 transition-all cursor-pointer relative animate-glow-ring group"

@@ -11,6 +11,18 @@ import {
   Send,
   MessageCircle,
   ChevronRight,
+  Gauge,
+  Zap,
+  Wind,
+  Cpu,
+  Activity,
+  Wrench,
+  Layers,
+  LayoutGrid,
+  Home,
+  ShoppingCart,
+  ShieldCheck,
+  FileText,
 } from "lucide-react";
 import { Instagram, Facebook } from "@/components/ui/brand-icons";
 import { useTranslation } from "@/lib/i18n/context";
@@ -86,43 +98,46 @@ export function Footer() {
 
         {/* Kolonna 2: Saytdagi Asosiy Menular (Navigatsiya) */}
         <div className="space-y-3">
-          <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
-            {t("footer.navigation")}
-          </h4>
+          <div className="flex items-center gap-2">
+            <LayoutGrid className="w-4 h-4 text-industrial-orange shrink-0" />
+            <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
+              {t("footer.navigation")}
+            </h4>
+          </div>
           <ul className="space-y-2.5 text-xs text-slate-300">
             <li>
-              <Link href="/" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <ChevronRight className="w-3.5 h-3.5 text-industrial-orange group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Home className="w-3.5 h-3.5 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("nav.home")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/katalog" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <ChevronRight className="w-3.5 h-3.5 text-industrial-orange group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/katalog" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <LayoutGrid className="w-3.5 h-3.5 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span className="font-semibold text-white">{t("nav.catalog")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/kontaktlar" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <ChevronRight className="w-3.5 h-3.5 text-industrial-orange group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/kontaktlar" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <MapPin className="w-3.5 h-3.5 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("nav.contacts")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/savat" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <ChevronRight className="w-3.5 h-3.5 text-industrial-orange group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/savat" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <ShoppingCart className="w-3.5 h-3.5 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("nav.cart")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/maxfiylik-siyosati" className="hover:text-white transition-colors flex items-center gap-1.5 group text-slate-400">
-                <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/maxfiylik-siyosati" className="hover:text-white transition-colors flex items-center gap-2 group text-slate-400">
+                <ShieldCheck className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
                 <span>{t("footer.privacyPolicy")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/foydalanish-shartlari" className="hover:text-white transition-colors flex items-center gap-1.5 group text-slate-400">
-                <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/foydalanish-shartlari" className="hover:text-white transition-colors flex items-center gap-2 group text-slate-400">
+                <FileText className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
                 <span>{t("footer.termsOfService")}</span>
               </Link>
             </li>
@@ -131,53 +146,57 @@ export function Footer() {
 
         {/* Kolonna 3: Haqiqiy Sanoat va Energetika Kategoriyalari */}
         <div className="space-y-3">
-          <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
-            {t("footer.categories")}
-          </h4>
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-industrial-orange shrink-0" />
+            <h4 className="text-sm font-extrabold uppercase text-industrial-orange tracking-wider">
+              {t("footer.categories")}
+            </h4>
+          </div>
           <ul className="space-y-2.5 text-xs text-slate-300">
             <li>
-              <Link href="/katalog?category=counters" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <span className="w-1.5 h-1.5 rounded-full bg-industrial-orange group-hover:scale-125 transition-transform" />
+              <Link href="/katalog?category=counters" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Gauge className="w-4 h-4 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.catCounters")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/katalog?category=electrical-equipment" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <span className="w-1.5 h-1.5 rounded-full bg-industrial-orange group-hover:scale-125 transition-transform" />
+              <Link href="/katalog?category=electrical-equipment" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Zap className="w-4 h-4 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.catElectrical")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/katalog?category=Pneumatics" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <span className="w-1.5 h-1.5 rounded-full bg-industrial-orange group-hover:scale-125 transition-transform" />
+              <Link href="/katalog?category=Pneumatics" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Wind className="w-4 h-4 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.catPneumatics")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/katalog?category=instrumentation-automation" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <span className="w-1.5 h-1.5 rounded-full bg-industrial-orange group-hover:scale-125 transition-transform" />
+              <Link href="/katalog?category=instrumentation-automation" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Cpu className="w-4 h-4 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.catAutomation")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/katalog?category=electricity-meters" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <span className="w-1.5 h-1.5 rounded-full bg-industrial-orange group-hover:scale-125 transition-transform" />
+              <Link href="/katalog?category=electricity-meters" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Activity className="w-4 h-4 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.catElectricityMeters")}</span>
               </Link>
             </li>
             <li>
-              <Link href="/katalog?category=misc-tools" className="hover:text-white transition-colors flex items-center gap-1.5 group">
-                <span className="w-1.5 h-1.5 rounded-full bg-industrial-orange group-hover:scale-125 transition-transform" />
+              <Link href="/katalog?category=misc-tools" className="hover:text-white transition-colors flex items-center gap-2 group">
+                <Wrench className="w-4 h-4 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.catMiscTools")}</span>
               </Link>
             </li>
             <li className="pt-1">
               <Link
                 href="/katalog"
-                className="inline-flex items-center gap-1 text-[11px] font-extrabold text-industrial-orange hover:text-white transition-colors uppercase tracking-wider"
+                className="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-industrial-orange hover:text-white transition-colors uppercase tracking-wider group"
               >
+                <Layers className="w-3.5 h-3.5 text-industrial-orange group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t("footer.viewAllCategories")}</span>
-                <ChevronRight className="w-3 h-3" />
+                <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </li>
           </ul>
@@ -219,16 +238,10 @@ export function Footer() {
               </div>
             </div>
 
-            {/* Telefon raqamlar */}
+            {/* Telefon raqam */}
             <div className="pt-1 space-y-1.5">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-industrial-orange flex-shrink-0" />
-                <a href="tel:+998781137027" className="hover:underline font-bold text-white text-xs">
-                  +998 (78) 113-70-27
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-sky-400 flex-shrink-0" />
                 <a href="tel:+998712006800" className="hover:underline font-bold text-white text-xs">
                   +998 (71) 200-68-00
                 </a>

@@ -33,7 +33,7 @@ const DISTRIBUTORS_DATA = [
   { id: 8, name: "Olmaliq Tech Partner", region: "Toshkent vil.", address: "Olmaliq sh., Metallurglar 5", phone: "+998 70 614-33-11", category: "Kon va sanoat avtomatikasi" },
   { id: 9, name: "Angren Automation Hub", region: "Toshkent vil.", address: "Angren sh., Istiqlol 33", phone: "+998 70 662-88-99", category: "Sensorlar & Datchiklar" },
   { id: 10, name: "Bekobod Industrial Supply", region: "Toshkent vil.", address: "Bekobod sh., Sir-Daryo 77", phone: "+998 70 913-22-33", category: "Elektrotexnika" },
-  { id: 11, name: "Universal Sensor Toshkent", region: "Toshkent sh.", address: "Uchtepa tumani, Farhod 15", phone: "+998 78 113-70-27", category: "KIPiA & Manometrlar" },
+  { id: 11, name: "Universal Sensor Toshkent", region: "Toshkent sh.", address: "Uchtepa tumani, Farhod 15", phone: "+998 71 200-68-00", category: "KIPiA & Manometrlar" },
   { id: 12, name: "Smart Flow Toshkent", region: "Toshkent sh.", address: "Mirobod tumani, Nukus 29", phone: "+998 71 255-88-00", category: "Sarflash o'lchagichlar" },
 
   // Samarqand viloyati (10 ta)
@@ -236,8 +236,8 @@ export function StatisticsInteractiveSection() {
                     <div className="space-y-1.5 text-xs text-industrial-text">
                       <div className="flex items-center gap-2">
                         <Phone className="w-3.5 h-3.5 text-industrial-blue" />
-                        <a href="tel:+998781137027" className="font-bold hover:text-industrial-orange transition-colors">
-                          +998 (78) 113-70-27
+                        <a href="tel:+998712006800" className="font-bold hover:text-industrial-orange transition-colors">
+                          +998 (71) 200-68-00
                         </a>
                       </div>
                       <div className="flex items-center gap-2 text-industrial-text-muted">
@@ -394,8 +394,8 @@ export function StatisticsInteractiveSection() {
                     </div>
                     <div className="flex items-center justify-between text-xs pt-1">
                       <span className="text-industrial-text-muted font-medium">Aloqa telefoni:</span>
-                      <a href="tel:+998781137027" className="font-extrabold text-industrial-blue hover:text-industrial-orange">
-                        +998 (78) 113-70-27
+                      <a href="tel:+998712006800" className="font-extrabold text-industrial-blue hover:text-industrial-orange">
+                        +998 (71) 200-68-00
                       </a>
                     </div>
                   </div>
@@ -442,8 +442,8 @@ export function StatisticsInteractiveSection() {
             <div className="p-4 bg-industrial-surface-low border-t border-industrial-border flex items-center justify-between text-xs">
               <span className="text-industrial-text-muted font-medium">
                 Savollar bormi? Mutaxassis bilan bog'laning:{" "}
-                <a href="tel:+998781137027" className="font-bold text-industrial-blue hover:underline">
-                  +998 (78) 113-70-27
+                <a href="tel:+998712006800" className="font-bold text-industrial-blue hover:underline">
+                  +998 (71) 200-68-00
                 </a>
               </span>
               <button

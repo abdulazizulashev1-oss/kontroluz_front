@@ -96,7 +96,6 @@ export default async function ContactsPage() {
             </div>
             <h3 className="font-extrabold text-sm text-industrial-text">{dict.contact.phoneLines}</h3>
             <div className="text-xs font-bold text-industrial-blue space-y-1">
-              <a href="tel:+998781137027" className="block hover:text-industrial-orange transition-colors">+998 (78) 113-70-27</a>
               <a href="tel:+998712006800" className="block hover:text-industrial-orange transition-colors">+998 (71) 200-68-00</a>
               <a href="tel:+998950155548" className="block text-emerald-700 hover:text-industrial-orange transition-colors flex items-center gap-1">
                 <span>+998 (95) 015-55-48</span>

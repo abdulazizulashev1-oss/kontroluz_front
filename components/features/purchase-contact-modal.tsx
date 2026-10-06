@@ -83,10 +83,10 @@ export function PurchaseContactModal({
   const contacts = [
     {
       name: "Telefon",
-      href: "tel:+998781137027",
+      href: "tel:+998712006800",
       icon: Phone,
       bgColor: "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20",
-      ariaLabel: "Telefon orqali bog'lanish: +998 (78) 113-70-27",
+      ariaLabel: "Telefon orqali bog'lanish: +998 (71) 200-68-00",
     },
     {
       name: "Telegram",

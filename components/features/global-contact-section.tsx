@@ -18,7 +18,6 @@ export function GlobalContactSection() {
   const { t } = useTranslation();
 
   const phoneNumbers = [
-    { label: t("contact.contactInfoTitle"), number: "+998 (78) 113-70-27", raw: "+998781137027" },
     { label: t("engineering.feature4Title"), number: "+998 (71) 200-68-00", raw: "+998712006800" },
     { label: t("contact.b2bPhoneLabel"), number: "+998 (95) 015-55-48", raw: "+998950155548" },
   ];

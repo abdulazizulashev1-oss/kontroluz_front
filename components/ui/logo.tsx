@@ -70,7 +70,7 @@ export function Logo({
               isDark ? "text-white" : "text-industrial-blue"
             }`}
           >
-            KONTROL<span className="text-industrial-orange">.UZ</span>
+            KONTROL.UZ
           </span>
           <span
             className={`text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider mt-1 ${

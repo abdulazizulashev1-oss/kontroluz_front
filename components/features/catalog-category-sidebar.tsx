@@ -2,11 +2,48 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { SlidersHorizontal, ChevronRight, Plus, Minus, Download } from "lucide-react";
+import {
+  SlidersHorizontal,
+  ChevronRight,
+  Plus,
+  Minus,
+  Download,
+  Gauge,
+  Zap,
+  Wind,
+  Cpu,
+  Activity,
+  Wrench,
+  Layers,
+  LayoutGrid,
+} from "lucide-react";
 import { Category } from "@/shared/types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/context";
+
+function getSidebarCategoryIcon(slug: string) {
+  const s = slug.toLowerCase();
+  if (s.includes("counter") || s.includes("hisoblagich") || s.includes("meter")) {
+    return <Gauge className="w-4 h-4 text-industrial-orange shrink-0" />;
+  }
+  if (s.includes("electric") || s.includes("elektr")) {
+    return <Zap className="w-4 h-4 text-industrial-orange shrink-0" />;
+  }
+  if (s.includes("pneumat") || s.includes("pnevmat")) {
+    return <Wind className="w-4 h-4 text-industrial-orange shrink-0" />;
+  }
+  if (s.includes("automat") || s.includes("instrument") || s.includes("kipia") || s.includes("plc")) {
+    return <Cpu className="w-4 h-4 text-industrial-orange shrink-0" />;
+  }
+  if (s.includes("pump") || s.includes("nasos")) {
+    return <Activity className="w-4 h-4 text-industrial-orange shrink-0" />;
+  }
+  if (s.includes("tool") || s.includes("asbob") || s.includes("misc")) {
+    return <Wrench className="w-4 h-4 text-industrial-orange shrink-0" />;
+  }
+  return <Layers className="w-4 h-4 text-industrial-orange shrink-0" />;
+}
 
 interface CatalogCategorySidebarProps {
   categories: Category[];
@@ -58,13 +95,14 @@ export function CatalogCategorySidebar({
         <li>
           <Link
             href="/katalog"
-            className={`block p-2.5 rounded-lg transition-all ${
+            className={`flex items-center gap-2 p-2.5 rounded-lg transition-all ${
               !selectedCategorySlug
                 ? "bg-industrial-blue text-white font-black shadow-xs"
                 : "hover:bg-industrial-surface-low text-industrial-text font-bold"
             }`}
           >
-            {t("categories.allEquipment")}
+            <LayoutGrid className="w-4 h-4 text-industrial-orange shrink-0" />
+            <span>{t("categories.allEquipment")}</span>
           </Link>
         </li>
 
@@ -88,9 +126,12 @@ export function CatalogCategorySidebar({
               >
                 <Link
                   href={`/katalog?category=${cat.slug}`}
-                  className="flex-1 flex items-center justify-between gap-2 pr-2"
+                  className="flex-1 flex items-center justify-between gap-2 pr-2 min-w-0"
                 >
-                  <span className="truncate">{cat.name}</span>
+                  <div className="flex items-center gap-2 min-w-0">
+                    {getSidebarCategoryIcon(cat.slug)}
+                    <span className="truncate">{cat.name}</span>
+                  </div>
                   <span className="text-[10px] px-2 py-0.5 rounded bg-black/5 font-mono font-bold shrink-0">
                     {cat.productCount || 10}
                   </span>

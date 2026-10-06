@@ -8,7 +8,7 @@ export const MOCK_ORGANIZATION: OrganizationInfo = {
   legalName: "Kontrol Security Systems LLC",
   url: "https://kontrol.uz",
   logo: "https://kontrol.uz/logo.png",
-  telephone: "+998 78 113 70 27",
+  telephone: "+998 71 200 68 00",
   email: "info@kontrol.uz",
   address: {
     streetAddress: "Amir Temur shoh ko'chasi, 108",

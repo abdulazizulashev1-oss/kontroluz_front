@@ -27,8 +27,8 @@ export function BranchLocationsMap() {
       name: t("branches.qorasaroy.name"),
       badge: t("branches.qorasaroy.badge"),
       address: t("branches.qorasaroy.address"),
-      phone: "+998 (78) 113-70-27",
-      rawPhone: "+998781137027",
+      phone: "+998 (71) 200-68-00",
+      rawPhone: "+998712006800",
       workingHours: t("branches.qorasaroy.hours"),
       googleMapsUrl:
         "https://www.google.com/maps/place/Kontrol+Qorasaroy/@41.3572598,69.2427857,19z",

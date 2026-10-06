@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Calculator } from "lucide-react";
+import { ArrowRight, ShieldCheck, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/context";
 
@@ -65,7 +65,7 @@ export function HeroBanner() {
               }}
               className="w-full sm:w-auto border-2 border-white/90 bg-white/10 hover:bg-white text-white hover:text-industrial-blue font-bold px-6 py-3 rounded-lg text-sm sm:text-base backdrop-blur-2xs justify-center h-11 sm:h-12 flex items-center gap-2 cursor-pointer transition-all"
             >
-              <Calculator className="w-4 h-4" />
+              <FileText className="w-4 h-4" />
               <span>{t("hero.ctaCalculator")}</span>
             </Button>
           </div>

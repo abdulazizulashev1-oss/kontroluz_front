@@ -7,7 +7,6 @@ import { ProductCard } from "@/components/features/product-card";
 import { HomeProductsSection } from "@/components/features/home-products-section";
 import { PromoBanner } from "@/components/features/promo-banner";
 import { EngineeringExcellence } from "@/components/features/engineering-excellence";
-import { SolutionCalculator } from "@/components/features/solution-calculator";
 import { StatisticsInteractiveSection } from "@/components/features/statistics-interactive-section";
 import { fetchCategories, fetchProducts, toCardProduct } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
@@ -43,9 +42,6 @@ export default async function HomePage() {
 
       {/* 7. Engineering Excellence (Injenyerlik Mukammalligi) */}
       <EngineeringExcellence />
-
-      {/* 8. B2B Security Solution Calculator */}
-      <SolutionCalculator />
     </div>
   );
 }
