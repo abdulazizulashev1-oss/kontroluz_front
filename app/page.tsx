@@ -8,6 +8,7 @@ import { HomeProductsSection } from "@/components/features/home-products-section
 import { PromoBanner } from "@/components/features/promo-banner";
 import { EngineeringExcellence } from "@/components/features/engineering-excellence";
 import { StatisticsInteractiveSection } from "@/components/features/statistics-interactive-section";
+import { BoilerServicesSection } from "@/components/features/boiler-services-section";
 import { fetchCategories, fetchProducts, toCardProduct } from "@/lib/api";
 import { getServerLocale } from "@/lib/i18n/server";
 
@@ -28,7 +29,10 @@ export default async function HomePage() {
       {/* 2. Stitch 6-Tile Popular Categories */}
       <CategoryGrid categories={categories} />
 
-      {/* 3. Interactive Statistics & Directory Block */}
+      {/* 3. Boiler Services Section matching reference screenshot */}
+      <BoilerServicesSection />
+
+      {/* 4. Interactive Statistics & Directory Block */}
       <StatisticsInteractiveSection />
 
       {/* 4. New Arrivals (Yangi Kelgan Uskunalar) */}

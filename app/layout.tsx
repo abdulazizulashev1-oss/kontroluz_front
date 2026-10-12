@@ -28,19 +28,20 @@ const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Kontrol.uz — Intellektual Xavfsizlik va Muhandislik Tizimlari",
-    template: "%s | Kontrol.uz",
+    default: "kontrol.uz - счетчики и пневматика в Ташкенте",
+    template: "%s | kontrol.uz",
   },
   description:
-    "Toshkentda professional videokuzatuv kameralari, SKUD biometrik turniketlar va yong'in xavfsizligi tizimlarini sotish va o'rnatish. Rasmiy kafolat.",
+    "Счетчики газа, воды, тепла и пневматика в Ташкенте. Продажа качественного контрольно-измерительного и пневматического оборудования с гарантией и доставкой по Узбекистану.",
   keywords: [
-    "videokuzatuv kameralari Toshkent",
-    "Hikvision diller Uzbekistan",
-    "Dahua NVR registrator",
-    "turniketlar sotib olish",
-    "biometriya SKUD",
-    "xavfsizlik tizimlari",
-    "Kontrol.uz",
+    "счетчики в Ташкенте",
+    "пневматика в Ташкенте",
+    "счетчики газа",
+    "счетчики воды",
+    "пневматическое оборудование",
+    "промышленная пневматика",
+    "контрольно измерительные приборы",
+    "kontrol.uz",
   ],
   authors: [{ name: "Kontrol.uz Team" }],
   alternates: {
@@ -57,22 +58,24 @@ export const metadata: Metadata = {
     locale: "ru_RU",
     alternateLocale: ["uz_UZ", "en_US"],
     url: siteUrl,
-    siteName: "Kontrol.uz",
-    title: "Kontrol.uz — Intellektual Xavfsizlik Tizimlari",
-    description: "Sanoat va tijorat obyektlari uchun videokuzatuv va SKUD tizimlari.",
+    siteName: "kontrol.uz",
+    title: "kontrol.uz - счетчики и пневматика в Ташкенте",
+    description:
+      "Счетчики газа, воды, тепла и пневматика в Ташкенте. Официальная гарантия, сервис и доставка по Узбекистану.",
     images: [
       {
         url: `${siteUrl}/images/logo.png`,
         width: 1200,
         height: 630,
-        alt: "Kontrol.uz Industrial Security Systems",
+        alt: "kontrol.uz - счетчики и пневматика в Ташкенте",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kontrol.uz — Intellektual Xavfsizlik Tizimlari",
-    description: "Sanoat va tijorat obyektlari uchun videokuzatuv va SKUD tizimlari.",
+    title: "kontrol.uz - счетчики и пневматика в Ташкенте",
+    description:
+      "Счетчики газа, воды, тепла и пневматика в Ташкенте. Официальная гарантия, сервис и доставка по Узбекистану.",
     images: [`${siteUrl}/images/logo.png`],
   },
   verification: {
