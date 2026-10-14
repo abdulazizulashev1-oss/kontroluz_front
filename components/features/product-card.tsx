@@ -149,23 +149,33 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
 
-        {/* Button Stack matching the reference style */}
+        {/* Button Stack matching the reference screenshot */}
         <div className="space-y-2">
-          {/* Button 1: Primary Orange Phone Button */}
+          {/* Button 1: First Orange Phone Button */}
           <a
             href="tel:+998950155548"
             onClick={(e) => e.stopPropagation()}
-            className="w-full py-2 sm:py-2.5 px-3 rounded-full bg-[#FF6B00] hover:bg-[#E55E00] text-white font-bold text-[11px] sm:text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]"
+            className="w-full py-2.5 px-3 rounded-full bg-[#FF6B00] hover:bg-[#E55E00] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
-            <Phone className="w-3.5 h-3.5 fill-white shrink-0" />
+            <Phone className="w-4 h-4 fill-white shrink-0" />
             <span className="truncate">+998 95 015 55 48</span>
           </a>
 
-          {/* Button 2: Black Button - Cart / Secondary Order */}
+          {/* Button 2: Second Orange Phone Button */}
+          <a
+            href="tel:+998955882068"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full py-2.5 px-3 rounded-full bg-[#FF6B00] hover:bg-[#E55E00] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Phone className="w-4 h-4 fill-white shrink-0" />
+            <span className="truncate">+998 95 588 20 68</span>
+          </a>
+
+          {/* Button 3: Black Cart Button */}
           <button
             type="button"
             onClick={handleAddToCart}
-            className={`w-full py-2 sm:py-2.5 px-3 rounded-full font-bold text-[11px] sm:text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99] ${
+            className={`w-full py-2.5 px-3 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99] ${
               inCart || justAdded
                 ? "bg-[#00A67E] hover:bg-[#008F6C] text-white"
                 : "bg-[#18181B] hover:bg-black text-white"
@@ -173,26 +183,26 @@ export function ProductCard({ product }: ProductCardProps) {
           >
             {inCart || justAdded ? (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span className="truncate">{t("products.addedToCart")}</span>
               </>
             ) : (
               <>
-                <ShoppingCart className="w-3.5 h-3.5 shrink-0" />
+                <ShoppingCart className="w-4 h-4 shrink-0" />
                 <span className="truncate">{t("products.addToCart")}</span>
               </>
             )}
           </button>
 
-          {/* Button 3: Telegram Button */}
+          {/* Button 4: Telegram Button */}
           <a
             href="https://t.me/Kontrollshopbot"
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="w-full py-1.5 sm:py-2 px-3 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-semibold text-[11px] sm:text-xs flex items-center justify-center gap-1.5 border border-slate-200 shadow-2xs transition-all hover:scale-[1.01] active:scale-[0.99]"
+            className="w-full py-2 px-3 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-200 shadow-2xs transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
-            <Send className="w-3 h-3 text-[#229ED9] shrink-0" />
+            <Send className="w-3.5 h-3.5 text-[#229ED9] shrink-0" />
             <span>Telegram</span>
           </a>
         </div>
